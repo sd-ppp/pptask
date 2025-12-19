@@ -1,0 +1,217 @@
+import { buildNodeInfoListFromValues } from './utils.ts';
+export function parseRunninghubWebappId(url) {
+    const host = (url.hostname ?? '').trim();
+    const path = url.pathname.replace(/^\//, '').trim();
+    const webappId = host || path;
+    if (!webappId) {
+        throw new Error('runninghub locator must include a webappId');
+    }
+    return webappId;
+}
+export async function fetchRunninghubTemplate(webappId, config) {
+    const baseHost = getBaseHost(config.language);
+    const apiUrl = `https://${baseHost}/api/webapp/apiCallDemo?apiKey=${config.apiKey}&webappId=${encodeURIComponent(webappId)}`;
+    const response = await fetch(apiUrl, { headers: { Host: baseHost } });
+    if (!response.ok) {
+        throw new Error(`runninghub getNodes HTTP ${response.status}`);
+    }
+    const payload = await response.json();
+    if (payload?.code !== 0) {
+        throw createRunningHubError('getNodes', payload);
+    }
+    const nodeInfoTemplate = Array.isArray(payload?.data?.nodeInfoList) ? payload.data.nodeInfoList : [];
+    const defaultValues = buildRunninghubDefaults(nodeInfoTemplate);
+    return {
+        nodeInfoTemplate,
+        defaultValues,
+        rawData: payload,
+    };
+}
+export function buildRunninghubDefaults(nodeInfoList) {
+    const defaults = {};
+    nodeInfoList.forEach(node => {
+        const key = `${node.nodeId}_${node.fieldName}`;
+        defaults[key] = node.fieldValue;
+    });
+    return defaults;
+}
+export function buildRunninghubNodeInfoList(template, payload) {
+    return buildNodeInfoListFromValues(template.nodeInfoTemplate, payload, template.defaultValues);
+}
+export function getBaseHost(language) {
+    return language && language !== 'en-US' ? 'www.runninghub.cn' : 'www.runninghub.ai';
+}
+export function ensureRunninghubConfig(platformConfig) {
+    const config = (platformConfig ?? {});
+    const apiKey = config.apiKey;
+    if (!apiKey || typeof apiKey !== 'string') {
+        throw new Error('runninghub apiKey is required');
+    }
+    const language = config.language && typeof config.language === 'string'
+        ? config.language
+        : undefined;
+    return { apiKey, language };
+}
+export function extractRunninghubStatus(payload) {
+    const data = payload?.data;
+    if (typeof data === 'string')
+        return data;
+    if (typeof data?.status === 'string')
+        return data.status;
+    if (typeof data?.taskStatus === 'string')
+        return data.taskStatus;
+    if (typeof data?.state === 'string')
+        return data.state;
+    return undefined;
+}
+export function extractRunninghubProgress(payload) {
+    const data = payload?.data;
+    if (typeof data?.progress === 'number')
+        return data.progress;
+    if (typeof data?.taskProgress === 'number')
+        return data.taskProgress;
+    return undefined;
+}
+export function extractRunninghubCost(payload) {
+    const data = payload?.data;
+    const items = Array.isArray(data) ? data : undefined;
+    if (items && items.length > 0) {
+        let coinsTotal = 0;
+        let moneyTotal = 0;
+        let hasCoins = false;
+        let hasMoney = false;
+        for (const entry of items) {
+            const coins = parseNumber(entry?.consumeCoins ?? entry?.deductCredits ?? entry?.consumedCredits);
+            if (coins !== undefined) {
+                coinsTotal += coins;
+                hasCoins = true;
+            }
+            const money = parseNumber(entry?.thirdPartyConsumeMoney ?? entry?.consumeMoney ?? entry?.deductMoney ?? entry?.consumedMoney);
+            if (money !== undefined) {
+                moneyTotal += money;
+                hasMoney = true;
+            }
+        }
+        if (!hasCoins && !hasMoney)
+            return undefined;
+        return {
+            coins: hasCoins ? coinsTotal : undefined,
+            money: hasMoney ? moneyTotal : undefined,
+            moneyCurrency: hasMoney ? 'CNY' : undefined,
+        };
+    }
+    const aggregate = typeof data === 'object' && data !== null ? data : {};
+    const coins = parseNumber(aggregate.deductCredits ?? aggregate.consumedCredits ?? aggregate.consumeCoins ?? aggregate.consumeCredit);
+    const money = parseNumber(aggregate.thirdPartyConsumeMoney ?? aggregate.consumeMoney ?? aggregate.deductMoney ?? aggregate.consumedMoney);
+    const currency = typeof aggregate.currency === 'string'
+        ? aggregate.currency
+        : typeof aggregate.creditUnit === 'string'
+            ? aggregate.creditUnit
+            : money !== undefined
+                ? 'CNY'
+                : undefined;
+    if (coins === undefined && money === undefined && currency === undefined)
+        return undefined;
+    return {
+        coins,
+        money,
+        moneyCurrency: currency,
+    };
+}
+export function normalizeRunninghubOutputs(data) {
+    const list = Array.isArray(data)
+        ? data
+        : Array.isArray(data?.outputs)
+            ? data.outputs
+            : Array.isArray(data?.resultList)
+                ? data.resultList
+                : undefined;
+    if (!list)
+        return [];
+    return list.map((entry) => ({
+        url: entry?.fileUrl ?? entry?.url,
+        rawData: entry,
+    }));
+}
+export function mapRunninghubStatus(status) {
+    const normalized = String(status || '').toUpperCase();
+    switch (normalized) {
+        case 'INIT':
+        case 'WAITING':
+        case 'QUEUED':
+            return 'pending';
+        case 'RUNNING':
+        case 'PROCESSING':
+        case 'EXECUTING':
+            return 'running';
+        case 'SUCCESS':
+        case 'SUCCEEDED':
+        case 'DONE':
+            return 'succeeded';
+        case 'FAILED':
+        case 'ERROR':
+            return 'failed';
+        case 'CANCELLED':
+        case 'CANCELED':
+            return 'cancelled';
+        default:
+            return 'pending';
+    }
+}
+export function isRequestAborted(signal) {
+    if (!signal)
+        return false;
+    if (signal instanceof AbortSignal)
+        return signal.aborted;
+    return Boolean(signal.aborted);
+}
+export function createAbortError(message) {
+    try {
+        return new DOMException(message, 'AbortError');
+    }
+    catch {
+        const error = new Error(message);
+        error.name = 'AbortError';
+        return error;
+    }
+}
+export function createRunningHubError(context, payload) {
+    const code = payload?.code;
+    const msg = payload?.msg ??
+        payload?.message ??
+        payload?.error ??
+        payload?.errorMessage ??
+        payload?.errorMsg ??
+        payload?.data?.msg ??
+        payload?.data?.message;
+    const detail = payload?.data?.errorMsg ??
+        payload?.data?.errorMessage ??
+        payload?.data?.failReason ??
+        payload?.data?.failMessage ??
+        payload?.data?.message ??
+        payload?.data?.reason;
+    const segments = [`RunningHub ${context} failed`];
+    if (typeof code !== 'undefined')
+        segments.push(`code=${code}`);
+    if (msg)
+        segments.push(`msg=${msg}`);
+    if (detail && detail !== msg)
+        segments.push(`detail=${detail}`);
+    const error = new Error(segments.join('; '));
+    error.payload = payload;
+    return error;
+}
+export function buildRunninghubPayload(template, payload) {
+    const nodeInfoList = buildRunninghubNodeInfoList(template, payload);
+    return { nodeInfoList, defaultValues: template.defaultValues };
+}
+function parseNumber(value) {
+    if (typeof value === 'number' && Number.isFinite(value))
+        return value;
+    if (typeof value === 'string' && value.trim()) {
+        const parsed = Number(value);
+        if (Number.isFinite(parsed))
+            return parsed;
+    }
+    return undefined;
+}

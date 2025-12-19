@@ -1,0 +1,33 @@
+{
+  "compilerOptions": {
+    "composite": false,
+    "baseUrl": ".",
+    "rootDir": ".",
+    "outDir": "dist",
+    "declaration": true,
+    "declarationMap": false,
+    "sourceMap": false,
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "target": "ES2019",
+    "jsx": "react-jsx",
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "allowImportingTsExtensions": true,
+    "strict": true,
+    "noEmitOnError": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "types": ["vitest/globals", "node"],
+    "lib": ["ES2020", "DOM", "DOM.Iterable"]
+  },
+  "include": [
+    "core/src",
+    "core/tests",
+    "executors/inline/src",
+    "executors/inline/tests",
+    "executors/queue/src",
+    "executors/queue/tests"
+  ],
+  "exclude": ["dist", "node_modules"]
+}

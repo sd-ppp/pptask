@@ -1,0 +1,222 @@
+# SDPPP Task Router
+
+通过统一的 `locator + payload` 协议复用不同 AI Provider 的异步能力。代码现分为三部分：
+
+```
+core/               // Provider 注册、通用任务方法（describe/create/check/get/cancel/upload）
+executors/inline/   // 进程内执行器：本地直连或 HTTP 代理（前端、BFF、脚本场景）
+executors/queue/    // 消息队列执行器：入队、轮询、工作进程等后台场景
+```
+
+## core/ —— Provider 注册与任务入口
+
+`core` 暴露的六个入口函数在任何环境下可用（`platformConfig` 可选，用于传入当前调用的默认配置）：
+
+- `describeResource({ locator, platformConfig?, options? })`
+- `createTask({ locator, payload?, platformConfig?, options? })`
+- `checkStatus({ locator, taskId, platformConfig?, options? })`
+- `getResult({ locator, taskId, platformConfig?, options? })`
+- `cancelTask({ locator, taskId, platformConfig?, options? })`
+- `upload({ locator, formData, platformConfig?, options? })`
+
+`TaskResult` 额外包含 `costCoins` / `costMoney` / `costMoneyCurrency` 字段，Provider 在有消费信息时会填入（如平台内积分、人民币金额与货币单位），供上层做扣费或展示。
+
+默认已注册 `replicate://` 与 `runninghub://`，并可按需扩展新 Provider：
+
+```ts
+import { registerProvider } from './core/src/index.ts';
+import type { ProviderDefinition } from './core/src/types.ts';
+
+const customProvider: ProviderDefinition = {
+  async describeResource({ locator }) {
+    return {
+      provider: 'custom',
+      metadata: { scheme: 'custom', locator },
+      formSchema: { type: 'object', properties: {} },
+      formValues: {},
+    };
+  },
+  async createTask({ locator }) {
+    return {
+      provider: 'custom',
+      taskId: 'job-1',
+      status: 'pending',
+      raw: {},
+    };
+  },
+  async checkStatus({ taskId }) {
+    return {
+      provider: 'custom',
+      taskId,
+      status: 'succeeded',
+      raw: {},
+    };
+  },
+  async getResult({ taskId }) {
+    return {
+      provider: 'custom',
+      taskId,
+      status: 'succeeded',
+      outputs: [],
+      raw: {},
+    };
+  },
+  async cancelTask() {},
+  async upload() {
+    return { provider: 'custom', url: '', raw: {} };
+  },
+};
+
+registerProvider('custom', customProvider);
+```
+
+如果需要维护平台密钥，可根据 locator 的 scheme 手动选择默认值，并在调用时自行合并覆盖项：
+
+```ts
+import { createTask } from './core/src/index.ts';
+import { parseLocator, normalizeScheme } from './core/src/resource.ts';
+
+const defaults: Record<string, Record<string, any>> = {};
+if (process.env.REPLICATE_API_KEY) {
+  defaults[normalizeScheme('replicate')] = { apiKey: process.env.REPLICATE_API_KEY };
+}
+
+function resolvePlatformConfig(locator: string) {
+  const { scheme } = parseLocator(locator);
+  const base = defaults[normalizeScheme(scheme)] ?? {};
+  return base;
+}
+
+await createTask({
+  locator: 'replicate://owner/model',
+  payload: { prompt: 'hi' },
+  platformConfig: resolvePlatformConfig('replicate://owner/model'),
+});
+```
+
+**核心状态面板**
+
+- `providers`：`registerProvider` 写入的 Provider 注册表，`ensureProvider` / `listProviders` 等读取。
+- `replicate/versionCache`：`replicate` Provider 内部按 `apiKey:model` 的版本缓存，避免重复请求最新版本号与模型元数据。
+
+## executors/inline/ —— 进程内执行器
+
+`createInlineExecutor` 负责在同一个进程内执行任务，可选择 **local**（直连 Provider）或 **http**（代理到后端）两种模式。
+
+```ts
+import { createInlineExecutor } from './executors/inline/src/index.ts';
+
+// 直连 Replicate / RunningHub 等 Provider
+const localExecutor = createInlineExecutor({
+  mode: 'local',
+  platformConfig: locator =>
+    locator.startsWith('replicate://') && process.env.REPLICATE_API_KEY
+      ? { apiKey: process.env.REPLICATE_API_KEY }
+      : undefined,
+});
+const describe = await localExecutor.describe({ locator: 'replicate://owner/model' });
+const task = await localExecutor.run({
+  locator: 'replicate://owner/model',
+  payload: describe.formValues,
+});
+const outputs = await task.promise;
+
+// 通过 HTTP Endpoint 代理执行（headers 为函数，可适配动态登录态）
+const httpExecutor = createInlineExecutor({
+  mode: 'http',
+  baseUrl: 'https://router.example.com/api',
+  headers: async () => ({
+    Authorization: `Bearer ${await fetchToken()}`,
+  }),
+  pollIntervalMs: 1500,
+  platformConfig: locator =>
+    locator.startsWith('runninghub://') && process.env.RUNNINGHUB_API_KEY
+      ? {
+          apiKey: process.env.RUNNINGHUB_API_KEY,
+          language: process.env.RUNNINGHUB_LANGUAGE ?? 'en-US',
+        }
+      : undefined,
+});
+
+const delegated = await httpExecutor.run({
+  locator: 'runninghub://flux-kontext-pro',
+  payload: { prompt: 'via-http' },
+});
+await delegated.promise;
+```
+
+`upload` 同样可用于两种模式，HTTP 场景会把 `locator` 与 `platformConfig` 自动拼装到表单中。`createInlineExecutor` 时提供的 `platformConfig` 会自动注入，单次调用无需（也不能）再次传入。
+
+## executors/queue/ —— 消息队列执行器
+
+队列执行器拆分为两个部分：
+
+1. **生产端**：`createQueueExecutor(hooks, { platformConfig })` 对外暴露统一的 `enqueue / getStatus / getResult / cancel` 方法，可在初始化时注入平台配置（对象或函数），内部通过你提供的 MQ Hook（如发布消息、读取状态）对接。
+2. **消费端**：`createQueueWorker(hooks, { platformConfig, ... })` 从队列中取出任务，复用 `core` 的能力创建、轮询、获取结果，并将进度写回 MQ。与 inline 一样，平台配置只在创建执行器/Worker 时指定，队列消息本身不再重复携带。
+
+```ts
+import { createQueueExecutor, createQueueWorker } from './executors/queue/src/index.ts';
+
+const executor = createQueueExecutor(
+  {
+    enqueue: async job => {
+      await redis.lpush('task-jobs', JSON.stringify(job));
+      return { jobId: job.jobId ?? crypto.randomUUID() };
+    },
+    getStatus: jobId => redis.hget('task-status', jobId).then(v => (v ? JSON.parse(v) : undefined)),
+    getResult: jobId => redis.hget('task-result', jobId).then(v => (v ? JSON.parse(v) : undefined)),
+    cancel: jobId => redis.hset('task-cancel', jobId, '1'),
+  },
+  {
+    platformConfig: locator => {
+      if (!process.env.REPLICATE_API_KEY) return undefined;
+      const scheme = locator.split('://')[0]?.toLowerCase();
+      if (scheme !== 'replicate') return undefined;
+      return { apiKey: process.env.REPLICATE_API_KEY };
+    },
+  }
+);
+
+const worker = createQueueWorker(
+  {
+    reserve: async () => {
+      const payload = await redis.rpop('task-jobs');
+      if (!payload) return undefined;
+      const job = JSON.parse(payload);
+      return { job, attempts: (job.attempts ?? 0) + 1 };
+    },
+    markComplete: (job, result) => redis.hset('task-result', job.jobId, JSON.stringify(result)),
+    markFailed: (job, error) => redis.hset('task-error', job.jobId, JSON.stringify({ message: String(error?.message ?? error) })),
+    reportStatus: (job, status) => redis.hset('task-status', job.jobId, JSON.stringify(status)),
+  },
+  {
+    statusPollIntervalMs: 2000,
+    jobPollIntervalMs: 500,
+    platformConfig: locator => {
+      if (!process.env.REPLICATE_API_KEY) return undefined;
+      const scheme = locator.split('://')[0]?.toLowerCase();
+      if (scheme !== 'replicate') return undefined;
+      return { apiKey: process.env.REPLICATE_API_KEY };
+    },
+  }
+);
+
+await worker.runOnce(); // 或 worker.start() 循环处理
+```
+
+`executeCreateTask` 等底层函数仍由 `executors/queue/src/service/execution.ts` 暴露，可在自定义 Worker 或审计逻辑中复用（保留原始 `raw` 响应、上下文等）。
+
+## 测试
+
+```bash
+pnpm test
+```
+
+Vitest 默认跳过需要真实密钥的集成测试；如需验证 Replicate 或 RunningHub 实际调用，设置对应环境变量后再运行。
+
+## 示例与下一步
+
+- `demo/server`：最小化 Express 示例，使用 `executors/queue` 在内存队列中调度任务并提供 `/api/tasks/*`、`/api/balance`（演示余额）路由。
+- `demo/web`：React + Formily 页面，使用 `inline` 执行器的 HTTP 模式触达后端。
+
+在生产环境中可基于上述三层组合出更多形态（CLI、Electron、Job Worker 等），新 Provider 也只需实现 `ProviderDefinition` 并通过 `registerProvider` 注入即可。
