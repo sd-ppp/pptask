@@ -1,4 +1,4 @@
-# SDPPP Task Router
+# @sdppp/pptask
 
 通过统一的 `locator + payload` 协议复用不同 AI Provider 的异步能力。代码现分为三部分：
 

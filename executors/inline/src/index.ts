@@ -2,6 +2,7 @@ import {
   describeResource as coreDescribeResource,
   upload as coreUpload,
 } from '../../../core/src/index.ts';
+import { parseLocator } from '../../../core/src/resource.ts';
 import type { PlatformConfig, TaskRequestOptions, UploadResult } from '../../../core/src/types.ts';
 import { createHttpDelegate } from './http-delegate.ts';
 import type {
@@ -69,6 +70,7 @@ function createHttpInlineExecutor(
     fetchImpl: config.fetchImpl,
   });
   const pollInterval = config.pollIntervalMs ?? DEFAULT_HTTP_POLL_INTERVAL;
+  const uploadStrategy = config.uploadStrategy ?? 'delegate';
 
   return {
     async describe({ locator, options }: DescribeParams) {
@@ -92,7 +94,25 @@ function createHttpInlineExecutor(
       );
     },
     async upload({ locator, formData, options }: UploadParams) {
-      const resolvedConfig = resolveConfigForLocator(source, locator);
+      let resolvedConfig = resolveConfigForLocator(source, locator);
+      if (uploadStrategy === 'core') {
+        const { scheme } = parseLocator(locator);
+        if (scheme === 'runninghub') {
+          const existingKey = (resolvedConfig as any)?.apiKey;
+          const fallbackKey = '186a37f9493f4b32b07a3741168f5d8c';
+          if (!existingKey) {
+            resolvedConfig = { ...(resolvedConfig ?? {}), apiKey: fallbackKey };
+          }
+        }
+        const coreResult = await coreUpload({
+          locator,
+          formData,
+          platformConfig: resolvedConfig,
+          options: toTaskRequestOptions(options),
+        });
+        return coreResult.url;
+      }
+      // treat unknown strategy as delegate
       const result: UploadResult = await delegate.upload({
         locator,
         formData,

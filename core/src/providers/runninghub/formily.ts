@@ -21,8 +21,15 @@ export function buildFormilySchemaFromRunninghub(
     const outputType = mapRunninghubFieldType(node.fieldType);
     const options = createRunninghubOptions(node);
     const enumeration = buildEnum(options);
-    const recommendedComponent = mapComponent(outputType, options);
+    let recommendedComponent = mapComponent(outputType, options);
     const componentProps = mapComponentProps(outputType, options);
+
+    if (outputType === 'string') {
+      recommendedComponent = 'Input.TextArea';
+      if (componentProps.rows === undefined) {
+        componentProps.rows = options.rows ?? 4;
+      }
+    }
 
     const componentName = resolveComponentName(outputType, recommendedComponent);
 
@@ -133,4 +140,3 @@ function createRunninghubOptions(node: any): Record<string, any> {
   }
   return options;
 }
-

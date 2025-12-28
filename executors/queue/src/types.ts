@@ -122,4 +122,5 @@ export type QueueWorkerOptions = {
   jobPollIntervalMs?: number;
   statusPollIntervalMs?: number;
   maxAttempts?: number;
+  onError?(error: unknown): void | Promise<void>;
 };

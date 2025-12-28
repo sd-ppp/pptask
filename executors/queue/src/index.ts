@@ -1,9 +1,7 @@
 import { ServiceError } from './errors.ts';
 import {
-  executeCreateTask,
   executeCheckStatus,
   executeGetResult,
-  executeCancelTask,
   executeDescribe,
   executeUpload,
 } from './service/execution.ts';
@@ -28,10 +26,8 @@ export * from './types.ts';
 export { ServiceError };
 export {
   executeDescribe,
-  executeCreateTask,
   executeCheckStatus,
   executeGetResult,
-  executeCancelTask,
   executeUpload,
 };
 
@@ -88,6 +84,7 @@ export function createQueueWorker(
   const statusPollInterval = options?.statusPollIntervalMs ?? DEFAULT_STATUS_POLL_INTERVAL_MS;
   const maxAttempts = options?.maxAttempts;
   const source = options?.platformConfig;
+  const onError = options?.onError;
 
   let stopped = false;
   let running = false;
@@ -105,14 +102,34 @@ export function createQueueWorker(
     running = true;
     try {
       while (!stopped) {
-        const processed = await runOnce();
-        if (!processed) {
+        try {
+          const processed = await runOnce();
+          if (!processed) {
+            await delay(jobPollInterval);
+          }
+        } catch (error) {
+          await handleLoopError(error);
           await delay(jobPollInterval);
         }
       }
     } finally {
       running = false;
     }
+  }
+
+  async function handleLoopError(error: unknown): Promise<void> {
+    if (onError) {
+      try {
+        await onError(error);
+        return;
+      } catch (handlerError) {
+        console.warn(
+          '[pptask:queue-worker] error handler threw:',
+          formatWorkerError(handlerError)
+        );
+      }
+    }
+    console.warn('[pptask:queue-worker] run loop error:', formatWorkerError(error));
   }
 
   return {
@@ -148,30 +165,33 @@ async function processReservedJob(
     if (maxAttempts && reserved.attempts > maxAttempts) {
       await hooks.markFailed(
         job,
-        new ServiceError('createTask', `Job ${job.jobId} exceeded max attempts`, {
+        new ServiceError('checkStatus', `Job ${job.jobId} exceeded max attempts`, {
           locator: job.locator,
           context: job.options?.context,
         })
       );
       return;
     }
-    const created = await executeCreateTask({
-      locator: job.locator,
-      payload: job.payload ?? {},
-      platformConfig: resolveConfig(source, job.locator),
-      options: job.options,
-    });
-    await maybeReportStatus(hooks, job, toStatusResultFromCreate(created.data, job.jobId));
-
-    const createdData = created.data;
-    const taskId = createdData.taskId;
+    const providerTaskId =
+      (job as any).providerTaskId ??
+      job.options?.context?.providerTaskId ??
+      job.payload?.providerTaskId;
+    if (!providerTaskId) {
+      throw new ServiceError('checkStatus', `Missing provider task id for job ${job.jobId}`, {
+        locator: job.locator,
+        context: job.options?.context,
+      });
+    }
     const options = job.options;
     const platformConfig = resolveConfig(source, job.locator);
+    let iteration = 0;
     while (true) {
-      await delay(statusPollInterval);
+      if (iteration > 0) {
+        await delay(statusPollInterval);
+      }
       const statusResult = await executeCheckStatus({
         locator: job.locator,
-        taskId,
+        taskId: providerTaskId,
         platformConfig,
         options,
       });
@@ -180,24 +200,30 @@ async function processReservedJob(
       if (status === 'succeeded') {
         const result = await executeGetResult({
           locator: job.locator,
-          taskId,
+          taskId: providerTaskId,
           platformConfig,
           options,
         });
         await hooks.markComplete(job, normalizeResultForJob(result.data, job.jobId));
         return;
       }
-      if (status === 'failed' || status === 'cancelled') {
-        throw new ServiceError(
-          status === 'failed' ? 'checkStatus' : 'cancelTask',
-          `Task ${taskId} ended with status=${status}`,
-         {
-            locator: job.locator,
-            platformConfig,
-            details: statusResult.data.raw,
-          }
-        );
+      if (status === 'cancelled') {
+        await maybeReportStatus(hooks, job, {
+          provider: statusResult.data.provider,
+          taskId: job.jobId,
+          status: 'cancelled',
+          raw: statusResult.data.raw,
+        });
+        return;
       }
+      if (status === 'failed') {
+        throw new ServiceError('checkStatus', `Task ${providerTaskId} ended with status=${status}`, {
+          locator: job.locator,
+          platformConfig,
+          details: statusResult.data.raw,
+        });
+      }
+      iteration += 1;
     }
   } catch (err) {
     await hooks.markFailed(job, err);
@@ -230,15 +256,6 @@ function normalizeExecutionOptions(options?: ExecutionOptions): ExecutionOptions
   return normalized;
 }
 
-function toStatusResultFromCreate(createResult: TaskCreateResult, jobId: string): TaskStatusResult {
-  return {
-    provider: createResult.provider,
-    taskId: jobId,
-    status: createResult.status,
-    raw: createResult.raw,
-  };
-}
-
 function normalizeStatusForJob(status: TaskStatusResult, jobId: string): TaskStatusResult {
   if (status.taskId === jobId) return status;
   return {
@@ -255,6 +272,37 @@ function normalizeResultForJob(result: TaskResult, jobId: string): TaskResult {
     taskId: jobId,
     raw: { ...result.raw, providerTaskId: result.taskId },
   };
+}
+
+function formatWorkerError(error: unknown): string {
+  if (error instanceof Error) {
+    const message = sanitizeWorkerErrorMessage(error.message ?? '');
+    if (error.name && error.name !== 'Error' && !message.startsWith(error.name)) {
+      return `${error.name}: ${message}`;
+    }
+    return message || error.name || 'Unknown error';
+  }
+  if (typeof error === 'string') {
+    return sanitizeWorkerErrorMessage(error);
+  }
+  try {
+    return sanitizeWorkerErrorMessage(JSON.stringify(error));
+  } catch {
+    return 'Unknown error';
+  }
+}
+
+function sanitizeWorkerErrorMessage(message: string): string {
+  const trimmed = message.trim();
+  const htmlIndex = trimmed.search(/<!DOCTYPE html|<html/i);
+  if (htmlIndex >= 0) {
+    const prefix = trimmed.slice(0, htmlIndex).trim();
+    return prefix ? `${prefix} [HTML response omitted]` : 'Received HTML response [omitted]';
+  }
+  if (trimmed.length > 300) {
+    return `${trimmed.slice(0, 297)}...`;
+  }
+  return trimmed || 'Unknown error';
 }
 
 function delay(ms: number): Promise<void> {

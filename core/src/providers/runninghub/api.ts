@@ -64,21 +64,57 @@ export async function createRunninghubTask(
   const { nodeInfoList } = buildRunninghubPayload(template, payload);
   const baseHost = getBaseHost(config.language);
   const runUrl = `https://${baseHost}/task/openapi/ai-app/run`;
+  const requestPayload = {
+    apiKey: config.apiKey,
+    webappId,
+    nodeInfoList,
+    instanceType: 'default',
+  };
+  console.debug(
+    '[pptask][runninghub] createTask request',
+    JSON.stringify(
+      {
+        url: runUrl,
+        payload: requestPayload,
+      },
+      null,
+      2
+    )
+  );
   const response = await fetch(runUrl, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      apiKey: config.apiKey,
-      webappId,
-      nodeInfoList,
-      instanceType: 'default',
-    }),
+    body: JSON.stringify(requestPayload),
   });
   if (!response.ok) {
+    console.error(
+      '[pptask][runninghub] createTask HTTP error',
+      JSON.stringify(
+        {
+          url: runUrl,
+          status: response.status,
+          payload: requestPayload,
+        },
+        null,
+        2
+      )
+    );
     throw new Error(`runninghub run HTTP ${response.status}`);
   }
   const result = await response.json();
   if (result?.code !== 0) {
+    console.error(
+      '[pptask][runninghub] createTask API error',
+      JSON.stringify(
+        {
+          url: runUrl,
+          payload: requestPayload,
+          response: result,
+        },
+        null,
+        2
+      )
+    );
     throw createRunningHubError('run', result);
   }
   const taskId: string = result?.data?.taskId;
@@ -110,16 +146,52 @@ export async function checkRunninghubStatus(
   if (isRequestAborted(signal)) throw createAbortError('Status check aborted');
   const baseHost = getBaseHost(config.language);
   const statusUrl = `https://${baseHost}/task/openapi/status`;
+  const statusPayload = { apiKey: config.apiKey, taskId };
+  console.debug(
+    '[pptask][runninghub] status request',
+    JSON.stringify(
+      {
+        url: statusUrl,
+        payload: statusPayload,
+      },
+      null,
+      2
+    )
+  );
   const response = await fetch(statusUrl, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ apiKey: config.apiKey, taskId }),
+    body: JSON.stringify(statusPayload),
   });
   if (!response.ok) {
+    console.error(
+      '[pptask][runninghub] status HTTP error',
+      JSON.stringify(
+        {
+          url: statusUrl,
+          status: response.status,
+          payload: statusPayload,
+        },
+        null,
+        2
+      )
+    );
     throw new Error(`runninghub status HTTP ${response.status}`);
   }
   const payload = await response.json();
   if (payload?.code !== 0) {
+    console.error(
+      '[pptask][runninghub] status API error',
+      JSON.stringify(
+        {
+          url: statusUrl,
+          payload: statusPayload,
+          response: payload,
+        },
+        null,
+        2
+      )
+    );
     throw createRunningHubError('status', payload);
   }
   const statusValue = extractRunninghubStatus(payload);

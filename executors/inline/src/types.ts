@@ -36,6 +36,7 @@ export type InlineEndpointConfig =
       pollIntervalMs?: number;
       endpoints?: Partial<DelegateEndpoints>;
       platformConfig?: PlatformConfigSource;
+      uploadStrategy?: 'delegate' | 'core';
     };
 
 export type DelegateEndpoints = {
