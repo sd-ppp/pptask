@@ -97,18 +97,37 @@ async function pollUntilDone(
 ): Promise<any[]> {
   try {
     let iteration = 0;
+    let consecutiveStatusFailures = 0;
     while (true) {
       throwIfAborted(taskOptions?.signal);
       if (iteration > 0) {
         await delay(pollIntervalMs);
       }
-      const status = await client.checkStatus({
-        locator,
-        taskId,
-        platformConfig,
-        options: taskOptions,
-        context,
-      });
+      let status: TaskStatusResult;
+      try {
+        status = await client.checkStatus({
+          locator,
+          taskId,
+          platformConfig,
+          options: taskOptions,
+          context,
+        });
+        consecutiveStatusFailures = 0;
+      } catch (error) {
+        if (isAbortError(error)) {
+          throw error;
+        }
+        consecutiveStatusFailures += 1;
+        if (consecutiveStatusFailures >= 3) {
+          const pollingError = new Error(
+            `Task status polling failed ${consecutiveStatusFailures} times consecutively`
+          );
+          (pollingError as any).cause = error;
+          throw pollingError;
+        }
+        iteration += 1;
+        continue;
+      }
       reportProgress(runOptions, status);
       const normalizedStatus = status.status;
       if (normalizedStatus === 'succeeded') {
