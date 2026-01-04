@@ -56,7 +56,8 @@ export type GetResultExecutionParams = CheckStatusExecutionParams;
 export type CancelTaskExecutionParams = CheckStatusExecutionParams;
 
 export type UploadExecutionParams = {
-  locator: string;
+  locator?: string;
+  uploadProvider?: string;
   formData: FormData;
   platformConfig?: PlatformConfig;
   options?: ExecutionOptions;

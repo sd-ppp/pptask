@@ -23,21 +23,9 @@ export type PlatformConfigSource =
   | PlatformConfig
   | ((locator: string) => PlatformConfig | undefined);
 
-export type InlineEndpointConfig =
-  | {
-      mode: 'local';
-      platformConfig?: PlatformConfigSource;
-    }
-  | {
-      mode: 'http';
-      baseUrl: string;
-      headers?: () => Record<string, string> | Promise<Record<string, string>>;
-      fetchImpl?: typeof fetch;
-      pollIntervalMs?: number;
-      endpoints?: Partial<DelegateEndpoints>;
-      platformConfig?: PlatformConfigSource;
-      uploadStrategy?: 'delegate' | 'core';
-    };
+export type InlineExecutorConfig = {
+  platformConfig?: PlatformConfigSource;
+};
 
 export type DelegateEndpoints = {
   describe: string;
@@ -60,7 +48,8 @@ export type RunParams = {
 };
 
 export type UploadParams = {
-  locator: string;
+  locator?: string;
+  uploadProvider?: string;
   formData: FormData;
   options?: RunOptions;
 };

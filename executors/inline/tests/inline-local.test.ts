@@ -32,7 +32,7 @@ describe('inline executor (local mode)', () => {
       formValues: {},
     });
 
-    const executor = createInlineExecutor({ mode: 'local' });
+    const executor = createInlineExecutor();
     const result = await executor.describe({ locator: 'replicate://owner/model' });
 
     expect(result.provider).toBe('replicate');
@@ -80,7 +80,7 @@ describe('inline executor (local mode)', () => {
       onFinish: vi.fn(),
     };
 
-    const executor = createInlineExecutor({ mode: 'local' });
+    const executor = createInlineExecutor();
     const handle = await executor.run({
       locator: 'replicate://owner/model',
       payload: { prompt: 'hello' },
@@ -119,7 +119,7 @@ describe('inline executor (local mode)', () => {
       raw: {},
     });
 
-    const executor = createInlineExecutor({ mode: 'local' });
+    const executor = createInlineExecutor();
     const form = new FormData();
     form.set('file', new Blob(['hello'], { type: 'text/plain' }));
     const url = await executor.upload({
@@ -128,6 +128,12 @@ describe('inline executor (local mode)', () => {
     });
 
     expect(url).toBe('https://files.example.com/foo.png');
-    expect(uploadMock).toHaveBeenCalled();
+    expect(uploadMock).toHaveBeenCalledWith({
+      locator: 'replicate://owner/model',
+      uploadProvider: undefined,
+      formData: form,
+      platformConfig: undefined,
+      options: undefined,
+    });
   });
 });

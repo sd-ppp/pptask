@@ -34,6 +34,7 @@ describe('runninghub integration (mocked)', () => {
     const describeResult = await describeResource({ locator, platformConfig });
     expect(describeResult.provider).toBe('runninghub');
     expect(Object.keys(describeResult.formSchema.properties)).toHaveLength(1);
+    expect(describeResult.recommendUploadProvider).toBe('runninghub');
 
     const createResult = await createTask({
       locator,
@@ -65,7 +66,11 @@ describe('runninghub integration (mocked)', () => {
 
     const form = new FormData();
     form.append('file', new Blob(['data'], { type: 'text/plain' }), 'demo.txt');
-    const uploadResult = await upload({ locator, formData: form, platformConfig });
+    const uploadResult = await upload({
+      uploadProvider: 'runninghub',
+      formData: form,
+      platformConfig,
+    });
     expect(uploadResult.url).toBe('uploaded-file');
   });
 });

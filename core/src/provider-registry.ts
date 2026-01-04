@@ -1,7 +1,12 @@
 import { normalizeScheme } from './resource.ts';
-import type { ProviderDefinition, ProviderScheme } from './types.ts';
+import type {
+  ProviderDefinition,
+  ProviderScheme,
+  UploadProviderDefinition,
+} from './types.ts';
 
 const providers = new Map<ProviderScheme, ProviderDefinition>();
+const uploadProviders = new Map<ProviderScheme, UploadProviderDefinition>();
 
 export function registerProvider(scheme: string, definition: ProviderDefinition): void {
   if (!definition) {
@@ -31,4 +36,29 @@ export function ensureProvider(scheme: string): ProviderDefinition {
 
 export function listProviders(): ProviderScheme[] {
   return Array.from(providers.keys());
+}
+
+export function registerUploadProvider(scheme: string, definition: UploadProviderDefinition): void {
+  if (!definition) {
+    throw new Error('upload provider definition is required');
+  }
+  const normalized = normalizeScheme(scheme);
+  uploadProviders.set(normalized, definition);
+}
+
+export function getUploadProvider(scheme: string): UploadProviderDefinition | undefined {
+  const normalized = normalizeScheme(scheme);
+  return uploadProviders.get(normalized);
+}
+
+export function ensureUploadProvider(scheme: string): UploadProviderDefinition {
+  const provider = getUploadProvider(scheme);
+  if (!provider) {
+    throw new Error(`No upload provider registered for name: ${normalizeScheme(scheme)}`);
+  }
+  return provider;
+}
+
+export function listUploadProviders(): ProviderScheme[] {
+  return Array.from(uploadProviders.keys());
 }

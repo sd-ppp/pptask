@@ -158,16 +158,23 @@ export async function executeCancelTask(
 export async function executeUpload(
   params: UploadExecutionParams
 ): Promise<ExecutionResult<UploadResult>> {
-  const { locator, formData, platformConfig, options } = params;
+  const { locator, uploadProvider, formData, platformConfig, options } = params;
   try {
     const result = await uploadResource({
       locator,
+      uploadProvider,
       formData,
       platformConfig,
       options: mapLibOptions(options),
     });
-    return buildExecutionResult('upload', locator, platformConfig, options, result);
+    return buildExecutionResult(
+      'upload',
+      locator ?? uploadProvider ?? '',
+      platformConfig,
+      options,
+      result
+    );
   } catch (error) {
-    throw wrapServiceError('upload', error, locator, platformConfig, options);
+    throw wrapServiceError('upload', error, locator ?? uploadProvider ?? '', platformConfig, options);
   }
 }

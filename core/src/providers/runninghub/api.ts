@@ -47,6 +47,7 @@ export async function describeRunninghub(
     },
     formSchema: schema,
     formValues: values,
+    recommendUploadProvider: 'runninghub',
   };
 }
 

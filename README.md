@@ -17,15 +17,15 @@ executors/queue/    // 消息队列执行器：入队、轮询、工作进程等
 - `checkStatus({ locator, taskId, platformConfig?, options? })`
 - `getResult({ locator, taskId, platformConfig?, options? })`
 - `cancelTask({ locator, taskId, platformConfig?, options? })`
-- `upload({ locator, formData, platformConfig?, options? })`
+- `upload({ uploadProvider?, locator?, formData, platformConfig?, options? })`
 
 `TaskResult` 额外包含 `costCoins` / `costMoney` / `costMoneyCurrency` 字段，Provider 在有消费信息时会填入（如平台内积分、人民币金额与货币单位），供上层做扣费或展示。
 
-默认已注册 `replicate://` 与 `runninghub://`，并可按需扩展新 Provider：
+默认已注册 `replicate://` 与 `runninghub://`，并可按需扩展新 Provider（上传逻辑可通过 `registerUploadProvider` 拆分复用）：
 
 ```ts
-import { registerProvider } from './core/src/index.ts';
-import type { ProviderDefinition } from './core/src/types.ts';
+import { registerProvider, registerUploadProvider } from './core/src/index.ts';
+import type { ProviderDefinition, UploadProviderDefinition } from './core/src/types.ts';
 
 const customProvider: ProviderDefinition = {
   async describeResource({ locator }) {
@@ -34,6 +34,7 @@ const customProvider: ProviderDefinition = {
       metadata: { scheme: 'custom', locator },
       formSchema: { type: 'object', properties: {} },
       formValues: {},
+      recommendUploadProvider: 'custom',
     };
   },
   async createTask({ locator }) {
@@ -62,12 +63,18 @@ const customProvider: ProviderDefinition = {
     };
   },
   async cancelTask() {},
-  async upload() {
-    return { provider: 'custom', url: '', raw: {} };
-  },
 };
 
 registerProvider('custom', customProvider);
+
+const customUploadProvider: UploadProviderDefinition = {
+  async upload({ formData }) {
+    // 自定义上传实现
+    return { provider: 'custom', url: 'https://files.example.com/demo', raw: {} };
+  },
+};
+
+registerUploadProvider('custom', customUploadProvider);
 ```
 
 如果需要维护平台密钥，可根据 locator 的 scheme 手动选择默认值，并在调用时自行合并覆盖项：
@@ -101,51 +108,109 @@ await createTask({
 
 ## executors/inline/ —— 进程内执行器
 
-`createInlineExecutor` 负责在同一个进程内执行任务，可选择 **local**（直连 Provider）或 **http**（代理到后端）两种模式。
+`createInlineExecutor` 负责在同一个进程内执行任务（复用当前进程内已注册的 Provider）。
 
 ```ts
 import { createInlineExecutor } from './executors/inline/src/index.ts';
 
 // 直连 Replicate / RunningHub 等 Provider
-const localExecutor = createInlineExecutor({
-  mode: 'local',
+const executor = createInlineExecutor({
   platformConfig: locator =>
     locator.startsWith('replicate://') && process.env.REPLICATE_API_KEY
       ? { apiKey: process.env.REPLICATE_API_KEY }
       : undefined,
 });
-const describe = await localExecutor.describe({ locator: 'replicate://owner/model' });
-const task = await localExecutor.run({
+const describe = await executor.describe({ locator: 'replicate://owner/model' });
+const task = await executor.run({
   locator: 'replicate://owner/model',
   payload: describe.formValues,
 });
 const outputs = await task.promise;
-
-// 通过 HTTP Endpoint 代理执行（headers 为函数，可适配动态登录态）
-const httpExecutor = createInlineExecutor({
-  mode: 'http',
-  baseUrl: 'https://router.example.com/api',
-  headers: async () => ({
-    Authorization: `Bearer ${await fetchToken()}`,
-  }),
-  pollIntervalMs: 1500,
-  platformConfig: locator =>
-    locator.startsWith('runninghub://') && process.env.RUNNINGHUB_API_KEY
-      ? {
-          apiKey: process.env.RUNNINGHUB_API_KEY,
-          language: process.env.RUNNINGHUB_LANGUAGE ?? 'en-US',
-        }
-      : undefined,
-});
-
-const delegated = await httpExecutor.run({
-  locator: 'runninghub://flux-kontext-pro',
-  payload: { prompt: 'via-http' },
-});
-await delegated.promise;
 ```
 
-`upload` 同样可用于两种模式，HTTP 场景会把 `locator` 与 `platformConfig` 自动拼装到表单中。`createInlineExecutor` 时提供的 `platformConfig` 会自动注入，单次调用无需（也不能）再次传入。
+`upload` 会自动注入在创建执行器时提供的 `platformConfig`，无需调用时再次传入。`describe` 返回的 `recommendUploadProvider` 可直接透传给 `upload({ uploadProvider })`。
+
+### 通过 HTTP 代理自定义 Provider
+
+如果需要像旧版 `mode: 'http'` 那样通过 HTTP 代理触发任务，可在外部直接封装 HTTP 请求并注册 Provider：
+
+```ts
+import { registerProvider } from '@sdppp/pptask/core/src/index.ts';
+import type { ProviderDefinition } from '@sdppp/pptask/core/src/types.ts';
+
+const BASE_URL = 'https://router.example.com/api';
+
+async function fetchToken(): Promise<string> {
+  // 在此实现实际的鉴权逻辑
+  return process.env.TASKROUTER_TOKEN ?? '';
+}
+
+async function postJson<T>(
+  path: string,
+  body: Record<string, any>,
+  options?: { signal?: AbortSignal }
+): Promise<T> {
+  const response = await fetch(`${BASE_URL}${path}`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${await fetchToken()}`,
+    },
+    body: JSON.stringify(body),
+    signal: options?.signal,
+  });
+  if (!response.ok) {
+    throw new Error(`HTTP ${response.status} ${response.statusText}`);
+  }
+  if (response.status === 204) return undefined as T;
+  return response.json() as Promise<T>;
+}
+
+const httpProvider: ProviderDefinition = {
+  async describeResource(params) {
+    const result = await postJson('/tasks/describe', {
+      locator: params.locator,
+      platformConfig: params.platformConfig,
+      options: params.options,
+    });
+    return result.recommendUploadProvider
+      ? result
+      : { ...result, recommendUploadProvider: 'runninghub' };
+  },
+  createTask: params =>
+    postJson('/tasks', {
+      locator: params.locator,
+      payload: params.payload ?? {},
+      platformConfig: params.platformConfig,
+      options: params.options,
+    }),
+  checkStatus: params =>
+    postJson('/tasks/status', {
+      locator: params.locator,
+      taskId: params.taskId,
+      platformConfig: params.platformConfig,
+      options: params.options,
+    }),
+  getResult: params =>
+    postJson('/tasks/result', {
+      locator: params.locator,
+      taskId: params.taskId,
+      platformConfig: params.platformConfig,
+      options: params.options,
+    }),
+  cancelTask: params =>
+    postJson('/tasks/cancel', {
+      locator: params.locator,
+      taskId: params.taskId,
+      platformConfig: params.platformConfig,
+      options: params.options,
+    }),
+};
+
+registerProvider('taskrouter', httpProvider);
+```
+
+随后即可通过 `createInlineExecutor()` 直接消费 `taskrouter://` 资源。
 
 ## executors/queue/ —— 消息队列执行器
 

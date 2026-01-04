@@ -33,7 +33,11 @@ export type DescribeParams = {
 };
 
 export type UploadParams = {
-  locator: string;
+  /**
+   * @deprecated Use uploadProvider instead; this field will be removed in a future release.
+   */
+  locator?: string;
+  uploadProvider?: string;
   formData: FormData;
   platformConfig?: PlatformConfig;
   options?: TaskRequestOptions;
@@ -80,6 +84,7 @@ export type DescribeResult = {
   };
   formSchema: FormilySchema;
   formValues: Record<string, any>;
+  recommendUploadProvider?: string;
 };
 
 export type UploadResult = {
@@ -94,6 +99,9 @@ export type ProviderDefinition = {
   checkStatus(params: TaskCheckParams): Promise<TaskStatusResult>;
   getResult(params: TaskResultParams): Promise<TaskResult>;
   cancelTask(params: TaskCheckParams): Promise<void>;
+};
+
+export type UploadProviderDefinition = {
   upload(params: UploadParams): Promise<UploadResult>;
 };
 

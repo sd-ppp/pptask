@@ -1,13 +1,23 @@
-import { parseLocator } from './resource.ts';
+import { parseLocator, normalizeScheme } from './resource.ts';
 import {
   registerProvider as registerProviderInternal,
   unregisterProvider,
   listProviders,
   ensureProvider,
   getProvider,
+  registerUploadProvider as registerUploadProviderInternal,
+  ensureUploadProvider,
+  getUploadProvider,
+  listUploadProviders,
 } from './provider-registry.ts';
-import { replicateProviderDefinition } from './providers/replicate/index.ts';
-import { runninghubProviderDefinition } from './providers/runninghub/index.ts';
+import {
+  replicateProviderDefinition,
+  replicateUploadProviderDefinition,
+} from './providers/replicate/index.ts';
+import {
+  runninghubProviderDefinition,
+  runninghubUploadProviderDefinition,
+} from './providers/runninghub/index.ts';
 import type {
   DescribeParams,
   DescribeResult,
@@ -20,6 +30,7 @@ import type {
   UploadParams,
   UploadResult,
   ProviderDefinition,
+  UploadProviderDefinition,
 } from './types.ts';
 
 export * from './types.ts';
@@ -27,13 +38,20 @@ export * from './providers/replicate/index.ts';
 export * from './providers/runninghub/index.ts';
 export * from './resource.ts';
 export { unregisterProvider, listProviders, getProvider };
+export { listUploadProviders, getUploadProvider };
 
 function ensureDefaultProvidersRegistered(): void {
   if (!getProvider('replicate')) {
     registerProviderInternal('replicate', replicateProviderDefinition);
   }
+  if (!getUploadProvider('replicate')) {
+    registerUploadProviderInternal('replicate', replicateUploadProviderDefinition);
+  }
   if (!getProvider('runninghub')) {
     registerProviderInternal('runninghub', runninghubProviderDefinition);
+  }
+  if (!getUploadProvider('runninghub')) {
+    registerUploadProviderInternal('runninghub', runninghubUploadProviderDefinition);
   }
 }
 
@@ -41,6 +59,10 @@ ensureDefaultProvidersRegistered();
 
 export function registerProvider(scheme: string, definition: ProviderDefinition) {
   registerProviderInternal(scheme, definition);
+}
+
+export function registerUploadProvider(scheme: string, definition: UploadProviderDefinition) {
+  registerUploadProviderInternal(scheme, definition);
 }
 
 export async function describeResource(params: DescribeParams): Promise<DescribeResult> {
@@ -69,11 +91,23 @@ export async function cancelTask(params: TaskCheckParams): Promise<void> {
 }
 
 export async function upload(params: UploadParams): Promise<UploadResult> {
-  const provider = resolveProvider(params.locator);
+  const uploadProviderName = resolveUploadProviderName(params);
+  const provider = ensureUploadProvider(uploadProviderName);
   return provider.upload(params);
 }
 
 function resolveProvider(locator: string) {
   const { scheme } = parseLocator(locator);
   return ensureProvider(scheme);
+}
+
+function resolveUploadProviderName(params: UploadParams): string {
+  if (params.uploadProvider) {
+    return normalizeScheme(params.uploadProvider);
+  }
+  if (params.locator) {
+    const { scheme } = parseLocator(params.locator);
+    return normalizeScheme(scheme);
+  }
+  throw new Error('upload requires uploadProvider or locator');
 }

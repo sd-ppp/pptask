@@ -42,6 +42,7 @@ export async function describeReplicate(
     },
     formSchema: schema,
     formValues: values,
+    recommendUploadProvider: 'replicate',
   };
 }
 

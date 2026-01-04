@@ -11,6 +11,7 @@ import type {
   TaskStatusResult,
   UploadParams,
   UploadResult,
+  UploadProviderDefinition,
 } from '../../types.ts';
 import {
   cancelRunninghubTask,
@@ -30,6 +31,13 @@ function ensureRunninghubUrl(locator: string): URL {
     throw new Error(`runninghub provider received unsupported locator: ${locator}`);
   }
   return url;
+}
+
+function resolveRunninghubUploadUrl(locator?: string): URL {
+  if (locator) {
+    return ensureRunninghubUrl(locator);
+  }
+  return new URL('runninghub://upload-placeholder');
 }
 
 export const runninghubProviderDefinition: ProviderDefinition = {
@@ -53,8 +61,11 @@ export const runninghubProviderDefinition: ProviderDefinition = {
     const url = ensureRunninghubUrl(params.locator);
     await cancelRunninghubTask(url, params.taskId, params.platformConfig, params.options);
   },
+};
+
+export const runninghubUploadProviderDefinition: UploadProviderDefinition = {
   async upload(params: UploadParams): Promise<UploadResult> {
-    const url = ensureRunninghubUrl(params.locator);
+    const url = resolveRunninghubUploadUrl(params.locator);
     return uploadRunninghubFile(url, params.formData, params.platformConfig, params.options);
   },
 };

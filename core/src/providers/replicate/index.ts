@@ -11,6 +11,7 @@ import type {
   TaskStatusResult,
   UploadParams,
   UploadResult,
+  UploadProviderDefinition,
 } from '../../types.ts';
 import {
   cancelReplicateTask,
@@ -29,6 +30,13 @@ function ensureReplicateUrl(locator: string): URL {
     throw new Error(`replicate provider received unsupported locator: ${locator}`);
   }
   return url;
+}
+
+function resolveReplicateUploadUrl(locator?: string): URL {
+  if (locator) {
+    return ensureReplicateUrl(locator);
+  }
+  return new URL('replicate://upload-placeholder');
 }
 
 export const replicateProviderDefinition: ProviderDefinition = {
@@ -52,8 +60,11 @@ export const replicateProviderDefinition: ProviderDefinition = {
     const url = ensureReplicateUrl(params.locator);
     await cancelReplicateTask(url, params.taskId, params.platformConfig, params.options);
   },
+};
+
+export const replicateUploadProviderDefinition: UploadProviderDefinition = {
   async upload(params: UploadParams): Promise<UploadResult> {
-    const url = ensureReplicateUrl(params.locator);
+    const url = resolveReplicateUploadUrl(params.locator);
     return uploadReplicateFile(url, params.formData, params.platformConfig, params.options);
   },
 };
