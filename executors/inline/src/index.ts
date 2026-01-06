@@ -73,7 +73,7 @@ function cloneConfig(config?: PlatformConfig): PlatformConfig | undefined {
 function resolveConfigForUpload(
   source: PlatformConfigSource | undefined,
   locator: string | undefined,
-  uploadProvider: string | undefined
+  uploadProvider: string
 ): PlatformConfig | undefined {
   if (!source) return undefined;
   if (locator) {

@@ -1,14 +1,13 @@
-import { parseLocator, normalizeScheme } from './resource.ts';
 import {
-  registerProvider as registerProviderInternal,
-  unregisterProvider,
-  listProviders,
   ensureProvider,
-  getProvider,
-  registerUploadProvider as registerUploadProviderInternal,
   ensureUploadProvider,
+  getProvider,
   getUploadProvider,
+  listProviders,
   listUploadProviders,
+  registerProvider as registerProviderInternal,
+  registerUploadProvider as registerUploadProviderInternal,
+  unregisterProvider,
 } from './provider-registry.ts';
 import {
   replicateProviderDefinition,
@@ -18,27 +17,27 @@ import {
   runninghubProviderDefinition,
   runninghubUploadProviderDefinition,
 } from './providers/runninghub/index.ts';
+import { normalizeScheme, parseLocator } from './resource.ts';
 import type {
   DescribeParams,
   DescribeResult,
+  ProviderDefinition,
+  TaskCheckParams,
   TaskCreateParams,
   TaskCreateResult,
-  TaskCheckParams,
-  TaskStatusResult,
-  TaskResultParams,
   TaskResult,
+  TaskResultParams,
+  TaskStatusResult,
   UploadParams,
-  UploadResult,
-  ProviderDefinition,
   UploadProviderDefinition,
+  UploadResult,
 } from './types.ts';
 
-export * from './types.ts';
 export * from './providers/replicate/index.ts';
 export * from './providers/runninghub/index.ts';
 export * from './resource.ts';
-export { unregisterProvider, listProviders, getProvider };
-export { listUploadProviders, getUploadProvider };
+export * from './types.ts';
+export { getProvider, getUploadProvider, listProviders, listUploadProviders, unregisterProvider };
 
 function ensureDefaultProvidersRegistered(): void {
   if (!getProvider('replicate')) {
@@ -105,9 +104,5 @@ function resolveUploadProviderName(params: UploadParams): string {
   if (params.uploadProvider) {
     return normalizeScheme(params.uploadProvider);
   }
-  if (params.locator) {
-    const { scheme } = parseLocator(params.locator);
-    return normalizeScheme(scheme);
-  }
-  throw new Error('upload requires uploadProvider or locator');
+  throw new Error('upload requires uploadProvider');
 }

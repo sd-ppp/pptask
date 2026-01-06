@@ -33,13 +33,6 @@ function ensureRunninghubUrl(locator: string): URL {
   return url;
 }
 
-function resolveRunninghubUploadUrl(locator?: string): URL {
-  if (locator) {
-    return ensureRunninghubUrl(locator);
-  }
-  return new URL('runninghub://upload-placeholder');
-}
-
 export const runninghubProviderDefinition: ProviderDefinition = {
   async describeResource(params: DescribeParams): Promise<DescribeResult> {
     const url = ensureRunninghubUrl(params.locator);
@@ -65,8 +58,7 @@ export const runninghubProviderDefinition: ProviderDefinition = {
 
 export const runninghubUploadProviderDefinition: UploadProviderDefinition = {
   async upload(params: UploadParams): Promise<UploadResult> {
-    const url = resolveRunninghubUploadUrl(params.locator);
-    return uploadRunninghubFile(url, params.formData, params.platformConfig, params.options);
+    return uploadRunninghubFile(params.formData, params.platformConfig, params.options);
   },
 };
 

@@ -33,11 +33,8 @@ export type DescribeParams = {
 };
 
 export type UploadParams = {
-  /**
-   * @deprecated Use uploadProvider instead; this field will be removed in a future release.
-   */
   locator?: string;
-  uploadProvider?: string;
+  uploadProvider: string;
   formData: FormData;
   platformConfig?: PlatformConfig;
   options?: TaskRequestOptions;

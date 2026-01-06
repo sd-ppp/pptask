@@ -32,13 +32,6 @@ function ensureReplicateUrl(locator: string): URL {
   return url;
 }
 
-function resolveReplicateUploadUrl(locator?: string): URL {
-  if (locator) {
-    return ensureReplicateUrl(locator);
-  }
-  return new URL('replicate://upload-placeholder');
-}
-
 export const replicateProviderDefinition: ProviderDefinition = {
   async describeResource(params: DescribeParams): Promise<DescribeResult> {
     const url = ensureReplicateUrl(params.locator);
@@ -64,8 +57,7 @@ export const replicateProviderDefinition: ProviderDefinition = {
 
 export const replicateUploadProviderDefinition: UploadProviderDefinition = {
   async upload(params: UploadParams): Promise<UploadResult> {
-    const url = resolveReplicateUploadUrl(params.locator);
-    return uploadReplicateFile(url, params.formData, params.platformConfig, params.options);
+    return uploadReplicateFile(params.formData, params.platformConfig, params.options);
   },
 };
 

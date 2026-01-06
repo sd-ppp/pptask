@@ -153,7 +153,6 @@ export async function cancelReplicateTask(
 }
 
 export async function uploadReplicateFile(
-  _url: URL,
   formData: FormData,
   platformConfig: PlatformConfig | undefined,
   options?: TaskRequestOptions

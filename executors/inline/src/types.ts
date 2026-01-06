@@ -49,7 +49,7 @@ export type RunParams = {
 
 export type UploadParams = {
   locator?: string;
-  uploadProvider?: string;
+  uploadProvider: string;
   formData: FormData;
   options?: RunOptions;
 };
