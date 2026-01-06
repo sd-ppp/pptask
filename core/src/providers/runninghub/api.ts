@@ -71,17 +71,6 @@ export async function createRunninghubTask(
     nodeInfoList,
     instanceType: 'default',
   };
-  console.debug(
-    '[pptask][runninghub] createTask request',
-    JSON.stringify(
-      {
-        url: runUrl,
-        payload: requestPayload,
-      },
-      null,
-      2
-    )
-  );
   const response = await fetch(runUrl, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
