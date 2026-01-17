@@ -8,10 +8,10 @@ import {
   upload,
 } from '../src/index.ts';
 
-const locator = 'runninghub://mock-app';
+const locator = 'runninghub:///mock-app';
 const apiKey = 'test-key';
 
-describe('runninghub integration (mocked)', () => {
+describe('runninghub provider (unit tests)', () => {
   let fetchMock: ReturnType<typeof vi.fn>;
 
   beforeEach(() => {
@@ -29,48 +29,71 @@ describe('runninghub integration (mocked)', () => {
     ).rejects.toThrow(/apiKey/);
   });
 
-  it('describes, creates, checks, fetches result, cancels, uploads', async () => {
+  it('describes resource', async () => {
     const platformConfig = { apiKey };
     const describeResult = await describeResource({ locator, platformConfig });
+    
     expect(describeResult.provider).toBe('runninghub');
     expect(Object.keys(describeResult.formSchema.properties)).toHaveLength(1);
     expect(describeResult.recommendUploadProvider).toBe('runninghub');
+  });
 
+  it('creates task', async () => {
+    const platformConfig = { apiKey };
     const createResult = await createTask({
       locator,
       payload: { '1_prompt': 'hello' },
       platformConfig,
     });
+    
     expect(createResult.taskId).toBe('task-123');
+    expect(createResult.provider).toBe('runninghub');
+  });
 
+  it('checks status', async () => {
+    const platformConfig = { apiKey };
     const statusResult = await checkStatus({
       locator,
       taskId: 'task-123',
       platformConfig,
     });
+    
     expect(statusResult.status).toBe('succeeded');
+  });
 
+  it('gets result', async () => {
+    const platformConfig = { apiKey };
     const result = await getResult({
       locator,
       taskId: 'task-123',
       platformConfig,
     });
+    
     expect(result.outputs[0]?.url).toBe('https://files/output.png');
     expect(result.costMoney).toBeCloseTo(0.3);
     expect(result.costMoneyCurrency).toBe('CNY');
     expect(result.costCoins).toBe(14);
+  });
 
+  it('cancels task', async () => {
+    const platformConfig = { apiKey };
+    
     await expect(
       cancelTask({ locator, taskId: 'task-123', platformConfig })
     ).resolves.toBeUndefined();
+  });
 
+  it('uploads file', async () => {
+    const platformConfig = { apiKey };
     const form = new FormData();
     form.append('file', new Blob(['data'], { type: 'text/plain' }), 'demo.txt');
+    
     const uploadResult = await upload({
       uploadProvider: 'runninghub',
       formData: form,
       platformConfig,
     });
+    
     expect(uploadResult.url).toBe('uploaded-file');
   });
 });

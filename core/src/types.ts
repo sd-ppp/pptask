@@ -82,6 +82,7 @@ export type DescribeResult = {
   formSchema: FormilySchema;
   formValues: Record<string, any>;
   recommendUploadProvider?: string;
+  cancelable?: boolean;
 };
 
 export type UploadResult = {
@@ -92,10 +93,15 @@ export type UploadResult = {
 
 export type ProviderDefinition = {
   describeResource(params: DescribeParams): Promise<DescribeResult>;
-  createTask(params: TaskCreateParams): Promise<TaskCreateResult>;
-  checkStatus(params: TaskCheckParams): Promise<TaskStatusResult>;
-  getResult(params: TaskResultParams): Promise<TaskResult>;
-  cancelTask(params: TaskCheckParams): Promise<void>;
+  
+  // Synchronous execution (preferred): directly returns TaskResult
+  createTaskSync?: (params: TaskCreateParams) => Promise<TaskResult>;
+  
+  // Asynchronous execution: create -> poll -> get result
+  createTaskAsync?: (params: TaskCreateParams) => Promise<TaskCreateResult>;
+  checkStatus?: (params: TaskCheckParams) => Promise<TaskStatusResult>;
+  getResult?: (params: TaskResultParams) => Promise<TaskResult>;
+  cancelTask?: (params: TaskCheckParams) => Promise<void>;
 };
 
 export type UploadProviderDefinition = {

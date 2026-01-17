@@ -2,6 +2,7 @@ import type {
   DescribeResult,
   TaskRequestOptions,
   TaskStatusResult,
+  TaskResult,
   PlatformConfig,
 } from '../../../core/src/types.ts';
 
@@ -54,7 +55,7 @@ export type UploadParams = {
   options?: RunOptions;
 };
 
-export interface TaskHandle<T = any> {
+export interface TaskHandle<T = TaskResult> {
   taskId: string;
   promise: Promise<T>;
   cancelable: boolean;
@@ -63,7 +64,7 @@ export interface TaskHandle<T = any> {
 
 export interface InlineExecutor {
   describe(params: DescribeParams): Promise<DescribeResult>;
-  run(params: RunParams): Promise<TaskHandle<any[]>>;
+  run(params: RunParams): Promise<TaskHandle<TaskResult>>;
   upload(params: UploadParams): Promise<string>;
 }
 

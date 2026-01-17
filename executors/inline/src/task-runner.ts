@@ -1,9 +1,10 @@
 import {
-  createTask as coreCreateTask,
   checkStatus as coreCheckStatus,
   getResult as coreGetResult,
   cancelTask as coreCancelTask,
+  getProvider,
 } from '../../../core/src/index.ts';
+import { parseLocator } from '../../../core/src/resource.ts';
 import type {
   TaskCheckParams,
   TaskCreateParams,
@@ -19,14 +20,23 @@ import type { RunOptions, TaskHandle } from './types.ts';
 const DEFAULT_POLL_INTERVAL = 1000;
 
 export type TaskClient = {
-  createTask: (params: TaskCreateParams & { context?: Record<string, any> }) => Promise<TaskCreateResult>;
+  createTaskAsync: (params: TaskCreateParams & { context?: Record<string, any> }) => Promise<TaskCreateResult>;
   checkStatus: (params: TaskCheckParams & { context?: Record<string, any> }) => Promise<TaskStatusResult>;
   getResult: (params: TaskResultParams & { context?: Record<string, any> }) => Promise<TaskResult>;
   cancelTask: (params: TaskCheckParams & { context?: Record<string, any> }) => Promise<void>;
 };
 
 const localClient: TaskClient = {
-  createTask: ({ context: _ctx, ...params }) => coreCreateTask(params),
+  createTaskAsync: async ({ context: _ctx, ...params }) => {
+    const provider = getProvider(parseLocator(params.locator).scheme);
+    if (!provider) {
+      throw new Error(`Provider not found for locator: ${params.locator}`);
+    }
+    if (!provider.createTaskAsync) {
+      throw new Error(`Provider does not support async execution: ${params.locator}`);
+    }
+    return provider.createTaskAsync(params);
+  },
   checkStatus: ({ context: _ctx, ...params }) => coreCheckStatus(params),
   getResult: ({ context: _ctx, ...params }) => coreGetResult(params),
   cancelTask: ({ context: _ctx, ...params }) => coreCancelTask(params),
@@ -39,10 +49,118 @@ export async function createTaskHandle(
   runOptions: RunOptions | undefined,
   pollIntervalMs: number = DEFAULT_POLL_INTERVAL,
   client: TaskClient = localClient
-): Promise<TaskHandle<any[]>> {
+): Promise<TaskHandle<TaskResult>> {
   const taskOptions = toTaskRequestOptions(runOptions);
   const context = runOptions?.context;
-  const created = await client.createTask({
+  
+  // Check if provider supports sync execution (prioritize sync)
+  const { scheme } = parseLocator(locator);
+  const provider = getProvider(scheme);
+  
+  if (provider?.createTaskSync) {
+    // Synchronous execution path
+    return createSyncTaskHandle(
+      provider,
+      locator,
+      payload,
+      platformConfig,
+      taskOptions,
+      runOptions
+    );
+  } else {
+    // Asynchronous execution path (original logic)
+    return createAsyncTaskHandle(
+      locator,
+      payload,
+      platformConfig,
+      taskOptions,
+      runOptions,
+      pollIntervalMs,
+      client,
+      context
+    );
+  }
+}
+
+function toTaskRequestOptions(options?: RunOptions): TaskRequestOptions | undefined {
+  if (!options) return undefined;
+  if (!options.signal) return undefined;
+  return {
+    signal: options.signal,
+  };
+}
+
+// Synchronous task execution
+async function createSyncTaskHandle(
+  provider: any,
+  locator: string,
+  payload: Record<string, any>,
+  platformConfig: PlatformConfig | undefined,
+  taskOptions: TaskRequestOptions | undefined,
+  runOptions: RunOptions | undefined
+): Promise<TaskHandle<TaskResult>> {
+  const syncTaskId = `sync-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
+  
+  runOptions?.reporter?.onStart?.(syncTaskId, { mode: 'sync' });
+  
+  const promise = (async () => {
+    try {
+      throwIfAborted(taskOptions?.signal);
+      
+      const result = await provider.createTaskSync({
+        locator,
+        payload,
+        platformConfig,
+        options: taskOptions,
+      });
+      
+      runOptions?.reporter?.onFinish?.(syncTaskId, 'completed');
+      return result; // Return full TaskResult
+    } catch (err: any) {
+      if (isAbortError(err)) {
+        runOptions?.reporter?.onFinish?.(syncTaskId, 'cancelled', err.message);
+      } else {
+        // 尝试从 err.statusResult 提取错误信息
+        let errorMessage = err?.message || 'Task failed';
+        if ((err as any).statusResult?.raw) {
+          const raw = (err as any).statusResult.raw;
+          // 尝试提取错误详情
+          if (typeof raw === 'string') {
+            errorMessage = raw;
+          } else if (raw?.error) {
+            errorMessage = typeof raw.error === 'string' ? raw.error : JSON.stringify(raw.error);
+          } else if (raw?.message) {
+            errorMessage = raw.message;
+          }
+        }
+        runOptions?.reporter?.onFinish?.(syncTaskId, 'failed', errorMessage);
+      }
+      throw err;
+    }
+  })();
+  
+  return {
+    taskId: syncTaskId,
+    promise,
+    cancelable: false,
+    cancel: async () => {
+      // Sync tasks typically cannot be cancelled
+    },
+  };
+}
+
+// Asynchronous task execution (original logic)
+async function createAsyncTaskHandle(
+  locator: string,
+  payload: Record<string, any>,
+  platformConfig: PlatformConfig | undefined,
+  taskOptions: TaskRequestOptions | undefined,
+  runOptions: RunOptions | undefined,
+  pollIntervalMs: number,
+  client: TaskClient,
+  context: Record<string, any> | undefined
+): Promise<TaskHandle<TaskResult>> {
+  const created = await client.createTaskAsync({
     locator,
     payload,
     platformConfig,
@@ -77,14 +195,6 @@ export async function createTaskHandle(
   };
 }
 
-function toTaskRequestOptions(options?: RunOptions): TaskRequestOptions | undefined {
-  if (!options) return undefined;
-  if (!options.signal) return undefined;
-  return {
-    signal: options.signal,
-  };
-}
-
 async function pollUntilDone(
   locator: string,
   taskId: string,
@@ -94,7 +204,7 @@ async function pollUntilDone(
   pollIntervalMs: number,
   client: TaskClient,
   context: Record<string, any> | undefined
-): Promise<any[]> {
+): Promise<TaskResult> {
   try {
     let iteration = 0;
     let consecutiveStatusFailures = 0;
@@ -140,7 +250,7 @@ async function pollUntilDone(
             context,
           });
           runOptions?.reporter?.onFinish?.(taskId, 'completed');
-          return result.outputs ?? [];
+          return result; // Return full TaskResult
         } catch (error) {
           if (isResultPendingError(error)) {
             iteration += 1;
@@ -150,6 +260,8 @@ async function pollUntilDone(
         }
       }
       if (normalizedStatus === 'failed') {
+        // Log the raw status response for debugging
+        console.error(`[TaskRunner] Task ${taskId} failed. Raw status:`, JSON.stringify(status.raw, null, 2));
         const error = buildTaskError(taskId, status, 'Task failed');
         runOptions?.reporter?.onFinish?.(taskId, 'failed', error.message);
         throw error;
@@ -206,7 +318,17 @@ function createAbortError(message: string): DOMException {
 }
 
 function buildTaskError(taskId: string, status: TaskStatusResult, message: string): Error {
-  const error = new Error(`${message} (taskId=${taskId}, status=${status.status})`);
+  // Extract detailed error message from provider's raw response
+  // Priority: error > failure_reason > message from raw data
+  const rawData = status.raw || {};
+  const detailedError = rawData.error || rawData.failure_reason || rawData.message;
+  
+  // Use detailed error if available, otherwise use generic message
+  const errorMessage = detailedError 
+    ? `${detailedError} (taskId=${taskId}, status=${status.status})`
+    : `${message} (taskId=${taskId}, status=${status.status})`;
+  
+  const error = new Error(errorMessage);
   (error as any).taskStatus = status;
   return error;
 }

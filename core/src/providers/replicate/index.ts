@@ -37,7 +37,7 @@ export const replicateProviderDefinition: ProviderDefinition = {
     const url = ensureReplicateUrl(params.locator);
     return describeReplicate(url, params.platformConfig, params.options);
   },
-  async createTask(params: TaskCreateParams): Promise<TaskCreateResult> {
+  async createTaskAsync(params: TaskCreateParams): Promise<TaskCreateResult> {
     const url = ensureReplicateUrl(params.locator);
     return createReplicateTask(url, params.payload ?? {}, params.platformConfig, params.options);
   },

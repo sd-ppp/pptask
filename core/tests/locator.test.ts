@@ -3,15 +3,15 @@ import { parseLocator } from '../src/resource.ts';
 
 describe('parseLocator', () => {
   it('parses replicate locator', () => {
-    const parsed = parseLocator('replicate://owner/model');
+    const parsed = parseLocator('replicate:///owner/model');
     expect(parsed.scheme).toBe('replicate');
-    expect(parsed.url.hostname).toBe('owner');
+    expect(parsed.url.pathname).toBe('/owner/model');
   });
 
   it('parses runninghub locator', () => {
-    const parsed = parseLocator('runninghub://app-123');
+    const parsed = parseLocator('runninghub:///app-123');
     expect(parsed.scheme).toBe('runninghub');
-    expect(parsed.url.hostname).toBe('app-123');
+    expect(parsed.url.pathname).toBe('/app-123');
   });
 
   it('throws on invalid url', () => {
@@ -19,8 +19,8 @@ describe('parseLocator', () => {
   });
 
   it('normalizes unknown scheme without validation', () => {
-    const parsed = parseLocator('unknown://abc');
+    const parsed = parseLocator('unknown:///abc');
     expect(parsed.scheme).toBe('unknown');
-    expect(parsed.url.hostname).toBe('abc');
+    expect(parsed.url.pathname).toBe('/abc');
   });
 });

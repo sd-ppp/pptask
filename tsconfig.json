@@ -25,9 +25,7 @@
     "core/src",
     "core/tests",
     "executors/inline/src",
-    "executors/inline/tests",
-    "executors/queue/src",
-    "executors/queue/tests"
+    "executors/inline/tests"
   ],
   "exclude": ["dist", "node_modules"]
 }

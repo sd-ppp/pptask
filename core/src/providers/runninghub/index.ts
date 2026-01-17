@@ -38,7 +38,7 @@ export const runninghubProviderDefinition: ProviderDefinition = {
     const url = ensureRunninghubUrl(params.locator);
     return describeRunninghub(url, params.platformConfig, params.options);
   },
-  async createTask(params: TaskCreateParams): Promise<TaskCreateResult> {
+  async createTaskAsync(params: TaskCreateParams): Promise<TaskCreateResult> {
     const url = ensureRunninghubUrl(params.locator);
     return createRunninghubTask(url, params.payload ?? {}, params.platformConfig, params.options);
   },

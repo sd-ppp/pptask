@@ -90,3 +90,7 @@ function resolveConfigForUpload(
 
 export type { InlineExecutor, InlineExecutorConfig } from './types.ts';
 export type { RunOptions, TaskHandle, DescribeParams, RunParams, UploadParams, TaskRunReporter } from './types.ts';
+
+// Export enhanced task runner with async generator support
+export { createTaskHandleStream } from './task-runner-enhanced.ts';
+export type { TaskEvent } from './task-runner-enhanced.ts';

@@ -18,12 +18,21 @@ export type RunninghubNodeTemplate = {
 };
 
 export function parseRunninghubWebappId(url: URL): string {
-  const host = (url.hostname ?? '').trim();
-  const path = url.pathname.replace(/^\//, '').trim();
-  const webappId = host || path;
-  if (!webappId) {
-    throw new Error('runninghub locator must include a webappId');
+  // locator format: runninghub:///webapp-id (pathname only, three slashes)
+  const webappId = url.pathname.replace(/^\//, '').trim();
+  
+  // Check if user used hostname instead of pathname (two slashes instead of three)
+  if (!webappId && url.hostname) {
+    throw new Error(
+      `Invalid runninghub locator format. Found 'runninghub://${url.hostname}' (two slashes). ` +
+      `Please use 'runninghub:///${url.hostname}' (three slashes) to specify the webapp ID in the pathname.`
+    );
   }
+  
+  if (!webappId) {
+    throw new Error('runninghub locator must include a webappId in pathname (e.g., runninghub:///app-123)');
+  }
+  
   return webappId;
 }
 

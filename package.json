@@ -3,16 +3,21 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "main": "dist/index.js",
-  "module": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "core/src/index.ts",
+  "module": "core/src/index.ts",
+  "types": "core/src/index.ts",
+  "exports": {
+    ".": "./core/src/index.ts",
+    "./executors/inline": "./executors/inline/src/index.ts"
+  },
   "scripts": {
     "test": "vitest run"
   },
   "dependencies": {
-    "zod": "^3.23.8",
+    "@google/genai": "^1.35.0",
+    "dotenv": "^16.4.5",
     "replicate": "^1.0.1",
-    "dotenv": "^16.4.5"
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "@types/node": "^20.11.25",

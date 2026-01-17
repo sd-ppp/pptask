@@ -9,11 +9,26 @@ export type ReplicateConfig = {
 const versionCache = new Map<string, string | undefined>();
 
 export function parseReplicateModel(url: URL): string {
-  const owner = url.hostname;
-  const model = url.pathname.replace(/^\//, '');
-  if (!owner || !model) {
-    throw new Error('replicate locator must be replicate://{owner}/{model}');
+  // locator format: replicate:///owner/model (pathname only, three slashes)
+  const pathname = url.pathname.replace(/^\//, '');
+  
+  // Check if user used hostname (two slashes instead of three)
+  if (!pathname && url.hostname) {
+    throw new Error(
+      `Invalid replicate locator format. Found 'replicate://${url.hostname}' (two slashes). ` +
+      `Please use 'replicate:///${url.hostname}/model' (three slashes) to specify owner/model in the pathname.`
+    );
   }
+  
+  // Split pathname into owner and model
+  const parts = pathname.split('/');
+  if (parts.length < 2 || !parts[0] || !parts[1]) {
+    throw new Error('replicate locator must be replicate:///owner/model (e.g., replicate:///black-forest-labs/flux-schnell)');
+  }
+  
+  const owner = parts[0];
+  const model = parts.slice(1).join('/'); // Support models with slashes in name
+  
   return `${owner}/${model}`;
 }
 

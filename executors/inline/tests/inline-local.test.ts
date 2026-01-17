@@ -1,13 +1,22 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-vi.mock('../../../core/src/index.ts', () => {
+vi.mock('../../../core/src/index.ts', async (importOriginal) => {
+  const actual = await importOriginal() as any;
   return {
+    ...actual,
     describeResource: vi.fn(),
     createTask: vi.fn(),
     checkStatus: vi.fn(),
     getResult: vi.fn(),
     cancelTask: vi.fn(),
     upload: vi.fn(),
+    // Mock getProvider to return a provider without createTaskSync
+    getProvider: vi.fn(() => ({
+      createTaskAsync: vi.fn(),
+      checkStatus: vi.fn(),
+      getResult: vi.fn(),
+      cancelTask: vi.fn(),
+    })),
   };
 });
 
@@ -43,7 +52,22 @@ describe('inline executor (local mode)', () => {
     });
   });
 
-  it('runs tasks to completion and returns outputs', async () => {
+  it('runs tasks to completion and returns full result', async () => {
+    const mockProvider = {
+      createTaskAsync: vi.fn().mockResolvedValue({
+        provider: 'replicate',
+        taskId: 'task-1',
+        status: 'pending',
+        raw: {},
+      }),
+      checkStatus: vi.fn(),
+      getResult: vi.fn(),
+      cancelTask: vi.fn(),
+    };
+    
+    // Mock getProvider to return our mock provider
+    vi.mocked(core.getProvider).mockReturnValue(mockProvider);
+    
     vi.mocked(core.createTask).mockResolvedValue({
       provider: 'replicate',
       taskId: 'task-1',
@@ -92,8 +116,11 @@ describe('inline executor (local mode)', () => {
 
     await vi.runAllTimersAsync();
 
-    const outputs = await handle.promise;
-    expect(outputs).toEqual([{ rawData: { url: 'foo' } }]);
+    const result = await handle.promise;
+    expect(result.provider).toBe('replicate');
+    expect(result.taskId).toBe('task-1');
+    expect(result.status).toBe('succeeded');
+    expect(result.outputs).toEqual([{ rawData: { url: 'foo' } }]);
     expect(checkStatusMock).toHaveBeenCalledTimes(2);
     expect(getResultMock).toHaveBeenCalledTimes(1);
     expect(reporter.onStart).toHaveBeenCalledWith('task-1', undefined);

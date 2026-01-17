@@ -1,4 +1,6 @@
 .env
+test.env
 node_modules/
 dist/
 tests/cases/**/output/
+core/tests/output/
