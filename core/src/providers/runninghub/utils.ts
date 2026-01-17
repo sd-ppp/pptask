@@ -33,11 +33,13 @@ export function buildNodeInfoListFromValues(
 }
 
 function normalizeUploadField(value: any): any {
+  // IMAGE and FILE fields should always be arrays for RunningHub API
   if (Array.isArray(value)) {
-    const first = value[0];
-    return normalizeUploadEntry(first);
+    // Process each element in the array: extract 'url' if it's an object
+    return value.map(item => normalizeUploadEntry(item));
   }
-  return normalizeUploadEntry(value);
+  // If not an array, wrap single value in array
+  return [normalizeUploadEntry(value)];
 }
 
 function normalizeUploadEntry(entry: any): any {
