@@ -19,8 +19,8 @@ import {
   createReplicateTask,
   describeReplicate,
   getReplicateResult,
-  uploadReplicateFile,
 } from './api.ts';
+import { uploadReplicateFile } from '../../upload-providers/replicate.ts';
 
 const REPLICATE_SCHEME = 'replicate';
 
@@ -67,8 +67,8 @@ export {
   createReplicateTask,
   describeReplicate,
   getReplicateResult,
-  uploadReplicateFile,
 } from './api.ts';
+export { uploadReplicateFile } from '../../upload-providers/replicate.ts';
 
 export {
   createAbortError as createReplicateAbortError,
