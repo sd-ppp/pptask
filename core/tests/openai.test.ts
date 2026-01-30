@@ -6,7 +6,7 @@ describe('openai provider', () => {
   describe('describeResource', () => {
     it('returns correct form schema for edits endpoint', async () => {
       const params: DescribeParams = {
-        locator: 'openai://edits',
+        locator: 'openai:///edits',
         platformConfig: { apiKey: 'test-key' },
       };
 
@@ -31,7 +31,7 @@ describe('openai provider', () => {
 
     it('returns correct form schema for generations endpoint', async () => {
       const params: DescribeParams = {
-        locator: 'openai://generations',
+        locator: 'openai:///generations',
         platformConfig: { apiKey: 'test-key' },
       };
 
@@ -46,7 +46,7 @@ describe('openai provider', () => {
 
     it('returns correct form schema for variations endpoint', async () => {
       const params: DescribeParams = {
-        locator: 'openai://variations',
+        locator: 'openai:///variations',
         platformConfig: { apiKey: 'test-key' },
       };
 
@@ -71,7 +71,7 @@ describe('openai provider', () => {
 
     it('throws error for unsupported endpoint', async () => {
       const params: DescribeParams = {
-        locator: 'openai://unknown',
+        locator: 'openai:///unknown',
         platformConfig: { apiKey: 'test-key' },
       };
 
@@ -96,7 +96,7 @@ describe('openai provider', () => {
 
     it('throws error when apiKey is missing', async () => {
       const params: TaskCreateParams = {
-        locator: 'openai://edits',
+        locator: 'openai:///edits',
         payload: { image: 'base64data', prompt: 'test' },
         platformConfig: {},
       };
@@ -108,7 +108,7 @@ describe('openai provider', () => {
 
     it('throws error when image is missing for edits', async () => {
       const params: TaskCreateParams = {
-        locator: 'openai://edits',
+        locator: 'openai:///edits',
         payload: { prompt: 'test' },
         platformConfig: { apiKey: 'test-key' },
       };
@@ -120,7 +120,7 @@ describe('openai provider', () => {
 
     it('throws error when prompt is missing for edits', async () => {
       const params: TaskCreateParams = {
-        locator: 'openai://edits',
+        locator: 'openai:///edits',
         payload: { image: 'base64data' },
         platformConfig: { apiKey: 'test-key' },
       };
@@ -132,7 +132,7 @@ describe('openai provider', () => {
 
     it('throws error when prompt is missing for generations', async () => {
       const params: TaskCreateParams = {
-        locator: 'openai://generations',
+        locator: 'openai:///generations',
         payload: {},
         platformConfig: { apiKey: 'test-key' },
       };
@@ -144,7 +144,7 @@ describe('openai provider', () => {
 
     it('throws error when image is missing for variations', async () => {
       const params: TaskCreateParams = {
-        locator: 'openai://variations',
+        locator: 'openai:///variations',
         payload: {},
         platformConfig: { apiKey: 'test-key' },
       };
@@ -157,7 +157,7 @@ describe('openai provider', () => {
 
   describe('endpoint normalization', () => {
     it('normalizes edit endpoints', async () => {
-      const variants = ['openai://edit', 'openai://edits', 'openai://image-edit'];
+      const variants = ['openai:///edit', 'openai:///edits', 'openai:///image-edit'];
       
       for (const locator of variants) {
         const result = await openaiProviderDefinition.describeResource({
@@ -169,7 +169,7 @@ describe('openai provider', () => {
     });
 
     it('normalizes generation endpoints', async () => {
-      const variants = ['openai://generate', 'openai://generations', 'openai://image-generate'];
+      const variants = ['openai:///generate', 'openai:///generations', 'openai:///image-generate'];
       
       for (const locator of variants) {
         const result = await openaiProviderDefinition.describeResource({
@@ -181,7 +181,7 @@ describe('openai provider', () => {
     });
 
     it('normalizes variation endpoints', async () => {
-      const variants = ['openai://variation', 'openai://variations', 'openai://image-variation'];
+      const variants = ['openai:///variation', 'openai:///variations', 'openai:///image-variation'];
       
       for (const locator of variants) {
         const result = await openaiProviderDefinition.describeResource({

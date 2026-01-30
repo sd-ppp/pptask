@@ -2,7 +2,7 @@ import type { PlatformConfig, TaskOutput } from '../../types.ts';
 
 export type GeminiConfig = {
   apiKey: string;
-  baseUrl?: string;
+  baseURL?: string;
 };
 
 export function ensureGeminiConfig(platformConfig?: PlatformConfig): GeminiConfig {
@@ -12,7 +12,7 @@ export function ensureGeminiConfig(platformConfig?: PlatformConfig): GeminiConfi
   }
   return {
     apiKey,
-    baseUrl: platformConfig?.baseUrl,
+    baseURL: platformConfig?.baseURL,
   };
 }
 

@@ -2,23 +2,23 @@ import type { PlatformConfig, SignalLike, TaskStatus } from '../../types.ts';
 
 export type GrsaiConfig = {
   apiKey: string;
-  baseUrl: string;
+  baseURL: string;
 };
 
 export function ensureGrsaiConfig(platformConfig?: PlatformConfig): GrsaiConfig {
   const apiKey = platformConfig?.apiKey;
-  const baseUrl = platformConfig?.baseUrl;
+  const baseURL = platformConfig?.baseURL;
   
   if (!apiKey) {
     throw new Error('grsai provider requires apiKey in platformConfig');
   }
-  if (!baseUrl) {
-    throw new Error('grsai provider requires baseUrl in platformConfig');
+  if (!baseURL) {
+    throw new Error('grsai provider requires baseURL in platformConfig');
   }
   
   return {
     apiKey,
-    baseUrl,
+    baseURL,
   };
 }
 

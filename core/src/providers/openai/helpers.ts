@@ -19,7 +19,13 @@ export function ensureOpenAIConfig(platformConfig?: PlatformConfig): OpenAIConfi
 export function parseOpenAIEndpoint(url: URL): string {
   let endpoint = url.pathname.replace(/^\//, '');
   if (!endpoint) {
-    endpoint = url.hostname;
+    if (url.hostname) {
+      throw new Error(
+        `Invalid openai locator format. Found 'openai://${url.hostname}' (two slashes). ` +
+        `Please use 'openai:///${url.hostname}' (three slashes) to specify the endpoint in the pathname.`
+      );
+    }
+    throw new Error('openai locator must contain endpoint in pathname (e.g., openai:///edits)');
   }
   
   // Normalize endpoint names

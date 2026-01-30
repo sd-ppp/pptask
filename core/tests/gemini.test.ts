@@ -69,7 +69,7 @@ describe('gemini provider', () => {
       const params: TaskCreateParams = {
         locator: 'gemini:///gemini-3-pro-image-preview',
         payload: {},
-        platformConfig: { apiKey: 'test-key', baseUrl: 'http://localhost' },
+        platformConfig: { apiKey: 'test-key', baseURL: 'http://localhost' },
       };
 
       await expect(geminiProviderDefinition.createTaskSync!(params)).rejects.toThrow(

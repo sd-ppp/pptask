@@ -42,7 +42,7 @@ describe('grsai provider (unit tests)', () => {
   });
 
   it('creates task', async () => {
-    const platformConfig = { apiKey, baseUrl: 'https://api.grsai.com' };
+    const platformConfig = { apiKey, baseURL: 'https://api.grsai.com' };
     const createResult = await createTask({
       locator,
       payload: { 
@@ -59,7 +59,7 @@ describe('grsai provider (unit tests)', () => {
   });
 
   it('checks status', async () => {
-    const platformConfig = { apiKey, baseUrl: 'https://status.api.com' };
+    const platformConfig = { apiKey, baseURL: 'https://status.api.com' };
     const statusResult = await checkStatus({
       locator,
       taskId: 'task-running',
@@ -73,7 +73,7 @@ describe('grsai provider (unit tests)', () => {
   });
 
   it('gets result', async () => {
-    const platformConfig = { apiKey, baseUrl: 'https://api.grsai.com' };
+    const platformConfig = { apiKey, baseURL: 'https://api.grsai.com' };
     const result = await getResult({
       locator,
       taskId: 'task-abc123',
@@ -89,7 +89,7 @@ describe('grsai provider (unit tests)', () => {
   });
 
   it('handles api error response', async () => {
-    const platformConfig = { apiKey, baseUrl: 'https://error.api.com' };
+    const platformConfig = { apiKey, baseURL: 'https://error.api.com' };
     
     await expect(
       checkStatus({
@@ -101,7 +101,7 @@ describe('grsai provider (unit tests)', () => {
   });
 
   it('cancels task (no-op)', async () => {
-    const platformConfig = { apiKey, baseUrl: 'https://api.grsai.com' };
+    const platformConfig = { apiKey, baseURL: 'https://api.grsai.com' };
     
     await expect(
       cancelTask({ locator, taskId: 'task-abc123', platformConfig })
@@ -109,7 +109,7 @@ describe('grsai provider (unit tests)', () => {
   });
 
   it('throws error when result is not succeeded', async () => {
-    const platformConfig = { apiKey, baseUrl: 'https://failed.api.com' };
+    const platformConfig = { apiKey, baseURL: 'https://failed.api.com' };
     
     await expect(
       getResult({

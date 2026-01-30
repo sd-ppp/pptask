@@ -161,7 +161,7 @@ export async function createGrsaiTask(
   platformConfig: PlatformConfig | undefined,
   options?: TaskRequestOptions
 ): Promise<TaskCreateResult> {
-  const { apiKey, baseUrl } = ensureGrsaiConfig(platformConfig);
+  const { apiKey, baseURL } = ensureGrsaiConfig(platformConfig);
   const model = parseGrsaiModel(url);
   const signal = options?.signal;
 
@@ -169,7 +169,7 @@ export async function createGrsaiTask(
     throw createAbortError('Task creation aborted');
   }
 
-  const response = await fetch(`${baseUrl}/v1/draw/nano-banana`, {
+  const response = await fetch(`${baseURL}/v1/draw/nano-banana`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -212,14 +212,14 @@ export async function checkGrsaiStatus(
   platformConfig: PlatformConfig | undefined,
   options?: TaskRequestOptions
 ): Promise<TaskStatusResult> {
-  const { apiKey, baseUrl } = ensureGrsaiConfig(platformConfig);
+  const { apiKey, baseURL } = ensureGrsaiConfig(platformConfig);
   const signal = options?.signal;
 
   if (isRequestAborted(signal)) {
     throw createAbortError('Status check aborted');
   }
 
-  const response = await fetch(`${baseUrl}/v1/draw/result`, {
+  const response = await fetch(`${baseURL}/v1/draw/result`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -262,14 +262,14 @@ export async function getGrsaiResult(
   platformConfig: PlatformConfig | undefined,
   options?: TaskRequestOptions
 ): Promise<TaskResult> {
-  const { apiKey, baseUrl } = ensureGrsaiConfig(platformConfig);
+  const { apiKey, baseURL } = ensureGrsaiConfig(platformConfig);
   const signal = options?.signal;
 
   if (isRequestAborted(signal)) {
     throw createAbortError('Result fetch aborted');
   }
 
-  const response = await fetch(`${baseUrl}/v1/draw/result`, {
+  const response = await fetch(`${baseURL}/v1/draw/result`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

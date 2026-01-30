@@ -46,8 +46,8 @@ export async function createGeminiTaskSync(
   
   // Initialize Gemini client
   const clientOptions: any = { apiKey: config.apiKey };
-  if (config.baseUrl) {
-    clientOptions.httpOptions = { baseUrl: config.baseUrl };
+  if (config.baseURL) {
+    clientOptions.httpOptions = { baseUrl: config.baseURL };
   }
   const genAI = new GoogleGenAI(clientOptions);
   

@@ -53,7 +53,7 @@ geminiSuite('gemini integration tests', () => {
         const executor = createInlineExecutor({
           platformConfig: {
             apiKey,
-            baseUrl: baseURL,
+            baseURL,
           },
         });
 
@@ -191,12 +191,12 @@ geminiSuite('gemini integration tests', () => {
       try {
         const testImageBase64 = 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==';
 
-        const executor = createInlineExecutor({
-          platformConfig: {
-            apiKey,
-            baseUrl: baseURL,
-          },
-        });
+          const executor = createInlineExecutor({
+            platformConfig: {
+              apiKey,
+              baseURL,
+            },
+          });
 
         log('Calling Gemini API (will abort after 100ms)...');
         
