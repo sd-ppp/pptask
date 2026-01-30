@@ -26,6 +26,10 @@ import {
 import {
   openaiProviderDefinition,
 } from './providers/openai/index.ts';
+import {
+  comfyProviderDefinition,
+  comfyUploadProviderDefinition,
+} from './providers/comfy/index.ts';
 import { normalizeScheme, parseLocator } from './resource.ts';
 import type {
   DescribeParams,
@@ -47,6 +51,7 @@ export * from './providers/runninghub/index.ts';
 export * from './providers/grsai/index.ts';
 export * from './providers/gemini/index.ts';
 export * from './providers/openai/index.ts';
+export * from './providers/comfy/index.ts';
 export * from './resource.ts';
 export * from './types.ts';
 export { getProvider, getUploadProvider, listProviders, listUploadProviders, unregisterProvider };
@@ -72,6 +77,18 @@ function ensureDefaultProvidersRegistered(): void {
   }
   if (!getProvider('openai')) {
     registerProviderInternal('openai', openaiProviderDefinition);
+  }
+  if (!getProvider('comfy-http')) {
+    registerProviderInternal('comfy-http', comfyProviderDefinition);
+  }
+  if (!getProvider('comfy-https')) {
+    registerProviderInternal('comfy-https', comfyProviderDefinition);
+  }
+  if (!getUploadProvider('comfy-http')) {
+    registerUploadProviderInternal('comfy-http', comfyUploadProviderDefinition);
+  }
+  if (!getUploadProvider('comfy-https')) {
+    registerUploadProviderInternal('comfy-https', comfyUploadProviderDefinition);
   }
 }
 
