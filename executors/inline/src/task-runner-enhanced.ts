@@ -89,7 +89,7 @@ export async function* createTaskHandleStream(
   runOptions: RunOptions | undefined = undefined,
   pollIntervalMs: number = DEFAULT_POLL_INTERVAL,
   client: TaskClient = localClient
-): AsyncGenerator<TaskEvent, TaskResult, void> {
+): AsyncGenerator<TaskEvent, TaskResult | void, void> {
   const taskOptions = toTaskRequestOptions(runOptions);
   const context = runOptions?.context;
   
@@ -106,6 +106,7 @@ export async function* createTaskHandleStream(
       platformConfig,
       taskOptions
     );
+    return;
   } else {
     // Asynchronous execution path
     yield* createAsyncTaskStream(
@@ -117,6 +118,7 @@ export async function* createTaskHandleStream(
       client,
       context
     );
+    return;
   }
 }
 
