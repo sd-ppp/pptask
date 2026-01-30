@@ -4,7 +4,7 @@ import type {
   TaskOutput,
   TaskRequestOptions,
   TaskStatus,
-} from '../../types.ts';
+} from '../../../types.ts';
 
 export type RunningHubConfig = {
   apiKey: string;

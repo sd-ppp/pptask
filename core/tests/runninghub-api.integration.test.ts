@@ -6,35 +6,45 @@ import {
   getResult,
 } from '../src/index.ts';
 
-const runninghubApiKey = process.env.RUNNINGHUB_API_KEY;
-const runninghubSuite = runninghubApiKey ? describe : describe.skip;
+// 新 API 需要企业级共享 API Key，与旧 API 的 key 不同
+const runninghubStandardApiKey = process.env.RUNNINGHUB_STANDARD_API_KEY;
+const apiSuite = runninghubStandardApiKey ? describe : describe.skip;
 
-runninghubSuite('runninghub provider (integration tests)', () => {
-  const apiKey = process.env.RUNNINGHUB_API_KEY!;
-  const webappId = process.env.RUNNINGHUB_WEBAPP_ID || 'template-123';
-  const locator = `runninghub://app/${webappId}`;
+apiSuite('runninghub-api provider (integration tests)', () => {
+  const apiKey = process.env.RUNNINGHUB_STANDARD_API_KEY!;
+  const modelPath = 'rhart-image-v1/text-to-image';
+  const locator = `runninghub://api/${modelPath}`;
   const platformConfig = { apiKey };
 
-  it('describes webapp template', async () => {
-    const describeResult = await describeResource({ locator, platformConfig });
-    expect(describeResult.provider).toBe('runninghub');
-    expect(describeResult.formSchema).toBeDefined();
-    expect(describeResult.recommendUploadProvider).toBe('runninghub');
-    console.log(`✓ Webapp ID: ${webappId}`);
+  it('describes model schema', async () => {
+    const result = await describeResource({ locator, platformConfig });
+    expect(result.provider).toBe('runninghub-api');
+    expect(result.formSchema).toBeDefined();
+    expect(result.formSchema.properties.prompt).toBeDefined();
+    expect(result.formSchema.properties.aspectRatio).toBeDefined();
+    console.log(`✓ Model: ${modelPath}`);
   });
 
   it(
     'creates task, polls status, and fetches result',
     async () => {
-      const runInput = process.env.RUNNINGHUB_RUN_INPUT_JSON
-        ? JSON.parse(process.env.RUNNINGHUB_RUN_INPUT_JSON)
-        : { '1_prompt': 'a beautiful sunset' };
+      const testPayload = {
+        prompt: 'A cute baby monkey with soft fur',
+        aspectRatio: '3:4',
+      };
 
-      const created = await createTask({ locator, payload: runInput, platformConfig });
+      // 1. Create task
+      const created = await createTask({
+        locator,
+        payload: testPayload,
+        platformConfig,
+      });
+      
       expect(typeof created.taskId).toBe('string');
-      expect(created.provider).toBe('runninghub');
+      expect(created.provider).toBe('runninghub-api');
       console.log(`✓ Created task: ${created.taskId}`);
 
+      // 2. Poll status
       let latestStatus = created;
       for (let attempt = 0; attempt < 40; attempt += 1) {
         await wait(3000);
@@ -53,6 +63,7 @@ runninghubSuite('runninghub provider (integration tests)', () => {
 
       expect(latestStatus.status).toBe('succeeded');
 
+      // 3. Get result
       const result = await getResult({
         locator,
         taskId: created.taskId,
@@ -61,15 +72,8 @@ runninghubSuite('runninghub provider (integration tests)', () => {
       
       expect(Array.isArray(result.outputs)).toBe(true);
       expect(result.outputs.length).toBeGreaterThan(0);
+      expect(result.outputs[0].url).toMatch(/^https?:\/\//);
       console.log(`✓ Result URLs:`, result.outputs.map(o => o.url).join(', '));
-      
-      // Check cost information
-      if (result.costCoins !== undefined) {
-        console.log(`  Cost: ${result.costCoins} coins`);
-      }
-      if (result.costMoney !== undefined) {
-        console.log(`  Cost: ${result.costMoney} ${result.costMoneyCurrency || 'CNY'}`);
-      }
     },
     180_000
   );

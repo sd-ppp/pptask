@@ -9,67 +9,81 @@ import type {
   TaskResult,
   TaskResultParams,
   TaskStatusResult,
-  UploadParams,
-  UploadResult,
   UploadProviderDefinition,
 } from '../../types.ts';
-import {
-  cancelRunninghubTask,
-  checkRunninghubStatus,
-  createRunninghubTask,
-  describeRunninghub,
-  getRunninghubResult,
-  uploadRunninghubFile,
-} from './api.ts';
-import { parseRunninghubWebappId } from './helpers.ts';
+
+// 导入两套实现
+import * as appImpl from './app/index.ts';
+import * as apiImpl from './api/index.ts';
 
 const RUNNINGHUB_SCHEME = 'runninghub';
 
-function ensureRunninghubUrl(locator: string): URL {
+/**
+ * 根据 locator 的 hostname 获取对应的实现
+ * - runninghub://app/ -> 旧 API 实现
+ * - runninghub://api/ -> 新 API 实现
+ */
+function getImplementation(locator: string) {
   const { scheme, url } = parseLocator(locator);
+  
   if (scheme !== RUNNINGHUB_SCHEME) {
     throw new Error(`runninghub provider received unsupported locator: ${locator}`);
   }
-  return url;
+  
+  if (url.hostname === 'app') {
+    return appImpl;
+  } else if (url.hostname === 'api') {
+    return apiImpl;
+  }
+  
+  throw new Error(
+    `Invalid runninghub hostname: ${url.hostname}. ` +
+    `Expected 'app' or 'api'. ` +
+    `Format: runninghub://app/webapp-id or runninghub://api/model-path`
+  );
 }
+
+// ========== Provider 定义 (路由层) ==========
 
 export const runninghubProviderDefinition: ProviderDefinition = {
   async describeResource(params: DescribeParams): Promise<DescribeResult> {
-    const url = ensureRunninghubUrl(params.locator);
-    return describeRunninghub(url, params.platformConfig, params.options);
+    const impl = getImplementation(params.locator);
+    return impl.describeResource(params);
   },
+
   async createTaskAsync(params: TaskCreateParams): Promise<TaskCreateResult> {
-    const url = ensureRunninghubUrl(params.locator);
-    return createRunninghubTask(url, params.payload ?? {}, params.platformConfig, params.options);
+    const impl = getImplementation(params.locator);
+    return impl.createTaskAsync(params);
   },
+
   async checkStatus(params: TaskCheckParams): Promise<TaskStatusResult> {
-    const url = ensureRunninghubUrl(params.locator);
-    return checkRunninghubStatus(url, params.taskId, params.platformConfig, params.options);
+    const impl = getImplementation(params.locator);
+    return impl.checkStatus(params);
   },
+
   async getResult(params: TaskResultParams): Promise<TaskResult> {
-    const url = ensureRunninghubUrl(params.locator);
-    return getRunninghubResult(url, params.taskId, params.platformConfig, params.options);
+    const impl = getImplementation(params.locator);
+    return impl.getResult(params);
   },
+
   async cancelTask(params: TaskCheckParams): Promise<void> {
-    const url = ensureRunninghubUrl(params.locator);
-    await cancelRunninghubTask(url, params.taskId, params.platformConfig, params.options);
+    const impl = getImplementation(params.locator);
+    return impl.cancelTask(params);
   },
 };
 
-export const runninghubUploadProviderDefinition: UploadProviderDefinition = {
-  async upload(params: UploadParams): Promise<UploadResult> {
-    return uploadRunninghubFile(params.formData, params.platformConfig, params.options);
-  },
-};
+// 上传 provider (使用旧 API 的实现)
+export const runninghubUploadProviderDefinition: UploadProviderDefinition = appImpl.runninghubUploadProviderDefinition;
 
+// 导出旧 API 的函数和类型 (保持向后兼容)
 export {
   cancelRunninghubTask,
   checkRunninghubStatus,
   createRunninghubTask,
   describeRunninghub,
   getRunninghubResult,
-  uploadRunninghubFile,
-} from './api.ts';
+} from './app/api.ts';
+export { uploadRunninghubFile } from '../../upload-providers/runninghub.ts';
 
 export {
   parseRunninghubWebappId,
@@ -78,4 +92,4 @@ export {
   buildRunninghubPayload,
   createRunningHubError,
   type RunningHubConfig,
-} from './helpers.ts';
+} from './app/helpers.ts';

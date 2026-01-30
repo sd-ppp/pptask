@@ -9,8 +9,9 @@ describe('parseLocator', () => {
   });
 
   it('parses runninghub locator', () => {
-    const parsed = parseLocator('runninghub:///app-123');
+    const parsed = parseLocator('runninghub://app/app-123');
     expect(parsed.scheme).toBe('runninghub');
+    expect(parsed.url.hostname).toBe('app');
     expect(parsed.url.pathname).toBe('/app-123');
   });
 

@@ -20,7 +20,7 @@ executors/inline/   // 进程内执行器：本地直连或 HTTP 代理（前端
 
 `TaskResult` 额外包含 `costCoins` / `costMoney` / `costMoneyCurrency` 字段，Provider 在有消费信息时会填入（如平台内积分、人民币金额与货币单位），供上层做扣费或展示。
 
-默认已注册 `replicate:///` 与 `runninghub:///`(使用三斜杠,路径格式),并可按需扩展新 Provider(上传逻辑可通过 `registerUploadProvider` 拆分复用):
+默认已注册 `replicate:///` 与 `runninghub://app/`(使用 app 作为 host),并可按需扩展新 Provider(上传逻辑可通过 `registerUploadProvider` 拆分复用):
 
 ```ts
 import { registerProvider, registerUploadProvider } from './core/src/index.ts';

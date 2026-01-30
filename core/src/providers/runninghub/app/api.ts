@@ -22,7 +22,7 @@ import type {
   TaskRequestOptions,
   TaskResult,
   TaskStatusResult,
-} from '../../types.ts';
+} from '../../../types.ts';
 
 export async function describeRunninghub(
   url: URL,

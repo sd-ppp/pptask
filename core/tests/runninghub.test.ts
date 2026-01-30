@@ -8,7 +8,7 @@ import {
   upload,
 } from '../src/index.ts';
 
-const locator = 'runninghub:///mock-app';
+const locator = 'runninghub://app/mock-app';
 const apiKey = 'test-key';
 
 describe('runninghub provider (unit tests)', () => {
