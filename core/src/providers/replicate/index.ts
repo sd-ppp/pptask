@@ -9,9 +9,6 @@ import type {
   TaskResult,
   TaskResultParams,
   TaskStatusResult,
-  UploadParams,
-  UploadResult,
-  UploadProviderDefinition,
 } from '../../types.ts';
 import {
   cancelReplicateTask,
@@ -52,12 +49,6 @@ export const replicateProviderDefinition: ProviderDefinition = {
   async cancelTask(params: TaskCheckParams): Promise<void> {
     const url = ensureReplicateUrl(params.locator);
     await cancelReplicateTask(url, params.taskId, params.platformConfig, params.options);
-  },
-};
-
-export const replicateUploadProviderDefinition: UploadProviderDefinition = {
-  async upload(params: UploadParams): Promise<UploadResult> {
-    return uploadReplicateFile(params.formData, params.platformConfig, params.options);
   },
 };
 

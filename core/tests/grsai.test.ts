@@ -37,7 +37,7 @@ describe('grsai provider (unit tests)', () => {
     expect(describeResult.formSchema.properties.prompt).toBeDefined();
     expect(describeResult.formSchema.properties.aspectRatio).toBeDefined();
     expect(describeResult.formSchema.properties.imageSize).toBeDefined();
-    expect(describeResult.recommendUploadProvider).toBe('runninghub');
+    expect(describeResult.recommendUploadProvider).toBe('grsai');
     expect(describeResult.cancelable).toBe(false);
   });
 

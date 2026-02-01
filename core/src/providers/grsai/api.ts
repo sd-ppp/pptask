@@ -150,7 +150,7 @@ export async function describeGrsai(
       aspectRatio: 'auto',
       imageSize: '1K',
     },
-    recommendUploadProvider: 'runninghub',
+    recommendUploadProvider: 'grsai',
     cancelable: false,
   };
 }

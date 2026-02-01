@@ -11,15 +11,22 @@ import {
 } from './provider-registry.ts';
 import {
   replicateProviderDefinition,
-  replicateUploadProviderDefinition,
 } from './providers/replicate/index.ts';
 import {
+  replicateUploadProviderDefinition,
+} from './upload-providers/replicate/index.ts';
+import {
   runninghubProviderDefinition,
-  runninghubUploadProviderDefinition,
 } from './providers/runninghub/index.ts';
+import {
+  runninghubUploadProviderDefinition,
+} from './upload-providers/runninghub/index.ts';
 import {
   grsaiProviderDefinition,
 } from './providers/grsai/index.ts';
+import {
+  grsaiUploadProviderDefinition,
+} from './upload-providers/grsai/index.ts';
 import {
   geminiProviderDefinition,
 } from './providers/gemini/index.ts';
@@ -71,6 +78,9 @@ function ensureDefaultProvidersRegistered(): void {
   }
   if (!getProvider('grsai')) {
     registerProviderInternal('grsai', grsaiProviderDefinition);
+  }
+  if (!getUploadProvider('grsai')) {
+    registerUploadProviderInternal('grsai', grsaiUploadProviderDefinition);
   }
   if (!getProvider('gemini')) {
     registerProviderInternal('gemini', geminiProviderDefinition);
