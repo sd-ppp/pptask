@@ -90,7 +90,7 @@ export async function createGeminiTaskSync(
   
   // Call Gemini API
   try {
-    const response = await genAI.models.generateContent({
+    const requestPayload = {
       model,
       contents: [{ role: 'user', parts }],
       config: {
@@ -99,11 +99,12 @@ export async function createGeminiTaskSync(
           imageSize: payload.imageSize || '2K',
         },
       },
-    });
+    };
+    const response = await genAI.models.generateContent(requestPayload);
     
     if (isRequestAborted(options?.signal)) {
       throw createAbortError('Task aborted during execution');
-    }
+    } 
     
     // Parse outputs
     const outputs = normalizeGeminiOutputs(response);
