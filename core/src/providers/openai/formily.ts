@@ -18,13 +18,12 @@ function buildEditSchema(): FormilySchema {
     type: 'object',
     properties: {
       image: {
-        type: 'string',
+        type: 'array',
         title: 'Image',
         'x-decorator': 'FormItem',
-        'x-component': 'Input.TextArea',
+        'x-component': 'Upload',
         'x-component-props': {
-          placeholder: 'Base64 encoded image or data URL',
-          rows: 2,
+          maxCount: 1,
         },
         description: 'Image to edit (must be PNG, < 4MB, square)',
         required: true,
@@ -42,13 +41,12 @@ function buildEditSchema(): FormilySchema {
         required: true,
       },
       mask: {
-        type: 'string',
+        type: 'array',
         title: 'Mask (optional)',
         'x-decorator': 'FormItem',
-        'x-component': 'Input.TextArea',
+        'x-component': 'Upload',
         'x-component-props': {
-          placeholder: 'Base64 encoded mask image',
-          rows: 2,
+          maxCount: 1,
         },
         description: 'Mask image where transparent areas indicate where to edit',
       },
@@ -175,13 +173,12 @@ function buildVariationSchema(): FormilySchema {
     type: 'object',
     properties: {
       image: {
-        type: 'string',
+        type: 'array',
         title: 'Image',
         'x-decorator': 'FormItem',
-        'x-component': 'Input.TextArea',
+        'x-component': 'Upload',
         'x-component-props': {
-          placeholder: 'Base64 encoded image or data URL',
-          rows: 2,
+          maxCount: 1,
         },
         description: 'Image to create variations from (must be PNG, < 4MB, square)',
         required: true,

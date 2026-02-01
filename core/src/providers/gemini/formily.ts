@@ -19,16 +19,11 @@ export function buildGeminiFormSchema(): FormilySchema {
         type: 'array',
         title: 'Reference Images (optional)',
         'x-decorator': 'FormItem',
-        'x-component': 'ArrayItems',
-        description: 'Base64 encoded images or image URLs',
-        items: {
-          type: 'string',
-          'x-component': 'Input.TextArea',
-          'x-component-props': {
-            placeholder: 'data:image/png;base64,... or http://...',
-            rows: 2,
-          },
+        'x-component': 'Upload',
+        'x-component-props': {
+          maxCount: 4,
         },
+        default: [],
       },
       aspectRatio: {
         type: 'string',
