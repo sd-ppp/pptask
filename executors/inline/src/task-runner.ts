@@ -90,6 +90,21 @@ function toTaskRequestOptions(options?: RunOptions): TaskRequestOptions | undefi
   };
 }
 
+function formatPollingError(error: unknown): Record<string, unknown> {
+  const err = error as any;
+  const formatted: Record<string, unknown> = {
+    name: err?.name,
+    message: err?.message ?? String(error),
+  };
+  if (err?.stack) formatted.stack = err.stack;
+  if (err?.cause) {
+    formatted.cause = (err.cause as any)?.message ?? err.cause;
+  }
+  if (err?.response) formatted.response = err.response;
+  if (err?.raw) formatted.raw = err.raw;
+  return formatted;
+}
+
 // Synchronous task execution
 async function createSyncTaskHandle(
   provider: any,
@@ -208,6 +223,7 @@ async function pollUntilDone(
   try {
     let iteration = 0;
     let consecutiveStatusFailures = 0;
+    const statusFailureErrors: Array<Record<string, unknown>> = [];
     while (true) {
       throwIfAborted(taskOptions?.signal);
       if (iteration > 0) {
@@ -228,11 +244,17 @@ async function pollUntilDone(
           throw error;
         }
         consecutiveStatusFailures += 1;
+        statusFailureErrors.push(formatPollingError(error));
+        if (statusFailureErrors.length > 3) {
+          statusFailureErrors.shift();
+        }
         if (consecutiveStatusFailures >= 3) {
+          const recentErrorsJson = JSON.stringify(statusFailureErrors, null, 2);
           const pollingError = new Error(
-            `Task status polling failed ${consecutiveStatusFailures} times consecutively`
+            `Task status polling failed ${consecutiveStatusFailures} times consecutively. Recent errors: ${recentErrorsJson}`
           );
           (pollingError as any).cause = error;
+          (pollingError as any).details = statusFailureErrors;
           throw pollingError;
         }
         iteration += 1;

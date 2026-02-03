@@ -7,13 +7,13 @@ export type GrsaiConfig = {
 
 export function ensureGrsaiConfig(platformConfig?: PlatformConfig): GrsaiConfig {
   const apiKey = platformConfig?.apiKey;
-  const baseURL = platformConfig?.baseURL;
+  const baseURL = (platformConfig as any)?.baseURL ?? (platformConfig as any)?.baseUrl;
   
   if (!apiKey) {
     throw new Error('grsai provider requires apiKey in platformConfig');
   }
   if (!baseURL) {
-    throw new Error('grsai provider requires baseURL in platformConfig');
+    throw new Error('grsai provider requires baseURL (or baseUrl) in platformConfig');
   }
   
   return {

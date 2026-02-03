@@ -174,6 +174,182 @@ export function getModelSchema(modelPath: string): {
       },
     };
   }
+
+  // rhart-image-n-pro-official/edit: 有 imageUrls, prompt, resolution, aspectRatio
+  if (modelPath === 'rhart-image-n-pro-official/edit') {
+    return {
+      schema: {
+        type: 'object',
+        properties: {
+          imageUrls: {
+            type: 'array',
+            title: '上传参考图像',
+            'x-decorator': 'FormItem',
+            'x-component': 'Upload',
+            required: true,
+            description: '最多 10 张图片，每张不超过 10 MB',
+            'x-component-props': {
+              variant: 'nomask',
+              maxCount: 10,
+              listType: 'picture-card',
+              accept: 'image/*',
+            },
+            'x-runninghub': {
+              outputType: 'images',
+              componentProps: {
+                maxCount: 10,
+              },
+            },
+          },
+          prompt: {
+            type: 'string',
+            title: 'Prompt',
+            'x-decorator': 'FormItem',
+            'x-component': 'Input.TextArea',
+            'x-component-props': {
+              placeholder: 'Enter your prompt here',
+              rows: 4,
+            },
+            required: true,
+            description: '文本长度 5-4000',
+          },
+          resolution: {
+            type: 'string',
+            title: 'Resolution',
+            'x-decorator': 'FormItem',
+            'x-component': 'Select',
+            enum: ['1k', '2k', '4k'],
+            default: '1k',
+            required: true,
+          },
+          aspectRatio: {
+            type: 'string',
+            title: 'Aspect Ratio',
+            'x-decorator': 'FormItem',
+            'x-component': 'Select',
+            enum: ['1:1', '3:2', '2:3', '3:4', '4:3', '4:5', '5:4', '9:16', '16:9', '21:9'],
+          },
+        },
+      },
+      defaults: {
+        resolution: '1k',
+      },
+    };
+  }
+
+  // rhart-image-n-pro/edit: 有 imageUrls, prompt, aspectRatio, resolution
+  if (modelPath === 'rhart-image-n-pro/edit') {
+    return {
+      schema: {
+        type: 'object',
+        properties: {
+          imageUrls: {
+            type: 'array',
+            title: '上传参考图像',
+            'x-decorator': 'FormItem',
+            'x-component': 'Upload',
+            required: true,
+            description: '最多 10 张图片，每张不超过 10 MB',
+            'x-component-props': {
+              variant: 'nomask',
+              maxCount: 10,
+              listType: 'picture-card',
+              accept: 'image/*',
+            },
+            'x-runninghub': {
+              outputType: 'images',
+              componentProps: {
+                maxCount: 10,
+              },
+            },
+          },
+          prompt: {
+            type: 'string',
+            title: 'Prompt',
+            'x-decorator': 'FormItem',
+            'x-component': 'Input.TextArea',
+            'x-component-props': {
+              placeholder: 'Enter your prompt here',
+              rows: 4,
+            },
+            required: true,
+            description: '文本长度 5-4000',
+          },
+          aspectRatio: {
+            type: 'string',
+            title: 'Aspect Ratio',
+            'x-decorator': 'FormItem',
+            'x-component': 'Select',
+            enum: ['1:1', '16:9', '9:16', '4:3', '3:4', '3:2', '2:3', '5:4', '4:5', '21:9'],
+          },
+          resolution: {
+            type: 'string',
+            title: 'Resolution',
+            'x-decorator': 'FormItem',
+            'x-component': 'Select',
+            enum: ['1k', '2k', '4k', '1K', '2K', '4K'],
+            default: '1k',
+            required: true,
+          },
+        },
+      },
+      defaults: {
+        resolution: '1k',
+      },
+    };
+  }
+
+  // rhart-image-v1/edit: 有 prompt, aspectRatio, imageUrls
+  if (modelPath === 'rhart-image-v1/edit') {
+    return {
+      schema: {
+        type: 'object',
+        properties: {
+          prompt: {
+            type: 'string',
+            title: 'Prompt',
+            'x-decorator': 'FormItem',
+            'x-component': 'Input.TextArea',
+            'x-component-props': {
+              placeholder: 'Enter your prompt here',
+              rows: 4,
+            },
+            required: true,
+            description: '文本长度 5-4000',
+          },
+          aspectRatio: {
+            type: 'string',
+            title: 'Aspect Ratio',
+            'x-decorator': 'FormItem',
+            'x-component': 'Select',
+            enum: ['auto', '1:1', '16:9', '9:16', '4:3', '3:4', '3:2', '2:3', '5:4', '4:5', '21:9'],
+            required: true,
+          },
+          imageUrls: {
+            type: 'array',
+            title: '上传参考图像',
+            'x-decorator': 'FormItem',
+            'x-component': 'Upload',
+            required: true,
+            description: '最多 5 张图片，每张不超过 10 MB',
+            'x-component-props': {
+              variant: 'nomask',
+              maxCount: 5,
+              listType: 'picture-card',
+              accept: 'image/*',
+            },
+            'x-runninghub': {
+              outputType: 'images',
+              componentProps: {
+                maxCount: 5,
+              },
+            },
+          },
+        },
+      },
+      defaults: {},
+    };
+  }
   
   // 未知模型，返回通用 schema
   return {

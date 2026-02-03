@@ -90,6 +90,10 @@ export async function createRunninghubApiTask(
   }
   
   const result = await response.json();
+
+  if (result?.errorCode || result?.errorMessage) {
+    throw createRunninghubApiError('create', result);
+  }
   
   // 检查响应格式
   const taskId = result.taskId || result.data?.taskId;
