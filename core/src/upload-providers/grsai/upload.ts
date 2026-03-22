@@ -14,7 +14,7 @@ export async function uploadGrsaiZHFile(
   options?: TaskRequestOptions
 ): Promise<UploadResult> {
   // Fixed credentials for grsai_zh upload
-  const GRSAI_ZH_BASE_URL = 'https://grsai.dakka.com.cn';
+  const GRSAI_ZH_BASE_URL = 'https://grsaiapi.com';
   const GRSAI_ZH_API_KEY = 'sk-a0cf3753548344e1a5cbdf2c2dc460c6'; // TODO: Fill in actual API key
 
   const signal = options?.signal;

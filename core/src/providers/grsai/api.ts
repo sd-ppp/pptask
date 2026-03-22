@@ -20,6 +20,28 @@ import {
  */
 async function parseResponse(response: Response, readFirstEventOnly: boolean = false): Promise<any> {
   const contentType = response.headers.get('content-type') || '';
+  const debugPrefix = '[Grsai] Invalid SSE format';
+  const toApiError = (raw: string): Error | null => {
+    const trimmed = raw.trim();
+    if (!trimmed) return null;
+    try {
+      const data = JSON.parse(trimmed);
+      const msg = data?.msg || data?.error || data?.message;
+      if (msg) {
+        const codeInfo = data?.code != null ? ` (code=${data.code})` : '';
+        return new Error(`Grsai API error: ${msg}${codeInfo}`);
+      }
+    } catch {
+      // Not JSON, ignore
+    }
+    return null;
+  };
+
+  const logInvalidSSE = (raw: string) => {
+    const maxLen = 2000;
+    const snippet = raw.length > maxLen ? `${raw.slice(0, maxLen)}... [truncated ${raw.length - maxLen} chars]` : raw;
+    console.error(`${debugPrefix}. content-type=${contentType}, raw=`, snippet);
+  };
   
   if (contentType.includes('text/event-stream')) {
     // Parse SSE format: "data: {...}\n\n"
@@ -51,6 +73,9 @@ async function parseResponse(response: Response, readFirstEventOnly: boolean = f
             }
           }
         }
+        logInvalidSSE(buffer);
+        const apiError = toApiError(buffer);
+        if (apiError) throw apiError;
         throw new Error('Grsai API returned invalid SSE format');
       } finally {
         reader.releaseLock();
@@ -63,6 +88,9 @@ async function parseResponse(response: Response, readFirstEventOnly: boolean = f
         const jsonStr = lines[0].substring(6); // Remove "data: " prefix
         return JSON.parse(jsonStr);
       } else {
+        logInvalidSSE(text);
+        const apiError = toApiError(text);
+        if (apiError) throw apiError;
         throw new Error('Grsai API returned invalid SSE format');
       }
     }

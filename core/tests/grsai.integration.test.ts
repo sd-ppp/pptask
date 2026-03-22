@@ -15,7 +15,7 @@ const outputDir = join(__dirname, 'output', 'grsai');
 grsaiSuite('grsai provider (integration tests)', () => {
   const apiKey = process.env.GRSAI_API_KEY!;
   // baseURL and model are hardcoded in the test, not from environment variables
-  const baseUrl = 'https://grsai.dakka.com.cn';
+  const baseUrl = 'https://grsaiapi.com';
   const model = 'nano-banana-pro';
   const locator = `grsai:///${model}`;
   const platformConfig = { apiKey, baseURL: baseUrl };
