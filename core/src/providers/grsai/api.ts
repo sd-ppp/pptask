@@ -15,6 +15,141 @@ import {
   parseGrsaiModel,
 } from './helpers.ts';
 
+const GRSAI_DRAW_NANO_BANANA = '/v1/draw/nano-banana';
+const GRSAI_DRAW_COMPLETIONS = '/v1/draw/completions';
+
+/** gpt-image-2（非 VIP）文档给出的像素规格 */
+const GPT_IMAGE_2_PIXEL_BY_RATIO: Record<string, string> = {
+  auto: '1024x1024',
+  '1:1': '1024x1024',
+  '16:9': '1536x1024',
+  '9:16': '1024x1536',
+  '4:3': '1024x1024',
+  '3:4': '1024x1536',
+  '3:2': '1536x1024',
+  '2:3': '1024x1536',
+  '5:4': '1024x1024',
+  '4:5': '1024x1536',
+  '21:9': '1774x887',
+};
+
+/** gpt-image-2-vip：按档位选用文档中的较大分辨率（未列出的比例回退 auto） */
+const GPT_IMAGE_VIP_PIXEL_BY_RATIO: Record<string, { k1: string; k2: string; k4: string }> = {
+  auto: { k1: '1024x1024', k2: '2048x2048', k4: '2880x2880' },
+  '1:1': { k1: '1024x1024', k2: '2048x2048', k4: '2880x2880' },
+  '16:9': { k1: '1536x1024', k2: '2048x1152', k4: '3840x2160' },
+  '9:16': { k1: '1024x1536', k2: '1152x2048', k4: '2160x3840' },
+  '4:3': { k1: '1024x1024', k2: '2048x1360', k4: '3504x2336' },
+  '3:4': { k1: '1024x1536', k2: '1360x2048', k4: '2336x3504' },
+  '3:2': { k1: '1536x1024', k2: '2048x1152', k4: '3840x2160' },
+  '2:3': { k1: '1024x1536', k2: '1152x2048', k4: '2160x3840' },
+  '5:4': { k1: '1024x1024', k2: '2048x1360', k4: '2880x2880' },
+  '4:5': { k1: '1024x1536', k2: '1360x2048', k4: '2880x2880' },
+  '21:9': { k1: '1774x887', k2: '2048x880', k4: '3840x1648' },
+};
+
+function normalizeImageTier(imageSize: string): 'k1' | 'k2' | 'k4' {
+  const s = String(imageSize || '').toLowerCase();
+  if (s.includes('4')) {
+    return 'k4';
+  }
+  if (s.includes('2')) {
+    return 'k2';
+  }
+  return 'k1';
+}
+
+function mapAspectRatioToGptPixels(
+  aspectRatio: unknown,
+  imageSize: string,
+  model: string
+): string {
+  const key =
+    typeof aspectRatio === 'string' && aspectRatio.trim() ? aspectRatio.trim() : 'auto';
+  const tier = normalizeImageTier(imageSize);
+  const isVip = model.toLowerCase().includes('vip');
+
+  if (isVip) {
+    const row = GPT_IMAGE_VIP_PIXEL_BY_RATIO[key] ?? GPT_IMAGE_VIP_PIXEL_BY_RATIO.auto;
+    return row[tier];
+  }
+
+  const standard = GPT_IMAGE_2_PIXEL_BY_RATIO[key] ?? GPT_IMAGE_2_PIXEL_BY_RATIO.auto;
+  return standard;
+}
+
+function normalizeGrsaiUrlList(urls: unknown): string[] {
+  if (!Array.isArray(urls)) {
+    return [];
+  }
+  return urls.filter((u): u is string => typeof u === 'string' && u.trim().length > 0);
+}
+
+function buildGptCompletionsBody(model: string, payload: Record<string, any>): Record<string, any> {
+  const prompt = typeof payload.prompt === 'string' ? payload.prompt : '';
+  const aspectRaw = payload.aspectRatio;
+  const imageSize = typeof payload.imageSize === 'string' ? payload.imageSize : '1K';
+
+  let aspectRatio: string;
+  if (typeof aspectRaw === 'string' && /^\d+x\d+$/i.test(aspectRaw.trim())) {
+    aspectRatio = aspectRaw.trim();
+  } else {
+    aspectRatio = mapAspectRatioToGptPixels(aspectRaw, imageSize, model);
+  }
+
+  const body: Record<string, any> = {
+    model,
+    prompt,
+    aspectRatio,
+  };
+
+  const urls = normalizeGrsaiUrlList(payload.urls);
+  if (urls.length > 0) {
+    body.urls = urls;
+  }
+  if (typeof payload.webHook === 'string' && payload.webHook.trim()) {
+    body.webHook = payload.webHook.trim();
+  }
+  if (typeof payload.shutProgress === 'boolean') {
+    body.shutProgress = payload.shutProgress;
+  }
+  if (payload.quality !== undefined && payload.quality !== null && String(payload.quality).length > 0) {
+    body.quality = payload.quality;
+  }
+
+  return body;
+}
+
+/** Debug log for completions API — avoids dumping huge prompts/URLs. */
+function logGrsaiCompletionsRequest(
+  baseURL: string,
+  path: string,
+  body: Record<string, any>,
+): void {
+  const prompt =
+    typeof body.prompt === 'string' ? body.prompt : '';
+  const urls = Array.isArray(body.urls) ? body.urls : [];
+  console.log('[Grsai] draw/completions request', {
+    url: `${baseURL.replace(/\/$/, '')}${path}`,
+    model: body.model,
+    aspectRatio: body.aspectRatio,
+    promptChars: prompt.length,
+    promptPreview: prompt.length <= 160 ? prompt : `${prompt.slice(0, 160)}…`,
+    urlsCount: urls.length,
+    urlPreviews: urls.map((u: unknown) =>
+      typeof u === 'string'
+        ? u.length > 120
+          ? `${u.slice(0, 120)}…`
+          : u
+        : u,
+    ),
+    bodyKeys: Object.keys(body),
+    bodyJson: JSON.stringify(body, (_k, v) =>
+      typeof v === 'string' && v.length > 200 ? `${v.slice(0, 200)}…(${v.length} chars)` : v,
+    ),
+  });
+}
+
 /**
  * Parse response that might be either JSON or SSE format
  */
@@ -106,13 +241,14 @@ export async function describeGrsai(
   options?: TaskRequestOptions
 ): Promise<DescribeResult> {
   const model = parseGrsaiModel(url);
+  const apiEndpoint = model.startsWith('gpt') ? GRSAI_DRAW_COMPLETIONS : GRSAI_DRAW_NANO_BANANA;
 
   return {
     provider: 'grsai',
     metadata: {
       scheme: 'grsai',
       model,
-      apiEndpoint: '/v1/draw/nano-banana',
+      apiEndpoint,
     },
     formSchema: {
       type: 'object',
@@ -197,20 +333,52 @@ export async function createGrsaiTask(
     throw createAbortError('Task creation aborted');
   }
 
-  const response = await fetch(`${baseURL}/v1/draw/nano-banana`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${apiKey}`,
-    },
-    body: JSON.stringify({
+  let response: Response;
+  if (model.startsWith('nano-banana')) {
+    const nanoUrl = `${baseURL}${GRSAI_DRAW_NANO_BANANA}`;
+    console.log('[Grsai] draw/nano-banana request', {
+      url: nanoUrl,
       model,
-      ...payload,
-    }),
-    signal: signal as AbortSignal,
-  });
+      payloadKeys: Object.keys(payload || {}),
+    });
+    response = await fetch(nanoUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${apiKey}`,
+      },
+      body: JSON.stringify({
+        model,
+        ...payload,
+      }),
+      signal: signal as AbortSignal,
+    });
+  } else if (model.startsWith('gpt')) {
+    const body = buildGptCompletionsBody(model, payload);
+    logGrsaiCompletionsRequest(baseURL, GRSAI_DRAW_COMPLETIONS, body);
+    response = await fetch(`${baseURL}${GRSAI_DRAW_COMPLETIONS}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${apiKey}`,
+      },
+      body: JSON.stringify(body),
+      signal: signal as AbortSignal,
+    });
+  } else {
+    throw new Error(
+      `Grsai draw routing: unsupported model "${model}". Use nano-banana-* (/${GRSAI_DRAW_NANO_BANANA}) or gpt* (/${GRSAI_DRAW_COMPLETIONS}).`
+    );
+  }
 
   if (!response.ok) {
+    const errBody = await response.text().catch(() => '');
+    console.error('[Grsai] create HTTP error', {
+      status: response.status,
+      statusText: response.statusText,
+      contentType: response.headers.get('content-type'),
+      bodyPreview: errBody.length > 1500 ? `${errBody.slice(0, 1500)}…` : errBody,
+    });
     throw new Error(`Grsai API error: ${response.status} ${response.statusText}`);
   }
 
@@ -221,8 +389,17 @@ export async function createGrsaiTask(
   // Format 1: { id: "xxx", status: "pending", ... }
   // Format 2: { code: 0, data: { id: "xxx", status: "pending", ... }, msg: "" }
   const resultData = data.data || data;
-  
+
+  console.log('[Grsai] create first response', {
+    taskId: resultData.id,
+    status: resultData.status,
+    code: data.code,
+    msg: data.msg,
+    modelEcho: resultData.model ?? resultData.model_name,
+  });
+
   if (!resultData.id) {
+    console.error('[Grsai] create missing task id, raw:', JSON.stringify(data).slice(0, 2000));
     throw new Error('Grsai API did not return a task id');
   }
 
