@@ -72,8 +72,9 @@ export async function* createTaskHandleStream(
   // Check if provider supports sync execution
   const { scheme } = parseLocator(locator);
   const provider = getProvider(scheme);
+  const executionMode = provider?.getExecutionMode?.({ locator, payload, platformConfig, options: taskOptions });
 
-  if (provider?.createTaskSync) {
+  if (provider?.createTaskSync && executionMode !== 'async') {
     // Synchronous execution path
     yield* createSyncTaskStream(
       provider,

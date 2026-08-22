@@ -34,6 +34,9 @@ import {
   openaiProviderDefinition,
 } from './providers/openai/index.ts';
 import {
+  ppioProviderDefinition,
+} from './providers/ppio/index.ts';
+import {
   comfyProviderDefinition,
   comfyUploadProviderDefinition,
 } from './providers/comfy/index.ts';
@@ -58,6 +61,7 @@ export * from './providers/runninghub/index.ts';
 export * from './providers/grsai/index.ts';
 export * from './providers/gemini/index.ts';
 export * from './providers/openai/index.ts';
+export * from './providers/ppio/index.ts';
 export * from './providers/comfy/index.ts';
 export * from './resource.ts';
 export * from './types.ts';
@@ -87,6 +91,9 @@ function ensureDefaultProvidersRegistered(): void {
   }
   if (!getProvider('openai')) {
     registerProviderInternal('openai', openaiProviderDefinition);
+  }
+  if (!getProvider('ppio')) {
+    registerProviderInternal('ppio', ppioProviderDefinition);
   }
   if (!getProvider('comfy-http')) {
     registerProviderInternal('comfy-http', comfyProviderDefinition);
@@ -119,9 +126,10 @@ export async function describeResource(params: DescribeParams): Promise<Describe
 
 export async function createTask(params: TaskCreateParams): Promise<TaskCreateResult> {
   const provider = resolveProvider(params.locator);
+  const executionMode = provider.getExecutionMode?.(params);
   
   // Prioritize sync execution, but createTask expects async result
-  if (provider.createTaskSync) {
+  if (provider.createTaskSync && executionMode !== 'async') {
     // Sync provider: execute and return as a completed task
     const result = await provider.createTaskSync(params);
     return {
@@ -131,7 +139,7 @@ export async function createTask(params: TaskCreateParams): Promise<TaskCreateRe
       raw: result.raw,
       metadata: { syncCompleted: true, outputs: result.outputs },
     };
-  } else if (provider.createTaskAsync) {
+  } else if (provider.createTaskAsync && executionMode !== 'sync') {
     return provider.createTaskAsync(params);
   } else {
     throw new Error(`Provider has no task creation method: ${params.locator}`);

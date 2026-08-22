@@ -93,6 +93,9 @@ export type UploadResult = {
 
 export type ProviderDefinition = {
   describeResource(params: DescribeParams): Promise<DescribeResult>;
+
+  // Providers that expose both sync and async models can select per request.
+  getExecutionMode?: (params: TaskCreateParams) => 'sync' | 'async';
   
   // Synchronous execution (preferred): directly returns TaskResult
   createTaskSync?: (params: TaskCreateParams) => Promise<TaskResult>;
