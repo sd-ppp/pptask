@@ -20,7 +20,7 @@ executors/inline/   // 进程内执行器：本地直连或 HTTP 代理（前端
 
 `TaskResult` 额外包含 `costCoins` / `costMoney` / `costMoneyCurrency` 字段，Provider 在有消费信息时会填入（如平台内积分、人民币金额与货币单位），供上层做扣费或展示。
 
-默认已注册 Replicate、RunningHub、GRSAI、Gemini、OpenAI、PPIO 与 Comfy Provider，并可按需扩展新 Provider（上传逻辑可通过 `registerUploadProvider` 拆分复用）：
+默认已注册 Replicate、RunningHub、GRSAI、Gemini、OpenAI、PPIO、火山方舟（Ark）与 Comfy Provider，并可按需扩展新 Provider（上传逻辑可通过 `registerUploadProvider` 拆分复用）：
 
 ```ts
 import { registerProvider, registerUploadProvider } from './core/src/index.ts';
@@ -419,6 +419,41 @@ H3 支持 768P/2K、4-15 秒，以及 21:9、16:9、4:3、1:1、3:4、9:16 和
 `/v3/minimax/v2/query/video_generation/{task_id}`；建议每 10-30 秒轮询一次，成功后
 及时保存有时效性的结果地址。可通过 `platformConfig.minimaxBaseURL`（或
 `minimaxBaseUrl`）覆盖协议根地址。
+
+### 火山方舟 Seedream 5.0 Pro
+
+火山方舟作为独立 Provider 注册，不与 PPIO 共用配置。模型 locator 为
+`ark:///doubao-seedream-5-0-pro-260628`，默认请求
+`https://ark.cn-beijing.volces.com/api/v3/images/generations`：
+
+```ts
+const executor = createInlineExecutor({
+  platformConfig: locator =>
+    locator.startsWith('ark:///') && process.env.ARK_API_KEY
+      ? { apiKey: process.env.ARK_API_KEY }
+      : undefined,
+});
+
+const task = await executor.run({
+  locator: 'ark:///doubao-seedream-5-0-pro-260628',
+  payload: {
+    prompt: '精确拆分图片中的文字、主体和背景',
+    image: ['https://assets.example.com/source.png'],
+    layerDecomposition: true,
+    size: '2K',
+    outputFormat: 'jpeg',
+    responseFormat: 'url',
+    watermark: true,
+  },
+});
+
+const result = await task.promise;
+```
+
+普通生成模式支持文生图、单图编辑和最多 10 张参考图，尺寸可使用 `1K`、`1.5K`、
+`2K` 或合法的 `宽x高`。图层拆分模式要求恰好一张源图，支持 `auto`、`1K`、`1.5K`
+和 `2K`，结果输出会保留 `zIndex`、`name`、`description` 与 `boundingBox`，便于按
+图层顺序还原。可通过 `platformConfig.baseURL`（或 `baseUrl`）覆盖方舟 API 根地址。
 
 ### 通过 HTTP 代理自定义 Provider
 

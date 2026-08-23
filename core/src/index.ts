@@ -37,6 +37,9 @@ import {
   ppioProviderDefinition,
 } from './providers/ppio/index.ts';
 import {
+  arkProviderDefinition,
+} from './providers/ark/index.ts';
+import {
   comfyProviderDefinition,
   comfyUploadProviderDefinition,
 } from './providers/comfy/index.ts';
@@ -62,6 +65,7 @@ export * from './providers/grsai/index.ts';
 export * from './providers/gemini/index.ts';
 export * from './providers/openai/index.ts';
 export * from './providers/ppio/index.ts';
+export * from './providers/ark/index.ts';
 export * from './providers/comfy/index.ts';
 export * from './resource.ts';
 export * from './types.ts';
@@ -94,6 +98,9 @@ function ensureDefaultProvidersRegistered(): void {
   }
   if (!getProvider('ppio')) {
     registerProviderInternal('ppio', ppioProviderDefinition);
+  }
+  if (!getProvider('ark')) {
+    registerProviderInternal('ark', arkProviderDefinition);
   }
   if (!getProvider('comfy-http')) {
     registerProviderInternal('comfy-http', comfyProviderDefinition);
