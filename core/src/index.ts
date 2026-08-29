@@ -40,6 +40,9 @@ import {
   arkProviderDefinition,
 } from './providers/ark/index.ts';
 import {
+  novitaProviderDefinition,
+} from './providers/novita/index.ts';
+import {
   comfyProviderDefinition,
   comfyUploadProviderDefinition,
 } from './providers/comfy/index.ts';
@@ -66,6 +69,7 @@ export * from './providers/gemini/index.ts';
 export * from './providers/openai/index.ts';
 export * from './providers/ppio/index.ts';
 export * from './providers/ark/index.ts';
+export * from './providers/novita/index.ts';
 export * from './providers/comfy/index.ts';
 export * from './resource.ts';
 export * from './types.ts';
@@ -101,6 +105,9 @@ function ensureDefaultProvidersRegistered(): void {
   }
   if (!getProvider('ark')) {
     registerProviderInternal('ark', arkProviderDefinition);
+  }
+  if (!getProvider('novita')) {
+    registerProviderInternal('novita', novitaProviderDefinition);
   }
   if (!getProvider('comfy-http')) {
     registerProviderInternal('comfy-http', comfyProviderDefinition);
