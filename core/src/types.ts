@@ -17,6 +17,8 @@ export type TaskInputSemantic = 'prompt' | 'reference-image' | 'reference-video'
 export type TaskInputBinding = {
   field: string;
   semantic: TaskInputSemantic;
+  /** URL is the compatibility default; reference preserves role and media metadata. */
+  valueFormat?: 'url' | 'reference';
   required?: boolean;
   multiple?: boolean;
   maxItems?: number;
