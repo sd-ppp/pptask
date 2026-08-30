@@ -1,6 +1,6 @@
 # @sdppp/pptask
 
-通过统一的 `locator + payload` 协议复用不同 AI Provider 的异步能力。代码现分为两部分：
+通过统一的 `locator + payload` 协议复用不同 AI Provider 的任务执行能力。代码现分为两部分：
 
 ```
 core/               // Provider 注册、通用任务方法（describe/create/check/get/cancel/upload）
@@ -17,6 +17,10 @@ executors/inline/   // 进程内执行器：本地直连或 HTTP 代理（前端
 - `getResult({ locator, taskId, platformConfig?, options? })`
 - `cancelTask({ locator, taskId, platformConfig?, options? })`
 - `upload({ uploadProvider?, locator?, formData, platformConfig?, options? })`
+
+Provider implementations expose one `createTask` method. Its result is tagged as
+`{ mode: 'sync', result }` for an already completed task or `{ mode: 'async', task }`
+when the returned task needs status polling.
 
 `TaskResult` 额外包含 `costCoins` / `costMoney` / `costMoneyCurrency` 字段，Provider 在有消费信息时会填入（如平台内积分、人民币金额与货币单位），供上层做扣费或展示。
 
@@ -38,10 +42,13 @@ const customProvider: ProviderDefinition = {
   },
   async createTask({ locator }) {
     return {
-      provider: 'custom',
-      taskId: 'job-1',
-      status: 'pending',
-      raw: {},
+      mode: 'async',
+      task: {
+        provider: 'custom',
+        taskId: 'job-1',
+        status: 'pending',
+        raw: {},
+      },
     };
   },
   async checkStatus({ taskId }) {

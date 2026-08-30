@@ -4,6 +4,7 @@ import type {
   DescribeResult,
   ProviderDefinition,
   TaskCreateParams,
+  TaskExecutionResult,
   TaskResult,
 } from '../../types.ts';
 import { describeGemini, createGeminiTaskSync } from './api.ts';
@@ -24,6 +25,12 @@ export const geminiProviderDefinition: ProviderDefinition = {
     return describeGemini(url, params.platformConfig, params.options);
   },
   
+  async createTask(params: TaskCreateParams): Promise<TaskExecutionResult> {
+    const url = ensureGeminiUrl(params.locator);
+    const result = await createGeminiTaskSync(url, params.payload ?? {}, params.platformConfig, params.options);
+    return { mode: 'sync', result };
+  },
+
   async createTaskSync(params: TaskCreateParams): Promise<TaskResult> {
     const url = ensureGeminiUrl(params.locator);
     return createGeminiTaskSync(url, params.payload ?? {}, params.platformConfig, params.options);

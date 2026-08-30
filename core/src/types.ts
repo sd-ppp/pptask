@@ -67,6 +67,16 @@ export type TaskResult = {
   raw: any;
 };
 
+export type TaskExecutionResult =
+  | {
+      mode: 'sync';
+      result: TaskResult;
+    }
+  | {
+      mode: 'async';
+      task: TaskCreateResult;
+    };
+
 export type TaskOutput = {
   url?: string;
   rawData: any;
@@ -93,11 +103,12 @@ export type UploadResult = {
 
 export type ProviderDefinition = {
   describeResource(params: DescribeParams): Promise<DescribeResult>;
-  
-  // Synchronous execution (preferred): directly returns TaskResult
+
+  // The provider selects the protocol internally and returns a tagged result.
+  createTask: (params: TaskCreateParams) => Promise<TaskExecutionResult>;
+
+  // Deprecated compatibility aliases. New code should use createTask.
   createTaskSync?: (params: TaskCreateParams) => Promise<TaskResult>;
-  
-  // Asynchronous execution: create -> poll -> get result
   createTaskAsync?: (params: TaskCreateParams) => Promise<TaskCreateResult>;
   checkStatus?: (params: TaskCheckParams) => Promise<TaskStatusResult>;
   getResult?: (params: TaskResultParams) => Promise<TaskResult>;

@@ -12,6 +12,7 @@ import type {
   TaskCheckParams,
   TaskCreateParams,
   TaskCreateResult,
+  TaskExecutionResult,
   TaskRequestOptions,
   TaskResultParams,
   TaskResult,
@@ -33,22 +34,29 @@ export type TaskEvent =
   | { type: 'cancelled'; taskId: string };
 
 export type TaskClient = {
-  createTaskAsync: (params: TaskCreateParams & { context?: Record<string, any> }) => Promise<TaskCreateResult>;
+  createTask: (params: TaskCreateParams & { context?: Record<string, any> }) => Promise<TaskExecutionResult>;
   checkStatus: (params: TaskCheckParams & { context?: Record<string, any> }) => Promise<TaskStatusResult>;
   getResult: (params: TaskResultParams & { context?: Record<string, any> }) => Promise<TaskResult>;
   cancelTask: (params: TaskCheckParams & { context?: Record<string, any> }) => Promise<void>;
 };
 
 const localClient: TaskClient = {
-  createTaskAsync: async ({ context: _ctx, ...params }) => {
+  createTask: async ({ context: _ctx, ...params }) => {
     const provider = getProvider(parseLocator(params.locator).scheme);
     if (!provider) {
       throw new Error(`Provider not found for locator: ${params.locator}`);
     }
-    if (!provider.createTaskAsync) {
-      throw new Error(`Provider does not support async execution: ${params.locator}`);
+    if (provider.createTask) {
+      return provider.createTask(params);
     }
-    return provider.createTaskAsync(params);
+    // Compatibility with providers registered against the pre-unified interface.
+    if (provider.createTaskAsync) {
+      return { mode: 'async', task: await provider.createTaskAsync(params) };
+    }
+    if (provider.createTaskSync) {
+      return { mode: 'sync', result: await provider.createTaskSync(params) };
+    }
+    throw new Error(`Provider does not support task creation: ${params.locator}`);
   },
   checkStatus: ({ context: _ctx, ...params }) => coreCheckStatus(params),
   getResult: ({ context: _ctx, ...params }) => coreGetResult(params),
@@ -69,33 +77,28 @@ export async function* createTaskHandleStream(
   const taskOptions = toTaskRequestOptions(runOptions);
   const context = runOptions?.context;
 
-  // Check if provider supports sync execution
-  const { scheme } = parseLocator(locator);
-  const provider = getProvider(scheme);
+  const created = await client.createTask({
+    locator,
+    payload,
+    platformConfig,
+    options: taskOptions,
+    context,
+  });
 
-  if (provider?.createTaskSync) {
-    // Synchronous execution path
-    yield* createSyncTaskStream(
-      provider,
-      locator,
-      payload,
-      platformConfig,
-      taskOptions
-    );
-    return;
+  if (created.mode === 'sync') {
+    yield* createSyncTaskStream(created.result, taskOptions);
   } else {
-    // Asynchronous execution path
     yield* createAsyncTaskStream(
       locator,
-      payload,
+      created.task,
       platformConfig,
       taskOptions,
       pollIntervalMs,
       client,
       context
     );
-    return;
   }
+  return;
 }
 
 function toTaskRequestOptions(options?: RunOptions): TaskRequestOptions | undefined {
@@ -108,10 +111,7 @@ function toTaskRequestOptions(options?: RunOptions): TaskRequestOptions | undefi
 
 // Synchronous task execution stream
 async function* createSyncTaskStream(
-  provider: any,
-  locator: string,
-  payload: Record<string, any>,
-  platformConfig: PlatformConfig | undefined,
+  result: TaskResult,
   taskOptions: TaskRequestOptions | undefined
 ): AsyncGenerator<TaskEvent, TaskResult, void> {
   const syncTaskId = `sync-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
@@ -120,13 +120,6 @@ async function* createSyncTaskStream(
     throwIfAborted(taskOptions?.signal);
 
     yield { type: 'created', taskId: syncTaskId, metadata: { mode: 'sync' } };
-
-    const result = await provider.createTaskSync({
-      locator,
-      payload,
-      platformConfig,
-      options: taskOptions,
-    });
 
     yield { type: 'completed', taskId: syncTaskId, result };
 
@@ -144,22 +137,13 @@ async function* createSyncTaskStream(
 // Asynchronous task execution stream
 async function* createAsyncTaskStream(
   locator: string,
-  payload: Record<string, any>,
+  created: TaskCreateResult,
   platformConfig: PlatformConfig | undefined,
   taskOptions: TaskRequestOptions | undefined,
   pollIntervalMs: number,
   client: TaskClient,
   context: Record<string, any> | undefined
 ): AsyncGenerator<TaskEvent, TaskResult, void> {
-  // 1. Create task
-  const created = await client.createTaskAsync({
-    locator,
-    payload,
-    platformConfig,
-    options: taskOptions,
-    context,
-  });
-
   const taskId = created.taskId;
 
   // Emit created event

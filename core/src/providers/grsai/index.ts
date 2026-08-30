@@ -6,6 +6,7 @@ import type {
   TaskCheckParams,
   TaskCreateParams,
   TaskCreateResult,
+  TaskExecutionResult,
   TaskResult,
   TaskResultParams,
   TaskStatusResult,
@@ -32,6 +33,11 @@ export const grsaiProviderDefinition: ProviderDefinition = {
   async describeResource(params: DescribeParams): Promise<DescribeResult> {
     const url = ensureGrsaiUrl(params.locator);
     return describeGrsai(url, params.platformConfig, params.options);
+  },
+  async createTask(params: TaskCreateParams): Promise<TaskExecutionResult> {
+    const url = ensureGrsaiUrl(params.locator);
+    const task = await createGrsaiTask(url, params.payload ?? {}, params.platformConfig, params.options);
+    return { mode: 'async', task };
   },
   async createTaskAsync(params: TaskCreateParams): Promise<TaskCreateResult> {
     const url = ensureGrsaiUrl(params.locator);

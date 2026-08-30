@@ -6,6 +6,7 @@ import type {
   TaskCheckParams,
   TaskCreateParams,
   TaskCreateResult,
+  TaskExecutionResult,
   TaskResult,
   TaskResultParams,
   TaskStatusResult,
@@ -49,6 +50,12 @@ export const runninghubProviderDefinition: ProviderDefinition = {
   async describeResource(params: DescribeParams): Promise<DescribeResult> {
     const impl = getImplementation(params.locator);
     return impl.describeResource(params);
+  },
+
+  async createTask(params: TaskCreateParams): Promise<TaskExecutionResult> {
+    const impl = getImplementation(params.locator);
+    const task = await impl.createTaskAsync(params);
+    return { mode: 'async', task };
   },
 
   async createTaskAsync(params: TaskCreateParams): Promise<TaskCreateResult> {

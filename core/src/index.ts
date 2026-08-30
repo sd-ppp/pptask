@@ -45,6 +45,7 @@ import type {
   TaskCheckParams,
   TaskCreateParams,
   TaskCreateResult,
+  TaskExecutionResult,
   TaskResult,
   TaskResultParams,
   TaskStatusResult,
@@ -119,11 +120,19 @@ export async function describeResource(params: DescribeParams): Promise<Describe
 
 export async function createTask(params: TaskCreateParams): Promise<TaskCreateResult> {
   const provider = resolveProvider(params.locator);
-  
-  // Prioritize sync execution, but createTask expects async result
-  if (provider.createTaskSync) {
-    // Sync provider: execute and return as a completed task
-    const result = await provider.createTaskSync(params);
+  let execution: TaskExecutionResult;
+  if (provider.createTask) {
+    execution = await provider.createTask(params);
+  } else if (provider.createTaskSync) {
+    execution = { mode: 'sync', result: await provider.createTaskSync(params) };
+  } else if (provider.createTaskAsync) {
+    execution = { mode: 'async', task: await provider.createTaskAsync(params) };
+  } else {
+    throw new Error(`Provider has no task creation method: ${params.locator}`);
+  }
+
+  if (execution.mode === 'sync') {
+    const result = execution.result;
     return {
       provider: result.provider,
       taskId: result.taskId,
@@ -131,11 +140,9 @@ export async function createTask(params: TaskCreateParams): Promise<TaskCreateRe
       raw: result.raw,
       metadata: { syncCompleted: true, outputs: result.outputs },
     };
-  } else if (provider.createTaskAsync) {
-    return provider.createTaskAsync(params);
-  } else {
-    throw new Error(`Provider has no task creation method: ${params.locator}`);
   }
+
+  return execution.task;
 }
 
 export async function checkStatus(params: TaskCheckParams): Promise<TaskStatusResult> {
