@@ -40,6 +40,18 @@ export const apiframeProviderDefinition: ProviderDefinition = {
       params.options,
     );
   },
+  async createTask(params: TaskCreateParams) {
+    ensureApiframeLocator(params.locator);
+    return {
+      mode: 'async' as const,
+      task: await createApiframeTask(
+        params.locator,
+        params.payload ?? {},
+        params.platformConfig,
+        params.options,
+      ),
+    };
+  },
   async checkStatus(params: TaskCheckParams): Promise<TaskStatusResult> {
     ensureApiframeLocator(params.locator);
     return checkApiframeStatus(

@@ -40,6 +40,18 @@ export const kieProviderDefinition: ProviderDefinition = {
       params.options,
     );
   },
+  async createTask(params: TaskCreateParams) {
+    ensureKieLocator(params.locator);
+    return {
+      mode: 'async' as const,
+      task: await createKieTask(
+        params.locator,
+        params.payload ?? {},
+        params.platformConfig,
+        params.options,
+      ),
+    };
+  },
   async checkStatus(params: TaskCheckParams): Promise<TaskStatusResult> {
     ensureKieLocator(params.locator);
     return checkKieStatus(

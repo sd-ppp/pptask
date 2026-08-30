@@ -21,7 +21,8 @@ import type { RunOptions, TaskHandle } from './types.ts';
 const DEFAULT_POLL_INTERVAL = 1000;
 
 export type TaskClient = {
-  createTask: (params: TaskCreateParams & { context?: Record<string, any> }) => Promise<TaskExecutionResult>;
+  createTask?: (params: TaskCreateParams & { context?: Record<string, any> }) => Promise<TaskExecutionResult>;
+  createTaskAsync?: (params: TaskCreateParams & { context?: Record<string, any> }) => Promise<TaskCreateResult>;
   checkStatus: (params: TaskCheckParams & { context?: Record<string, any> }) => Promise<TaskStatusResult>;
   getResult: (params: TaskResultParams & { context?: Record<string, any> }) => Promise<TaskResult>;
   cancelTask: (params: TaskCheckParams & { context?: Record<string, any> }) => Promise<void>;
@@ -60,7 +61,12 @@ export async function createTaskHandle(
   const taskOptions = toTaskRequestOptions(runOptions);
   const context = runOptions?.context;
   
-  const created = await client.createTask({ locator, payload, platformConfig, options: taskOptions, context });
+  const params = { locator, payload, platformConfig, options: taskOptions, context };
+  const created = client.createTask
+    ? await client.createTask(params)
+    : client.createTaskAsync
+      ? { mode: 'async' as const, task: await client.createTaskAsync(params) }
+      : (() => { throw new Error('Task client must implement createTask or createTaskAsync'); })();
   if (created.mode === 'sync') {
     return createSyncTaskHandle(created.result, runOptions);
   }
