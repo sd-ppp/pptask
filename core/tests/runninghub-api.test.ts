@@ -84,7 +84,7 @@ describe('runninghub-api provider (unit tests)', () => {
     ]);
 
     const options = listPPTaskLocatorOptions('runninghub');
-    expect(options).toHaveLength(374);
+    expect(options).toHaveLength(389);
     expect(new Set(options.map(option => option.locator)).size).toBe(options.length);
     expect(options).toContainEqual(expect.objectContaining({
       providerId: 'runninghub',

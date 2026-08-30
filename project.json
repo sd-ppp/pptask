@@ -1,5 +1,5 @@
 {
-  "name": "@sdppp/pptask",
+  "name": "pptask",
   "projectType": "library",
   "sourceRoot": "libs/domain/pptask/core/src",
   "tags": [

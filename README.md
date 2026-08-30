@@ -1,816 +1,422 @@
-# @sdppp/pptask
+<!-- English -->
+# PPTask
 
-通过统一的 `locator + payload` 协议复用不同 AI Provider 的任务执行能力。代码现分为两部分：
+> One interface for AI media generation, across providers.
 
+[![License](https://img.shields.io/badge/license-Apache--2.0-green.svg)](LICENSE)
+[![TypeScript](https://img.shields.io/badge/TypeScript-first-3178c6.svg)](https://www.typescriptlang.org/)
+[![Node.js](https://img.shields.io/badge/Node.js-%3E%3D20-339933.svg)](https://nodejs.org/)
+
+PPTask is an open source task layer for AI media generation. It connects models and API platforms through one stable `locator + payload` contract, and normalizes the complete lifecycle: description, creation, polling, result extraction, cancellation, and asset upload.
+
+Your application talks to PPTask instead of implementing a different SDK, request format, status mapper, error handler, and result parser for every platform.
+
+```text
+your app
+   |
+   | locator + payload
+   v
+ PPTask ---------------------------------------------------+
+   | describe | create | check | result | cancel | upload  |
+   +-------------------------------------------------------+
+      |          |          |          |          |
+   Replicate  RunningHub   ComfyUI    PPIO      Kie.ai ...
 ```
-core/               // Provider 注册、通用任务方法（describe/create/check/get/cancel/upload）
-executors/inline/   // 进程内执行器：本地直连或 HTTP 代理（前端、BFF、脚本场景）
+
+## Why PPTask
+
+- **One entry point for many platforms.** Select a provider and model with a locator instead of coupling product code to a vendor SDK.
+- **One task lifecycle.** Synchronous generation and asynchronous queues become the same task handle, status model, and result shape.
+- **Built for media workflows.** Image, video, and audio integrations include asset upload, progress, cancellation, and cost metadata where available.
+- **Discoverable model capabilities.** `describeResource` returns form schema, defaults, metadata, and upload recommendations for dynamic UIs.
+- **Provider isolation.** Authentication, endpoints, status codes, output formats, and platform errors stay inside the adapter layer.
+- **Open extension model.** Register a provider or upload provider for a private API, internal gateway, or self-hosted workflow without changing the core.
+- **No lowest-common-denominator trap.** Stable fields make integrations portable while `raw` and metadata preserve provider-specific details.
+
+## Where it fits
+
+- AI creative tools that need several image, video, or audio platforms.
+- Workflow systems that route by price, region, availability, or model capability.
+- SaaS products that want one task and cancellation model across providers.
+- Teams consolidating scattered vendor SDKs into a testable, replaceable adapter layer.
+- Private deployments connecting ComfyUI, internal services, and public APIs.
+
+## Core concepts
+
+### Locator
+
+A locator is a stable address for a model or workflow. The scheme selects the provider; the remaining path is interpreted by that provider:
+
+```text
+replicate:///black-forest-labs/flux-schnell
+runninghub://api/rhart-image-n-pro/text-to-image
+comfy-http://127.0.0.1:8188/workflows/product-shot
+ppio:///gemini-3.1-flash-image
+kie://market/seedream/5-pro-text-to-image
+apiframe://video/kling-3.0
 ```
 
-## core/ —— Provider 注册与任务入口
+Keep connection configuration separate from one-off task input:
 
-`core` 暴露的六个入口函数在任何环境下可用（`platformConfig` 可选，用于传入当前调用的默认配置）：
+- `platformConfig` contains API keys, base URLs, and provider settings.
+- `payload` contains prompts, dimensions, references, and task parameters.
+- `options` contains execution controls such as an abort signal.
 
-- `describeResource({ locator, platformConfig?, options? })`
-- `createTask({ locator, payload?, platformConfig?, options? })`
-- `checkStatus({ locator, taskId, platformConfig?, options? })`
-- `getResult({ locator, taskId, platformConfig?, options? })`
-- `cancelTask({ locator, taskId, platformConfig?, options? })`
-- `upload({ uploadProvider?, locator?, formData, platformConfig?, options? })`
+### Unified results
 
-Provider implementations expose one `createTask` method. Its result is tagged as
-`{ mode: 'sync', result }` for an already completed task or `{ mode: 'async', task }`
-when the returned task needs status polling.
-
-`TaskResult` 额外包含 `costCoins` / `costMoney` / `costMoneyCurrency` 字段，Provider 在有消费信息时会填入（如平台内积分、人民币金额与货币单位），供上层做扣费或展示。
-
-默认已注册 Replicate、RunningHub、GRSAI、Gemini、OpenAI、PPIO、Novita、火山方舟（Ark）与 Comfy Provider，并可按需扩展新 Provider（上传逻辑可通过 `registerUploadProvider` 拆分复用）：
-
-构建与发布说明见 [docs/BUILD.md](docs/BUILD.md)，RunningHub API 模式说明见
-[docs/RUNNINGHUB_API.md](docs/RUNNINGHUB_API.md)。
+Every provider maps successful output to one result shape while retaining the original response:
 
 ```ts
-import { registerProvider, registerUploadProvider } from './core/src/index.ts';
-import type { ProviderDefinition, UploadProviderDefinition } from './core/src/types.ts';
-
-const customProvider: ProviderDefinition = {
-  async describeResource({ locator }) {
-    return {
-      provider: 'custom',
-      metadata: { scheme: 'custom', locator },
-      formSchema: { type: 'object', properties: {} },
-      formValues: {},
-      recommendUploadProvider: 'custom',
-    };
-  },
-  async createTask({ locator }) {
-    return {
-      mode: 'async',
-      task: {
-        provider: 'custom',
-        taskId: 'job-1',
-        status: 'pending',
-        raw: {},
-      },
-    };
-  },
-  async checkStatus({ taskId }) {
-    return {
-      provider: 'custom',
-      taskId,
-      status: 'succeeded',
-      raw: {},
-    };
-  },
-  async getResult({ taskId }) {
-    return {
-      provider: 'custom',
-      taskId,
-      status: 'succeeded',
-      outputs: [],
-      raw: {},
-    };
-  },
-  async cancelTask() {},
+type TaskResult = {
+  provider: string;
+  taskId: string;
+  status: 'succeeded';
+  outputs: Array<{ url?: string; rawData: unknown }>;
+  costCoins?: number;
+  costMoney?: number;
+  costMoneyCurrency?: string;
+  raw: unknown;
 };
-
-registerProvider('custom', customProvider);
-
-const customUploadProvider: UploadProviderDefinition = {
-  async upload({ formData }) {
-    // 自定义上传实现
-    return { provider: 'custom', url: 'https://files.example.com/demo', raw: {} };
-  },
-};
-
-registerUploadProvider('custom', customUploadProvider);
 ```
 
-如果需要维护平台密钥，可根据 locator 的 scheme 手动选择默认值，并在调用时自行合并覆盖项：
+## Supported providers
 
-```ts
-import { createTask } from './core/src/index.ts';
-import { parseLocator, normalizeScheme } from './core/src/resource.ts';
+| Provider | Locator scheme | Typical coverage |
+| --- | --- | --- |
+| Replicate | `replicate:` | Model/version resolution, async tasks, uploads |
+| RunningHub | `runninghub:` | WebApp, API models, workflows, uploads |
+| ComfyUI | `comfy-http:` / `comfy-https:` | Self-hosted workflows and uploads |
+| PPIO | `ppio:` | Image, video, text, and multimodal models |
+| Novita | `novita:` | Image, video, text, and multimodal models |
+| Kie.ai | `kie:` | Catalog-backed image, video, and audio models |
+| APIFrame | `apiframe:` | Image, video, music, and uploads |
+| GRSAI | `grsai:` | Image generation and uploads |
+| OpenAI | `openai:` | Image generation, editing, and variations |
+| Gemini | `gemini:` | Gemini image generation |
+| Volcengine Ark | `ark:` | Volcengine Ark image models |
 
-const defaults: Record<string, Record<string, any>> = {};
-if (process.env.REPLICATE_API_KEY) {
-  defaults[normalizeScheme('replicate')] = { apiKey: process.env.REPLICATE_API_KEY };
-}
+See the [Provider Guide](docs/PROVIDER_GUIDE.md) for model-level parameters and platform-specific behavior.
 
-function resolvePlatformConfig(locator: string) {
-  const { scheme } = parseLocator(locator);
-  const base = defaults[normalizeScheme(scheme)] ?? {};
-  return base;
-}
+## Quick start
 
-await createTask({
-  locator: 'replicate:///owner/model',
-  payload: { prompt: 'hi' },
-  platformConfig: resolvePlatformConfig('replicate:///owner/model'),
-});
+Install PPTask from npm:
+
+```bash
+npm install pptask
 ```
 
-**核心状态面板**
-
-- `providers`：`registerProvider` 写入的 Provider 注册表，`ensureProvider` / `listProviders` 等读取。
-- `replicate/versionCache`：`replicate` Provider 内部按 `apiKey:model` 的版本缓存，避免重复请求最新版本号与模型元数据。
-
-## executors/inline/ —— 进程内执行器
-
-`createInlineExecutor` 负责在同一个进程内执行任务（复用当前进程内已注册的 Provider）。
+Use the inline executor to get one task handle for synchronous and asynchronous providers:
 
 ```ts
-import { createInlineExecutor } from './executors/inline/src/index.ts';
+import { createInlineExecutor } from 'pptask/executors/inline';
 
-// 直连 Replicate / RunningHub 等 Provider
 const executor = createInlineExecutor({
   platformConfig: locator =>
-    locator.startsWith('replicate:///') && process.env.REPLICATE_API_KEY
+    locator.startsWith('replicate:')
       ? { apiKey: process.env.REPLICATE_API_KEY }
       : undefined,
 });
-const describe = await executor.describe({ locator: 'replicate:///owner/model' });
+
+const locator = 'replicate:///black-forest-labs/flux-schnell';
+const description = await executor.describe({ locator });
 const task = await executor.run({
-  locator: 'replicate:///owner/model',
-  payload: describe.formValues,
-});
-const outputs = await task.promise;
-```
-
-`upload` 会自动注入在创建执行器时提供的 `platformConfig`，无需调用时再次传入。`describe` 返回的 `recommendUploadProvider` 可直接透传给 `upload({ uploadProvider })`。
-
-### PPIO 图像模型
-
-PPIO 使用同步的 Gemini `generateContent` 协议，默认请求
-`https://api.ppio.com/v3/gemini-image/v1beta1`。模型放在 locator 的 pathname 中：
-
-```ts
-const executor = createInlineExecutor({
-  platformConfig: locator =>
-    locator.startsWith('ppio:///') && process.env.PPIO_API_KEY
-      ? { apiKey: process.env.PPIO_API_KEY }
-      : undefined,
+  locator,
+  payload: { ...description.formValues, prompt: 'A product photo with soft studio lighting' },
 });
 
-const task = await executor.run({
-  locator: 'ppio:///gemini-3.1-flash-image',
-  payload: {
-    prompt: 'Generate a product photo on a clean studio background',
-    // 图片编辑时可传 data URL、纯 base64 或 { data, mimeType }
-    urls: [],
-    aspectRatio: '16:9',
-    imageSize: '2K',
-  },
-});
-
+console.log(task.taskId, task.cancelable);
 const result = await task.promise;
-const outputs = result.outputs;
+console.log(result.outputs);
 ```
 
-支持 `gemini-3.1-flash-image`、`gemini-3-pro-image` 和
-`gemini-2.5-flash-image`。如需代理或兼容服务，可通过
-`platformConfig.baseURL`（也兼容 `baseUrl`）和 `platformConfig.apiVersion`
-覆盖默认地址与版本。
+Keep API keys in a server or trusted runtime. Never bundle provider secrets into browser code or commit them to the repository.
 
-### Novita（PPIO 海外站）Nano Banana
+## Public API
 
-Novita 作为独立 Provider 注册，不与国内 PPIO 共用 locator、API Key 或地址配置。
-默认请求 `https://api.novita.ai/gemini/v1/models/{model}:generateContent`，使用
-`Authorization: Bearer <NOVITA_API_KEY>`：
+Core exposes `describeResource`, `createTask`, `checkStatus`, `getResult`, `cancelTask`, and `upload`. Providers and upload providers can be registered with `registerProvider` and `registerUploadProvider`. See the [Provider Guide](docs/PROVIDER_GUIDE.md) and [Contributing Guide](CONTRIBUTING.md) for the complete contract.
 
-```ts
-const executor = createInlineExecutor({
-  platformConfig: locator =>
-    locator.startsWith('novita:///') && process.env.NOVITA_API_KEY
-      ? { apiKey: process.env.NOVITA_API_KEY }
-      : undefined,
-});
+## Project status
 
-const task = await executor.run({
-  locator: 'novita:///gemini-3.1-flash-image',
-  payload: {
-    prompt: 'Generate a cinematic product photo',
-    // 图片编辑可传 data URL、纯 base64 或 inlineData 对象
-    urls: [],
-    aspectRatio: '16:9',
-    imageSize: '4K',
-  },
-});
+PPTask is currently `0.x`. The API is usable in real applications, but may evolve before the first stable release. Near-term work includes stabilizing the provider SDK and error model, publishing to npm, expanding model catalogs, adding cross-provider routing, and improving server-side credential isolation.
 
-const result = await task.promise;
-console.log(result.outputs, result.costCoins); // costCoins 为 totalTokenCount
-```
-
-支持 `gemini-3.1-flash-lite-image`、`gemini-3.1-flash-image`、
-`gemini-3-pro-image`、`gemini-2.5-flash-image`，以及对应的四个 `-as` 模型。
-默认固定 `responseModalities: ['IMAGE']`，防止额外生成思考图片并产生额外 Token；
-确需文字说明时可传 `includeTextResponse: true` 或显式传
-`responseModalities: ['TEXT', 'IMAGE']`。支持 `1K`、`2K`、`4K`，也可通过
-`platformConfig.baseURL` 和 `platformConfig.apiVersion`（`v1`/`v1beta`）覆盖协议地址。
-
-### Novita GPT Image 2
-
-GPT Image 2 继续使用独立的 `novita` Provider，支持以下 locator：
-
-- `novita:///gpt-image-2`
-- `novita:///gpt-image-2-oai`
-
-不传参考图时，Provider 以 JSON 请求
-`https://api.novita.ai/openai/v1/images/generations`；传入 `urls`、`images`、`image`
-或 `mask` 后自动切换到 multipart 请求 `/openai/v1/images/edits`。编辑模式支持多张
-`image[]` 和单张 PNG 遮罩：
-
-```ts
-const task = await executor.run({
-  locator: 'novita:///gpt-image-2',
-  payload: {
-    prompt: 'Replace the background with a clean studio backdrop',
-    urls: ['data:image/png;base64,...'],
-    mask: 'data:image/png;base64,...',
-    size: '1024x1024',
-    quality: 'high',
-    outputFormat: 'png',
-    inputFidelity: 'high',
-  },
-});
-```
-
-支持 PNG、JPEG、WebP、1-10 张输出；表单尺寸选项与 PPIO GPT Image 2 保持一致，
-同时底层仍接受 GPT Image 2 的合法自定义尺寸。宽高必须为
-16 的倍数、比例在 1:3 到 3:1 之间，最长边不超过 3840、短边不超过 2160。
-为便于 Token 成本控制，默认显式使用 `1024x1024` 和 `high`。文生图默认使用
-文档建议的 `moderation: 'low'`，编辑接口不发送该参数。响应中的
-`usage.total_tokens` 会回填至 `costCoins`。可通过
-`platformConfig.openaiBaseURL`（或 `openaiBaseUrl`）覆盖 OpenAI 兼容根地址。
-
-### Novita GPT-5.6（Responses / Chat Completions）
-
-GPT-5.6 继续使用独立的 `novita` Provider。模型列表与 PPIO 已接入的模型保持一致，
-不使用协议文档中的示例模型：
-
-- `novita:///pa/gpt-5.6-terra`
-- `novita:///pa/gpt-5.6-luna`
-- `novita:///pa/gpt-5.6-sol`
-
-同一个 locator 支持两种 OpenAI 兼容协议。`apiMode: 'responses'` 为默认模式，调用
-`/openai/v1/responses`；`apiMode: 'chat_completions'` 调用
-`/openai/v1/chat/completions`：
-
-```ts
-const task = await executor.run({
-  locator: 'novita:///pa/gpt-5.6-terra',
-  payload: {
-    apiMode: 'responses', // 或 chat_completions
-    systemPrompt: '回答要简洁准确',
-    prompt: '解释一下这张图',
-    urls: ['data:image/png;base64,...'],
-    reasoningEffort: 'medium',
-    maxOutputTokens: 2048,
-    responseFormat: 'text',
-    stream: false,
-  },
-});
-```
-
-也可在 `platformConfig.wireApi` / `platformConfig.wire_api` 中设置默认协议；payload
-中的 `apiMode`、`wireApi` 或 `wire_api` 优先级更高。支持文字、图片、工具调用、
-推理强度、结构化输出和流式响应；响应中的 `usage.total_tokens` 会回填至
-`costCoins`。由于 GPT-5.6 服务端不接受 `top_p`，Provider 会在请求前明确报错，
-请使用 `temperature` 调节随机性。默认 OpenAI 兼容根地址为
-`https://api.novita.ai/openai`，可通过 `platformConfig.openaiBaseURL` 覆盖。
-
-### Novita Seedance 海外版（Token 计费）
-
-海外 Seedance 使用独立的 `novita` Provider 和 Novita API Key，不与国内 PPIO
-地址或 Key 混用。支持以下官方版本 locator：
-
-- `novita:///doubao-seedance-2-0-260128`
-- `novita:///doubao-seedance-2-0-fast-260128`
-- `novita:///doubao-seedance-2-0-mini-260615`
-- `novita:///doubao-seedance-2-5-260628`
-- 对应的四个 `dreamina-` 前缀模型
-
-```ts
-const task = await executor.run({
-  locator: 'novita:///doubao-seedance-2-5-260628',
-  payload: {
-    prompt: '保持参考角色一致，生成电影感产品短片',
-    referenceImages: ['asset://asset-character'],
-    referenceVideos: ['https://assets.example.com/motion.mp4'],
-    referenceAudios: ['asset://asset-music'],
-    resolution: '720p',
-    ratio: 'adaptive',
-    duration: 11,
-    generateAudio: true,
-    watermark: false,
-  },
-});
-
-const result = await task.promise;
-console.log(result.outputs[0].url, result.costCoins);
-```
-
-Provider 通过 `POST /v3/bytedance/metered/contents/generations/tasks` 创建任务，使用
-官方 `cgt-*` ID 轮询同路径下的 `{id}`，并支持通过 DELETE 取消排队任务或删除任务
-记录。成功结果同时兼容 `content.video_url` 与 `content.url`，`usage.total_tokens`
-会回填至 `costCoins`。输入素材支持公网 HTTP(S) URL、已激活的 `asset://<Id>`，
-以及本地图片上传。表单中的 `firstFrameFile`、`lastFrameFile` 和
-`referenceImageFiles` 会把本地图片转换为 Base64 Data URL；URL 字段仍可照常使用，
-本地参考图与 URL 参考图合计最多 9 张。代码调用时也可直接传 Data URL 或
-`{ inlineData: { mimeType, data } }`；
-首尾帧模式不能与参考素材模式混用。默认根地址为
-`https://api.novita.ai/v3/bytedance/metered`，可通过
-`platformConfig.seedanceOverseaMeteredBaseURL`（或 `seedanceOverseaMeteredBaseUrl`）
-覆盖。
-
-### Novita Kling 3.0 系列
-
-Kling 3.0 使用 Novita 官方 v3 异步接口，已接入 7 个独立 locator：
-
-- `novita:///kling-v3.0-std-t2v`
-- `novita:///kling-v3.0-std-i2v`
-- `novita:///kling-v3.0-pro-t2v`
-- `novita:///kling-v3.0-pro-i2v`
-- `novita:///kling-v3.0-4k-t2v`
-- `novita:///kling-v3.0-4k-i2v`
-- `novita:///kling-v3.0-motion-control`
-
-```ts
-const task = await executor.run({
-  locator: 'novita:///kling-v3.0-pro-i2v',
-  payload: {
-    // image 也可传 Upload 表单结果、Data URL 或 inlineData
-    image: 'data:image/png;base64,...',
-    multiPrompt: [
-      '镜头缓慢推进，商品从暗部进入主光区',
-      '主体转向镜头，背景灯光逐渐亮起',
-    ],
-    duration: 10,
-    cfgScale: 0.5,
-    sound: true,
-  },
-});
-```
-
-Standard、Pro 和 4K 均覆盖文生视频与图生视频，时长支持 3–15 秒；文生视频
-支持 `16:9`、`9:16`、`1:1`。图生视频的 `image` / `endImage` 支持 JPG、PNG
-公网 URL 或 Base64，单张上限 10MB。Pro 的 `multiPrompt` 为字符串数组；
-Standard/4K 图生视频的 `multiPrompt` 为 `{ prompt, duration }[]`。尾帧不能与
-多分镜同时使用。
-
-Motion Control 需要角色参考图和公网 MP4/MOV 动作视频 URL，可选择
-`kling-v3-0-std` 或 `kling-v3-0-pro`，并通过 `characterOrientation` 选择跟随
-图片构图或视频构图。所有 Kling 任务通过
-`GET /v3/async/task-result?task_id=...` 查询。默认异步根地址为
-`https://api.novita.ai/v3/async`，可用 `platformConfig.asyncBaseURL`（或
-`asyncBaseUrl`）覆盖。
-
-### Novita Google Veo 3.1
-
-Veo 3.1 使用 Google 原生 `predictLongRunning` 请求结构和 Novita 的统一异步
-结果接口，支持三款独立 locator：
-
-- `novita:///veo-3.1-generate-001`
-- `novita:///veo-3.1-fast-generate-001`
-- `novita:///veo-3.1-lite-generate-001`
-
-```ts
-const task = await executor.run({
-  locator: 'novita:///veo-3.1-generate-001',
-  payload: {
-    prompt: 'A cinematic camera move from the first frame to the last frame',
-    image: 'data:image/png;base64,...',
-    lastFrame: 'data:image/jpeg;base64,...',
-    aspectRatio: '16:9',
-    resolution: '1080p',
-    durationSeconds: 8,
-    sampleCount: 1,
-    generateAudio: true,
-  },
-});
-```
-
-文本生视频不传图片；图生视频传 `image`；首尾帧模式同时传 `image` 和
-`lastFrame`。图片会转换为原生 `{ mimeType, bytesBase64Encoded }`，支持 JPEG
-和 PNG，本地上传无需先取得公网 URL。支持 4/6/8 秒、16:9 或 9:16、720p 或
-1080p，以及单次 1–4 个视频。提交可选择 `v1` 或 `v1beta1`，结果始终通过
-`GET /v3/async/task-result?task_id=...` 查询；不要调用 Google 原生 operation
-查询地址。默认提交根地址为 `https://api.novita.ai/v3/veo-3.1`，可通过
-`platformConfig.veo31BaseURL`（或 `veo31BaseUrl`）覆盖。
-
-GPT Image 2 使用 `ppio:///gpt-image-2`。不传输入图时自动调用文生图端点；传入
-`urls` 或 `image` 后自动调用图片编辑端点，`mask` 可传带透明区域的 PNG：
-
-```ts
-const task = await executor.run({
-  locator: 'ppio:///gpt-image-2',
-  payload: {
-    prompt: 'Replace the object inside the mask with a yellow banana',
-    urls: ['data:image/png;base64,...'],
-    mask: 'data:image/png;base64,...',
-    n: 1,
-    size: '3840x2160',
-    quality: 'high',
-    background: 'auto',
-    outputFormat: 'png',
-  },
-});
-```
-
-GPT Image 2 支持 1-10 张输出、文档列出的 1K/2K/4K 尺寸、
-`low`/`medium`/`high` 质量、PNG/JPEG，以及多图编辑。其默认 API 根地址为
-`https://api.ppio.com/v3`，可用 `platformConfig.gptImageBaseURL` 覆盖。
-
-PPIO GPT-5.6 使用 OpenAI Response API 协议，支持以下 locator：
-
-- `ppio:///pa/gpt-5.6-terra`
-- `ppio:///pa/gpt-5.6-luna`
-- `ppio:///pa/gpt-5.6-sol`
-
-```ts
-const task = await executor.run({
-  locator: 'ppio:///pa/gpt-5.6-terra',
-  payload: {
-    prompt: 'Explain why the sky is blue',
-    instructions: 'Answer clearly and concisely.',
-    reasoningEffort: 'high',
-    reasoningSummary: 'concise',
-    maxOutputTokens: 2048,
-    verbosity: 'medium',
-    stream: false,
-  },
-});
-```
-
-也可直接通过 `payload.input` 传入完整的 Response API 文本、图片或文件输入结构，
-并透传 `text`、`tools`、`toolChoice`、`previousResponseId` 等参数。同步执行器会消费
-SSE 流并返回合并后的最终结果。默认端点为
-`https://api.ppio.com/openai/v1/responses`，可通过
-`platformConfig.responseBaseURL`（或 `responseBaseUrl`）覆盖。服务端目前仅支持 POST，
-且 `previous_response_id` 不保证状态串联。
-
-GPT-5.6 当前不支持 `top_p`，Provider 会在请求发送前拒绝该参数。`temperature`
-为可选参数且默认不发送；稳定控制输出时优先使用 `reasoningEffort`。
-
-PPIO Fusion 融合模型使用 OpenAI Chat Completions 协议，locator 为
-`ppio:///pprouter/fusion`：
-
-```ts
-const task = await executor.run({
-  locator: 'ppio:///pprouter/fusion',
-  payload: {
-    systemPrompt: '从多个角度分析并给出明确结论。',
-    prompt: '比较这三种技术方案的风险和收益。',
-    maxTokens: 4096,
-    temperature: 0.3,
-    stream: true,
-  },
-});
-
-const result = await task.promise;
-```
-
-也可通过 `payload.messages` 传入完整的多轮消息，并使用 `topP`、`seed`、`stop`、
-`responseFormat`、`tools` 和 `toolChoice` 等 Chat Completions 参数。Provider 会消费
-SSE 流并返回合并后的最终文本或函数调用。默认端点为
-`https://api.ppio.com/openai/v1/chat/completions`，可通过
-`platformConfig.chatBaseURL`（或 `chatBaseUrl`）覆盖。
-
-Seedance 2.0 使用异步视频任务，locator 为 `ppio:///seedance-2.0`：
-
-```ts
-const task = await executor.run({
-  locator: 'ppio:///seedance-2.0',
-  payload: {
-    prompt: '电影感的产品展示，镜头缓慢环绕',
-    fast: false,
-    resolution: '1080p',
-    ratio: '16:9',
-    duration: 8,
-    generateAudio: true,
-    returnLastFrame: true,
-  },
-});
-
-const result = await task.promise;
-```
-
-支持 4-15 秒、480p/720p/1080p、标准/快速模式、首尾帧、参考图/视频/音频、
-生成音频、联网搜索、水印和返回尾帧。快速模式不支持 1080p；参考视频只接受
-HTTP(S) URL。默认创建端点为 `https://api.ppio.com/v3/async/seedance-2.0`，
-状态与结果通过 `/v3/async/task-result` 轮询；可用 `platformConfig.asyncBaseURL`
-（或 `asyncBaseUrl`）覆盖异步 API 根地址。
-
-Seedance 国内 Token 计费协议使用官方完整模型名，与上面的旧异步接口相互独立：
-
-- `ppio:///doubao-seedance-2-0-260128`
-- `ppio:///doubao-seedance-2-0-fast-260128`
-- `ppio:///doubao-seedance-2-0-mini-260615`
-- `ppio:///doubao-seedance-2-5-260628`
-
-```ts
-const task = await executor.run({
-  locator: 'ppio:///doubao-seedance-2-5-260628',
-  payload: {
-    prompt: '保持参考角色一致，跟随参考视频动作并匹配背景音乐',
-    referenceImages: ['asset://asset-character'],
-    referenceVideos: ['https://assets.example.com/motion.mp4'],
-    referenceAudios: ['asset://asset-music'],
-    resolution: '720p',
-    ratio: 'adaptive',
-    duration: 11,
-    generateAudio: true,
-    watermark: false,
-  },
-});
-
-const result = await task.promise;
-```
-
-该协议使用原厂 `content[]` 多模态请求，创建任务返回 `cgt-*` 格式的 `id`，并通过
-`/v3/bytedance-cn/metered/contents/generations/tasks/{id}` 查询。成功响应中的
-`usage.completion_tokens` 和 `usage.total_tokens` 会保留在原始结果中。输入素材支持公网
-HTTP(S) URL 或已激活的 `asset://<Id>`；2.0、fast、mini 和 2.5 共用协议实现，但仍按
-各模型限制校验分辨率。默认根地址为 `https://api.ppio.com/v3/bytedance-cn/metered`，
-可用 `platformConfig.seedanceCnMeteredBaseURL`（或 `seedanceCnMeteredBaseUrl`）覆盖。
-
-Google Veo 3.1 使用原生 `predictLongRunning` 协议，支持以下 locator：
-
-- `ppio:///veo-3.1-generate-001`
-- `ppio:///veo-3.1-fast-generate-001`
-- `ppio:///veo-3.1-lite-generate-001`
-
-```ts
-const task = await executor.run({
-  locator: 'ppio:///veo-3.1-generate-001',
-  payload: {
-    prompt: '一艘纸船穿行在雨夜的霓虹城市中，电影感运镜',
-    // 图生视频可传 image；首尾帧模式再传 lastFrame
-    image: [],
-    lastFrame: [],
-    aspectRatio: '16:9',
-    resolution: '1080p',
-    durationSeconds: 8,
-    sampleCount: 1,
-    generateAudio: true,
-    negativePrompt: '文字，水印',
-  },
-});
-
-const result = await task.promise;
-```
-
-支持文生视频、首帧图生视频和首尾帧视频，画幅为 16:9 或 9:16，分辨率为
-720p 或 1080p，时长可选 4/6/8 秒，每次生成 1-4 个视频。创建端点默认为
-`https://api.ppio.com/v3/veo-3.1/v1/models/{model}:predictLongRunning`，结果通过
-`https://api.ppio.com/v3/async/task-result` 轮询。可用 `platformConfig.veoBaseURL`
-和 `platformConfig.veoApiVersion` 覆盖 Veo 根地址与版本。
-
-Kling V3.0 使用 PPIO 异步视频协议，支持以下 locator：
-
-- `ppio:///kling-v3.0-std-t2v`
-- `ppio:///kling-v3.0-std-i2v`
-- `ppio:///kling-v3.0-pro-t2v`
-- `ppio:///kling-v3.0-pro-i2v`
-- `ppio:///kling-v3.0-4k-t2v`
-- `ppio:///kling-v3.0-4k-i2v`
-- `ppio:///kling-v3.0-motion-control`
-
-```ts
-const task = await executor.run({
-  locator: 'ppio:///kling-v3.0-pro-i2v',
-  payload: {
-    image: ['data:image/png;base64,...'],
-    prompt: '电影感的产品展示，镜头缓慢接近，环境光扫过产品表面',
-    endImage: [],
-    duration: 8,
-    cfgScale: 0.5,
-    sound: true,
-    negativePrompt: '文字，水印，画面抖动',
-  },
-});
-
-const result = await task.promise;
-```
-
-Standard、Pro 和 4K 均支持文生视频与图生视频，时长为 3-15 秒，支持可选音频、
-负面提示词、CFG 强度、首尾帧和对应版本的多镜头参数。动作控制使用参考图片与
-HTTP(S) 参考视频，可选择 Standard/Pro 质量，以及跟随参考图或参考视频的构图模式。
-创建端点为 `https://api.ppio.com/v3/async/{model}`，结果继续通过
-`https://api.ppio.com/v3/async/task-result` 轮询。
-
-MiniMax Hailuo 2.3 同样使用 PPIO 异步视频协议，支持以下 locator：
-
-- `ppio:///minimax-hailuo-2.3-t2v`
-- `ppio:///minimax-hailuo-2.3-i2v`
-- `ppio:///minimax-hailuo-2.3-fast-i2v`
-
-```ts
-const task = await executor.run({
-  locator: 'ppio:///minimax-hailuo-2.3-i2v',
-  payload: {
-    prompt: '熊猫在雪山日出时跳舞 [左移,上升]',
-    image: ['data:image/jpeg;base64,...'],
-    duration: 6,
-    resolution: '1080P',
-    enablePromptExpansion: true,
-    fastPretreatment: false,
-    aigcWatermark: false,
-  },
-});
-
-const result = await task.promise;
-```
-
-三个接口都支持 6 秒或 10 秒视频：6 秒可选 768P/1080P，10 秒仅支持 768P。
-普通文生与图生接口支持 `fastPretreatment`，Fast 图生接口不支持该字段。图片可传
-公网 URL、data URL 或上传组件输出的 base64 对象。创建端点为
-`https://api.ppio.com/v3/async/{model}`，结果通过通用异步任务接口轮询。
-
-MiniMax H3 使用原厂异步视频协议，对应 locator 为 `ppio:///MiniMax-H3`：
-
-```ts
-const task = await executor.run({
-  locator: 'ppio:///MiniMax-H3',
-  payload: {
-    prompt: '保持参考角色外观，使用参考视频的动作并匹配音乐节奏',
-    referenceImages: ['https://assets.example.com/character.png'],
-    referenceVideos: ['https://assets.example.com/motion.mp4'],
-    referenceAudios: ['https://assets.example.com/music.mp3'],
-    resolution: '2K',
-    duration: 8,
-    ratio: '16:9',
-    aigcWatermark: false,
-  },
-});
-
-const result = await task.promise;
-```
-
-H3 支持 768P/2K、4-15 秒，以及 21:9、16:9、4:3、1:1、3:4、9:16 和
-素材模式下的 adaptive 画幅。可使用首帧/尾帧，或最多 9 张参考图、3 个参考视频、
-3 个参考音频；帧模式与参考素材模式不能混用，参考音频也不能作为唯一参考素材。
-所有输入素材都必须是服务端可访问的公网 HTTP(S) URL。创建端点默认为
-`https://api.ppio.com/v3/minimax/v2/video_generation`，查询端点为
-`/v3/minimax/v2/query/video_generation/{task_id}`；建议每 10-30 秒轮询一次，成功后
-及时保存有时效性的结果地址。可通过 `platformConfig.minimaxBaseURL`（或
-`minimaxBaseUrl`）覆盖协议根地址。
-
-### 火山方舟 Seedream 5.0 Pro
-
-火山方舟作为独立 Provider 注册，不与 PPIO 共用配置。模型 locator 为
-`ark:///doubao-seedream-5-0-pro-260628`，默认请求
-`https://ark.cn-beijing.volces.com/api/v3/images/generations`：
-
-```ts
-const executor = createInlineExecutor({
-  platformConfig: locator =>
-    locator.startsWith('ark:///') && process.env.ARK_API_KEY
-      ? { apiKey: process.env.ARK_API_KEY }
-      : undefined,
-});
-
-const task = await executor.run({
-  locator: 'ark:///doubao-seedream-5-0-pro-260628',
-  payload: {
-    prompt: '精确拆分图片中的文字、主体和背景',
-    image: ['https://assets.example.com/source.png'],
-    layerDecomposition: true,
-    size: '2K',
-    outputFormat: 'jpeg',
-    responseFormat: 'url',
-    watermark: true,
-  },
-});
-
-const result = await task.promise;
-```
-
-普通生成模式支持文生图、单图编辑和最多 10 张参考图，尺寸可使用 `1K`、`1.5K`、
-`2K` 或合法的 `宽x高`。图层拆分模式要求恰好一张源图，支持 `auto`、`1K`、`1.5K`
-和 `2K`，结果输出会保留 `zIndex`、`name`、`description` 与 `boundingBox`，便于按
-图层顺序还原。可通过 `platformConfig.baseURL`（或 `baseUrl`）覆盖方舟 API 根地址。
-
-### 通过 HTTP 代理自定义 Provider
-
-如果需要像旧版 `mode: 'http'` 那样通过 HTTP 代理触发任务，可在外部直接封装 HTTP 请求并注册 Provider：
-
-```ts
-import { registerProvider } from '@sdppp/pptask/core/src/index.ts';
-import type { ProviderDefinition } from '@sdppp/pptask/core/src/types.ts';
-
-const BASE_URL = 'https://router.example.com/api';
-
-async function fetchToken(): Promise<string> {
-  // 在此实现实际的鉴权逻辑
-  return process.env.TASKROUTER_TOKEN ?? '';
-}
-
-async function postJson<T>(
-  path: string,
-  body: Record<string, any>,
-  options?: { signal?: AbortSignal }
-): Promise<T> {
-  const response = await fetch(`${BASE_URL}${path}`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${await fetchToken()}`,
-    },
-    body: JSON.stringify(body),
-    signal: options?.signal,
-  });
-  if (!response.ok) {
-    throw new Error(`HTTP ${response.status} ${response.statusText}`);
-  }
-  if (response.status === 204) return undefined as T;
-  return response.json() as Promise<T>;
-}
-
-const httpProvider: ProviderDefinition = {
-  async describeResource(params) {
-    const result = await postJson('/tasks/describe', {
-      locator: params.locator,
-      platformConfig: params.platformConfig,
-      options: params.options,
-    });
-    return result.recommendUploadProvider
-      ? result
-      : { ...result, recommendUploadProvider: 'runninghub' };
-  },
-  createTask: params =>
-    postJson('/tasks', {
-      locator: params.locator,
-      payload: params.payload ?? {},
-      platformConfig: params.platformConfig,
-      options: params.options,
-    }),
-  checkStatus: params =>
-    postJson('/tasks/status', {
-      locator: params.locator,
-      taskId: params.taskId,
-      platformConfig: params.platformConfig,
-      options: params.options,
-    }),
-  getResult: params =>
-    postJson('/tasks/result', {
-      locator: params.locator,
-      taskId: params.taskId,
-      platformConfig: params.platformConfig,
-      options: params.options,
-    }),
-  cancelTask: params =>
-    postJson('/tasks/cancel', {
-      locator: params.locator,
-      taskId: params.taskId,
-      platformConfig: params.platformConfig,
-      options: params.options,
-    }),
-};
-
-registerProvider('taskrouter', httpProvider);
-```
-
-随后即可通过 `createInlineExecutor()` 直接消费 `taskrouter://` 资源。
-
-## 测试
-
-### 运行测试
+## Development
 
 ```bash
+pnpm install
 pnpm test
+pnpm run typecheck
+pnpm run build
+pnpm run test:build
 ```
 
-### 集成测试配置
+More documentation: [Provider Guide](docs/PROVIDER_GUIDE.md), [Build and publishing](docs/BUILD.md), [Contributing](CONTRIBUTING.md), and [Security Policy](SECURITY.md).
 
-集成测试需要真实的 API Keys。配置步骤：
+## License
 
-1. **创建 test.env 文件**：
-   ```bash
-   cp test.env.example test.env
-   ```
+PPTask is licensed under the [Apache License 2.0](LICENSE). You may use, modify, and distribute it, including for commercial purposes, subject to the license terms.
 
-2. **填入你的 API Keys**：
-   ```env
-   # test.env
-   REPLICATE_API_KEY=r8_your-key-here
-   RUNNINGHUB_API_KEY=your-key-here
-   GRSAI_API_KEY=your-key-here
-   ```
+Mentioned models, platforms, and trademarks belong to their respective owners. PPTask is an independent open source project and does not imply affiliation with or endorsement by those platforms.
 
-3. **运行测试**：
-   ```bash
-   pnpm test
-   ```
+---
 
-**注意**：
-- `test.env` 仅在运行测试时加载，不会影响正常的开发或生产环境
-- 没有 API Key 的集成测试会被自动跳过
-- Vitest 会在测试开始前通过 `vitest.setup.ts` 自动加载 `test.env`
+<!-- 中文 -->
+# PPTask
 
-## 示例与下一步
+> 面向 AI 媒体生成的统一入口，连接不同模型与 API 平台。
 
-- `demo/server`：最小化 Express 示例，提供 `/api/tasks/*`、`/api/balance`（演示余额）路由。
-- `demo/web`：React + Formily 页面，使用 `inline` 执行器的 HTTP 模式触达后端。
+[![License](https://img.shields.io/badge/license-Apache--2.0-green.svg)](LICENSE)
+[![TypeScript](https://img.shields.io/badge/TypeScript-first-3178c6.svg)](https://www.typescriptlang.org/)
+[![Node.js](https://img.shields.io/badge/Node.js-%3E%3D20-339933.svg)](https://nodejs.org/)
 
-在生产环境中可基于上述两层组合出更多形态（CLI、Electron、Job Worker 等），新 Provider 也只需实现 `ProviderDefinition` 并通过 `registerProvider` 注入即可。
+PPTask 是面向 AI 媒体生成的统一任务接口。它用一套稳定的 `locator + payload` 协议连接不同模型与 API 平台，并把同步响应、异步任务、状态轮询、结果提取、取消和素材上传整理成一致的生命周期。
+
+应用只需要面向 PPTask 编程，不必为每个平台重复实现鉴权、请求格式、状态映射、错误处理和结果解析。
+
+```text
+your app
+   |
+   | locator + payload
+   v
+ PPTask ---------------------------------------------------+
+   | describe | create | check | result | cancel | upload  |
+   +-------------------------------------------------------+
+      |          |          |          |          |
+   Replicate  RunningHub   ComfyUI    PPIO      Kie.ai ...
+```
+
+## 为什么是 PPTask
+
+- **一个入口，多种平台**：通过 locator 选择 Provider 和模型，业务代码不再绑定某一家 SDK。
+- **统一任务生命周期**：同步生成与异步队列统一为相同的任务句柄、状态和结果结构。
+- **媒体生成优先**：围绕图片、视频、音频等生成任务设计，内置素材上传、进度、取消和成本字段。
+- **模型可描述**：`describeResource` 返回表单 Schema、默认值和上传建议，可直接驱动动态 UI。
+- **平台差异留在适配层**：鉴权、端点、状态码、输出结构和错误信息由 Provider 负责归一化。
+- **开放扩展**：Provider 与 Upload Provider 都可注册，私有平台和内部网关无需修改核心代码。
+- **保留原始响应**：标准字段方便跨平台编程，`raw` 同时保留平台特有信息，避免能力被最低公分母限制。
+
+## 适合什么场景
+
+- AI 创作工具需要同时接入多个图片、视频或音频平台。
+- 工作流系统需要按价格、区域、可用性或模型能力动态切换供应商。
+- SaaS 产品希望用同一套任务状态、取消和结果结构构建前端体验。
+- 团队需要逐步把散落的平台 SDK 收敛到可测试、可替换的 Provider 层。
+- 私有部署需要同时连接 ComfyUI、本地服务和公开 API。
+
+## 核心概念
+
+### Locator
+
+Locator 是资源的稳定地址。scheme 表示平台，后续部分由对应 Provider 解释：
+
+```text
+replicate:///black-forest-labs/flux-schnell
+runninghub://api/rhart-image-n-pro/text-to-image
+comfy-http://127.0.0.1:8188/workflows/product-shot
+ppio:///gemini-3.1-flash-image
+kie://market/seedream/5-pro-text-to-image
+apiframe://video/kling-3.0
+```
+
+平台配置与任务参数分离：
+
+- `platformConfig` 放 API Key、Base URL 等连接配置。
+- `payload` 放 prompt、尺寸、参考素材等单次任务参数。
+- `options` 放取消信号等执行控制信息。
+
+这让凭据管理、任务复现和 Provider 切换保持清晰。
+
+### 统一结果
+
+所有 Provider 最终返回同一类结果：
+
+```ts
+type TaskResult = {
+  provider: string;
+  taskId: string;
+  status: 'succeeded';
+  outputs: Array<{ url?: string; rawData: unknown }>;
+  costCoins?: number;
+  costMoney?: number;
+  costMoneyCurrency?: string;
+  raw: unknown;
+};
+```
+
+## 支持的平台
+
+| Provider | Locator scheme | 典型能力 |
+| --- | --- | --- |
+| Replicate | `replicate:` | Replicate 模型与版本解析、异步任务、上传 |
+| RunningHub | `runninghub:` | WebApp、API 模型、工作流任务与上传 |
+| ComfyUI | `comfy-http:` / `comfy-https:` | 自托管工作流执行与上传 |
+| PPIO | `ppio:` | 图片、视频、文本与多模态模型 |
+| Novita | `novita:` | 图片、视频、文本与多模态模型 |
+| Kie.ai | `kie:` | 基于目录的图片、视频、音频模型 |
+| APIFrame | `apiframe:` | 图片、视频、音乐模型与素材上传 |
+| GRSAI | `grsai:` | 图片生成任务与上传 |
+| OpenAI | `openai:` | 图片生成、编辑与变体 |
+| Gemini | `gemini:` | Gemini 图片生成能力 |
+| Volcengine Ark | `ark:` | 火山方舟图片模型 |
+
+具体模型、参数和平台差异见 [Provider Guide](docs/PROVIDER_GUIDE.md)。模型与平台能力会持续变化，代码中的 catalog 和 Provider 测试是最终依据。
+
+## 快速开始
+
+通过 npm 安装 PPTask：
+
+```bash
+npm install pptask
+```
+
+推荐使用 inline executor。它会把同步 Provider 和需要轮询的异步 Provider 都包装成统一任务句柄：
+
+```ts
+import { createInlineExecutor } from 'pptask/executors/inline';
+
+const executor = createInlineExecutor({
+  platformConfig: locator => {
+    if (locator.startsWith('replicate:')) {
+      return { apiKey: process.env.REPLICATE_API_KEY };
+    }
+    return undefined;
+  },
+});
+
+const locator = 'replicate:///black-forest-labs/flux-schnell';
+const description = await executor.describe({ locator });
+
+const task = await executor.run({
+  locator,
+  payload: {
+    ...description.formValues,
+    prompt: 'A product photo with soft studio lighting',
+  },
+});
+
+console.log('task:', task.taskId, 'cancelable:', task.cancelable);
+const result = await task.promise;
+console.log(result.outputs);
+```
+
+取消可取消的任务：
+
+```ts
+if (task.cancelable) {
+  await task.cancel();
+}
+```
+
+API Key 应只存在于服务端或可信执行环境。不要把平台密钥打包进浏览器代码或提交到仓库。
+
+## 公共接口
+
+Core 提供六个与执行环境无关的入口：
+
+```ts
+import {
+  describeResource,
+  createTask,
+  checkStatus,
+  getResult,
+  cancelTask,
+  upload,
+} from 'pptask';
+```
+
+| 接口 | 作用 |
+| --- | --- |
+| `describeResource` | 获取模型元数据、表单 Schema、默认值和上传建议 |
+| `createTask` | 创建任务，并归一化平台的创建响应 |
+| `checkStatus` | 查询异步任务状态与进度 |
+| `getResult` | 获取标准化输出、成本信息与原始响应 |
+| `cancelTask` | 在 Provider 支持时取消远端任务 |
+| `upload` | 使用独立 Upload Provider 上传输入素材 |
+
+Inline executor 在这些原语之上提供 `describe`、`run`、`upload` 和 `TaskHandle`，适合应用直接使用。
+
+## 扩展 Provider
+
+Provider 是一个小而明确的适配器。最小实现负责描述资源和创建任务；异步 Provider 再实现状态与结果查询：
+
+```ts
+import { registerProvider } from 'pptask';
+import type { ProviderDefinition } from 'pptask';
+
+const provider: ProviderDefinition = {
+  async describeResource({ locator }) {
+    return {
+      provider: 'acme',
+      metadata: { scheme: 'acme', locator },
+      formSchema: { type: 'object', properties: {} },
+      formValues: {},
+    };
+  },
+
+  async createTask({ payload }) {
+    const job = await acme.jobs.create(payload);
+    return {
+      mode: 'async',
+      task: {
+        provider: 'acme',
+        taskId: job.id,
+        status: 'pending',
+        raw: job,
+      },
+    };
+  },
+
+  async checkStatus({ taskId }) {
+    return mapAcmeStatus(await acme.jobs.get(taskId));
+  },
+
+  async getResult({ taskId }) {
+    return mapAcmeResult(await acme.jobs.get(taskId));
+  },
+};
+
+registerProvider('acme', provider);
+```
+
+完整类型、上传扩展和 HTTP 代理示例见 [Provider Guide](docs/PROVIDER_GUIDE.md)。提交新 Provider 前请阅读 [Contributing Guide](CONTRIBUTING.md)。
+
+## 设计原则
+
+1. **稳定的公共契约优先于平台请求格式。** 平台差异应封装在 Provider 内。
+2. **不隐藏平台能力。** 标准字段之外通过 `raw` 和 metadata 保留完整信息。
+3. **配置与任务分离。** 凭据和端点属于 `platformConfig`，生成参数属于 `payload`。
+4. **能力必须可发现。** 表单 Schema、上传建议和取消能力应能在运行前查询。
+5. **新增集成必须可测试。** 请求映射、状态归一化、结果解析和错误路径都需要测试。
+
+## 项目状态
+
+PPTask 目前处于 `0.x` 阶段，API 已可用于实际项目，但在首个稳定版本前仍可能调整。近期重点包括：
+
+- 稳定 Provider SDK 与错误模型。
+- 完成 npm 发布与语义化版本流程。
+- 扩充媒体类型、模型目录和 Provider 覆盖。
+- 增加跨 Provider 的能力查询、路由和一致性测试。
+- 完善服务端代理与凭据隔离方案。
+
+## 开发
+
+```bash
+pnpm install
+pnpm test
+pnpm run typecheck
+pnpm run build
+pnpm run test:build
+```
+
+更多资料：
+
+- [Provider 详细指南](docs/PROVIDER_GUIDE.md)
+- [构建与发布](docs/BUILD.md)
+- [RunningHub API 模式](docs/RUNNINGHUB_API.md)
+- [贡献指南](CONTRIBUTING.md)
+- [安全策略](SECURITY.md)
+
+## License
+
+PPTask 采用 [Apache License 2.0](LICENSE)。你可以在遵守许可证条款的前提下自由使用、修改和分发，包括商业用途。
+
+项目中提及的模型、平台和商标归各自所有者。PPTask 是独立开源项目，除非另有说明，不代表与这些平台存在官方隶属或背书关系。

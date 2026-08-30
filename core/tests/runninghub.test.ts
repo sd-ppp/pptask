@@ -106,7 +106,7 @@ describe('runninghub provider (unit tests)', () => {
       uploadProvider: 'runninghub',
       formData: form,
       platformConfig: {},
-    })).rejects.toThrow('runninghub apiKey is required');
+    })).rejects.toThrow('runninghub upload apiKey is required');
   });
 });
 

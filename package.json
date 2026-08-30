@@ -1,27 +1,51 @@
 {
-  "name": "@sdppp/pptask",
+  "name": "pptask",
   "version": "0.1.0",
-  "private": true,
+  "description": "A unified TypeScript interface for AI media generation across providers.",
+  "license": "Apache-2.0",
+  "author": "SDPPP Contributors",
+  "homepage": "https://github.com/sd-ppp/pptask#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sd-ppp/pptask.git"
+  },
+  "bugs": {
+    "url": "https://github.com/sd-ppp/pptask/issues"
+  },
+  "keywords": [
+    "ai",
+    "media-generation",
+    "image-generation",
+    "video-generation",
+    "provider",
+    "task-runner",
+    "typescript"
+  ],
   "type": "module",
-  "main": "./core/src/index.ts",
-  "module": "./core/src/index.ts",
-  "types": "./core/src/index.ts",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/core/src/index.d.ts",
   "exports": {
     ".": {
-      "types": "./core/src/index.ts",
-      "import": "./core/src/index.ts"
+      "types": "./dist/core/src/index.d.ts",
+      "import": "./dist/index.js"
     },
     "./executors/inline": {
-      "types": "./executors/inline/src/index.ts",
-      "import": "./executors/inline/src/index.ts"
+      "types": "./dist/executors/inline/src/index.d.ts",
+      "import": "./dist/executors/inline.js"
     },
     "./locator-catalog": {
-      "types": "./core/src/locator-catalog.ts",
-      "import": "./core/src/locator-catalog.ts"
+      "types": "./dist/core/src/locator-catalog.d.ts",
+      "import": "./dist/locator-catalog.js"
     }
   },
+  "sideEffects": false,
   "files": [
-    "dist"
+    "dist/**/*.js",
+    "dist/**/*.d.ts",
+    "docs",
+    "CONTRIBUTING.md",
+    "SECURITY.md"
   ],
   "scripts": {
     "build": "vite build && tsc --project tsconfig.build.json",
@@ -32,8 +56,16 @@
     "pptask:generate-kie-apiframe-catalogs": "node core/scripts/generate-kie-apiframe-catalogs.mjs",
     "pptask:generate-provider-catalogs": "node core/scripts/generate-provider-catalogs.mjs",
     "pptask:sync-kie-apiframe-describe-data": "node core/scripts/sync-kie-apiframe-describe-data.mjs",
+    "prepack": "pnpm run build",
     "prepublishOnly": "pnpm run build",
     "typecheck": "tsc -p tsconfig.build.json --noEmit"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
   },
   "nx": {
     "tags": [

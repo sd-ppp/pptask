@@ -22,6 +22,7 @@ The build process:
 1. **Vite** compiles TypeScript to JavaScript:
    - `core/src/index.ts` → `dist/index.js`
    - `executors/inline/src/index.ts` → `dist/executors/inline.js`
+   - `core/src/locator-catalog.ts` → `dist/locator-catalog.js`
 
 2. **TypeScript Compiler** generates type declarations:
    - `dist/core/src/**/*.d.ts` - Type definitions for core
@@ -29,14 +30,17 @@ The build process:
 
 ## Package Exports
 
-The package exports two entry points:
+The package exports three entry points:
 
 ```javascript
 // Main entry point
-import { describeResource, createTask, ... } from '@sdppp/pptask';
+import { describeResource, createTask, ... } from 'pptask';
 
 // Inline executor
-import { createInlineExecutor } from '@sdppp/pptask/executors/inline';
+import { createInlineExecutor } from 'pptask/executors/inline';
+
+// Provider-neutral locator catalogs
+import { listPPTaskLocatorOptions } from 'pptask/locator-catalog';
 ```
 
 ## Development vs Production
@@ -54,6 +58,7 @@ import { createInlineExecutor } from '@sdppp/pptask/executors/inline';
 │   ├── index.js          # Main bundle
 │   ├── executors/
 │   │   └── inline.js     # Inline executor bundle
+│   ├── locator-catalog.js # Locator catalog bundle
 │   ├── core/src/         # Type declarations
 │   └── executors/        # Executor type declarations
 ├── docs/BUILD.md         # Build documentation
