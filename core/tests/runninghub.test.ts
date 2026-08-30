@@ -95,6 +95,18 @@ describe('runninghub provider (unit tests)', () => {
     });
     
     expect(uploadResult.url).toBe('uploaded-file');
+    expect(form.get('apiKey')).toBe(apiKey);
+  });
+
+  it('requires apiKey for upload', async () => {
+    const form = new FormData();
+    form.append('file', new Blob(['data'], { type: 'text/plain' }), 'demo.txt');
+
+    await expect(upload({
+      uploadProvider: 'runninghub',
+      formData: form,
+      platformConfig: {},
+    })).rejects.toThrow('runninghub apiKey is required');
   });
 });
 

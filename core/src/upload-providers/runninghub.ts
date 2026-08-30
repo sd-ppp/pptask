@@ -2,9 +2,9 @@ import type { PlatformConfig, TaskRequestOptions, UploadResult } from '../types.
 import {
   createAbortError,
   createRunningHubError,
+  ensureRunninghubConfig,
   getBaseHost,
   isRequestAborted,
-  type RunningHubConfig,
 } from '../providers/runninghub/helpers.ts';
 
 export async function uploadRunninghubFile(
@@ -12,26 +12,16 @@ export async function uploadRunninghubFile(
   platformConfig: PlatformConfig | undefined,
   options?: TaskRequestOptions
 ): Promise<UploadResult> {
-  const UPLOAD_API_KEY = 'c32dbc1cdd024b9ea3a0498eeca22f73';
+  const config = ensureRunninghubConfig(platformConfig);
   const signal = options?.signal;
   if (isRequestAborted(signal)) throw createAbortError('Upload aborted');
 
-  if (!formData.has('apiKey')) {
-    formData.set('apiKey', UPLOAD_API_KEY);
-  }
+  formData.set('apiKey', config.apiKey);
   if (!formData.has('fileType')) {
     formData.set('fileType', 'image');
   }
 
-  let language: string | undefined;
-  try {
-    const config = platformConfig as RunningHubConfig | undefined;
-    language = config?.language;
-  } catch {
-    // ignore config extraction errors
-  }
-
-  const baseHost = getBaseHost(language);
+  const baseHost = getBaseHost(config.language);
   const uploadUrl = `https://${baseHost}/task/openapi/upload`;
   const response = await fetch(uploadUrl, {
     method: 'POST',

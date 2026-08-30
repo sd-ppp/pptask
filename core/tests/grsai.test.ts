@@ -5,6 +5,7 @@ import {
   checkStatus,
   getResult,
   cancelTask,
+  upload,
 } from '../src/index.ts';
 
 const locator = 'grsai:///nano-banana-fast';
@@ -26,6 +27,17 @@ describe('grsai provider (unit tests)', () => {
     await expect(
       createTask({ locator, payload: { prompt: 'test' }, platformConfig: {} })
     ).rejects.toThrow(/apiKey/);
+  });
+
+  it('requires apiKey for upload', async () => {
+    const form = new FormData();
+    form.append('file', new Blob(['data'], { type: 'text/plain' }), 'demo.txt');
+
+    await expect(upload({
+      uploadProvider: 'grsai',
+      formData: form,
+      platformConfig: {},
+    })).rejects.toThrow('grsai upload requires apiKey in platformConfig');
   });
 
   it('describes resource', async () => {

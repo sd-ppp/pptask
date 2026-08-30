@@ -13,9 +13,11 @@ export async function uploadGrsaiZHFile(
   platformConfig: PlatformConfig | undefined,
   options?: TaskRequestOptions
 ): Promise<UploadResult> {
-  // Fixed credentials for grsai_zh upload
   const GRSAI_ZH_BASE_URL = 'https://grsaiapi.com';
-  const GRSAI_ZH_API_KEY = 'sk-a0cf3753548344e1a5cbdf2c2dc460c6'; // TODO: Fill in actual API key
+  const apiKey = platformConfig?.apiKey;
+  if (!apiKey || typeof apiKey !== 'string') {
+    throw new Error('grsai upload requires apiKey in platformConfig');
+  }
 
   const signal = options?.signal;
   if (isRequestAborted(signal)) {
@@ -40,7 +42,7 @@ export async function uploadGrsaiZHFile(
   const tokenResponse = await fetch(tokenEndpoint, {
     method: 'POST',
     headers: {
-      'Authorization': `Bearer ${GRSAI_ZH_API_KEY}`,
+      'Authorization': `Bearer ${apiKey}`,
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({ sux: fileExt }),
