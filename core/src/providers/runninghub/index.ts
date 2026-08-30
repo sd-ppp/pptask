@@ -70,6 +70,16 @@ export const runninghubProviderDefinition: ProviderDefinition = {
     const impl = getImplementation(params.locator);
     return impl.cancelTask(params);
   },
+
+  // The legacy `runninghub://app/` API supports a real remote cancel
+  // endpoint; the newer `runninghub://api/` API does not (see
+  // api/api.ts:cancelRunninghubApiTask, which always throws "not yet
+  // implemented"). Report capability per-locator instead of hardcoding a
+  // single true/false for the whole `runninghub` scheme.
+  canCancelTask(params: { locator: string }): boolean {
+    const { url } = parseLocator(params.locator);
+    return url.hostname === 'app';
+  },
 };
 
 // 上传 provider (使用旧 API 的实现)

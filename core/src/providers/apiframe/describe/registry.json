@@ -1,0 +1,72 @@
+[
+  {
+    "locator": "apiframe://image/flux-2-pro",
+    "modelId": "flux-2-pro",
+    "label": "Flux 2 Pro",
+    "outputType": "image",
+    "file": "image__flux-2-pro.json"
+  },
+  {
+    "locator": "apiframe://image/gpt-image-1.5",
+    "modelId": "gpt-image-1.5",
+    "label": "GPT Image 1.5",
+    "outputType": "image",
+    "file": "image__gpt-image-1.5.json"
+  },
+  {
+    "locator": "apiframe://image/nano-banana-pro",
+    "modelId": "nano-banana-pro",
+    "label": "Nano Banana Pro",
+    "outputType": "image",
+    "file": "image__nano-banana-pro.json"
+  },
+  {
+    "locator": "apiframe://image/seedream-5-pro",
+    "modelId": "seedream-5-pro",
+    "label": "Seedream 5 Pro",
+    "outputType": "image",
+    "file": "image__seedream-5-pro.json"
+  },
+  {
+    "locator": "apiframe://music/mureka",
+    "modelId": "mureka",
+    "label": "Mureka",
+    "outputType": "music",
+    "file": "music__mureka.json"
+  },
+  {
+    "locator": "apiframe://music/suno",
+    "modelId": "suno",
+    "label": "Suno",
+    "outputType": "music",
+    "file": "music__suno.json"
+  },
+  {
+    "locator": "apiframe://video/kling-3.0",
+    "modelId": "kling-3.0",
+    "label": "Kling 3.0",
+    "outputType": "video",
+    "file": "video__kling-3.0.json"
+  },
+  {
+    "locator": "apiframe://video/seedance-2",
+    "modelId": "seedance-2",
+    "label": "Seedance 2",
+    "outputType": "video",
+    "file": "video__seedance-2.json"
+  },
+  {
+    "locator": "apiframe://video/sora-2-pro",
+    "modelId": "sora-2-pro",
+    "label": "Sora 2 Pro",
+    "outputType": "video",
+    "file": "video__sora-2-pro.json"
+  },
+  {
+    "locator": "apiframe://video/veo-3.1",
+    "modelId": "veo-3.1",
+    "label": "Veo 3.1",
+    "outputType": "video",
+    "file": "video__veo-3.1.json"
+  }
+]

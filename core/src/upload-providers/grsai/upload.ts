@@ -13,9 +13,23 @@ export async function uploadGrsaiZHFile(
   platformConfig: PlatformConfig | undefined,
   options?: TaskRequestOptions
 ): Promise<UploadResult> {
-  // Fixed credentials for grsai_zh upload
-  const GRSAI_ZH_BASE_URL = 'https://grsai.dakka.com.cn';
-  const GRSAI_ZH_API_KEY = 'sk-a0cf3753548344e1a5cbdf2c2dc460c6'; // TODO: Fill in actual API key
+  const config = (platformConfig ?? {}) as {
+    apiKey?: string;
+    baseUrl?: string;
+    baseURL?: string;
+    uploadApiKey?: string;
+    uploadBaseUrl?: string;
+    uploadBaseURL?: string;
+  };
+  const uploadApiKey = config.uploadApiKey ?? config.apiKey;
+  const uploadBaseUrl = (
+    config.uploadBaseUrl ??
+    config.uploadBaseURL ??
+    config.baseUrl ??
+    config.baseURL
+  )?.replace(/\/+$/, '');
+  if (!uploadApiKey) throw new Error('grsai upload apiKey is required');
+  if (!uploadBaseUrl) throw new Error('grsai upload baseUrl is required');
 
   const signal = options?.signal;
   if (isRequestAborted(signal)) {
@@ -36,11 +50,11 @@ export async function uploadGrsaiZHFile(
   }
 
   // Step 1: Request upload token
-  const tokenEndpoint = `${GRSAI_ZH_BASE_URL}/client/resource/newUploadTokenZH`;
+  const tokenEndpoint = `${uploadBaseUrl}/client/resource/newUploadTokenZH`;
   const tokenResponse = await fetch(tokenEndpoint, {
     method: 'POST',
     headers: {
-      'Authorization': `Bearer ${GRSAI_ZH_API_KEY}`,
+      'Authorization': `Bearer ${uploadApiKey}`,
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({ sux: fileExt }),

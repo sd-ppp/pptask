@@ -4,3 +4,4 @@ node_modules/
 dist/
 tests/cases/**/output/
 core/tests/output/
+core/.test-output/

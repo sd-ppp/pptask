@@ -2,7 +2,9 @@ import { describe, it, expect, vi } from 'vitest';
 import { createInlineExecutor } from '../../executors/inline/src/index.ts';
 import * as core from '../src/index.ts';
 
-const locator = 'comfy-http://localhost:8188/workflow-123';
+// 检查是否有ComfyUI服务器运行
+const comfyLocator = process.env.COMFY_LOCATOR || '';
+const comfySuite = comfyLocator && comfyLocator !== '' ? describe : describe.skip;
 const promptJson = JSON.stringify({
   prompt: {
     '57': {
@@ -46,9 +48,9 @@ const promptJson = JSON.stringify({
   },
 });
 const useHttps = false;
-const comfySuite = describe;
 
 comfySuite('comfy provider (integration tests)', () => {
+  const locator = comfyLocator;
   const platformConfig = useHttps ? { https: true } : undefined;
   const payload = JSON.parse(promptJson);
   const executor = createInlineExecutor({ platformConfig: () => platformConfig });

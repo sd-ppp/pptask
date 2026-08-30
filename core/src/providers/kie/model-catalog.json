@@ -1,0 +1,1202 @@
+[
+  {
+    "providerId": "kie",
+    "locator": "kie://market/bytedance/seedance-1.5-pro",
+    "label": "Bytedance Seedance 1.5 Pro",
+    "category": "video",
+    "outputType": "video",
+    "description": "Bytedance Seedance 1.5 Pro",
+    "searchText": "bytedance seedance 1.5 pro bytedance/seedance-1.5-pro video bytedance seedance 1.5 pro",
+    "supported": false
+  },
+  {
+    "providerId": "kie",
+    "locator": "kie://market/bytedance/seedance-2",
+    "label": "Bytedance Seedance 2.0",
+    "category": "video",
+    "outputType": "video",
+    "description": "Bytedance Seedance 2.0",
+    "searchText": "bytedance seedance 2.0 bytedance/seedance-2 video bytedance seedance 2.0",
+    "supported": true
+  },
+  {
+    "providerId": "kie",
+    "locator": "kie://market/bytedance/seedance-2-fast",
+    "label": "Bytedance Seedance 2.0 Fast",
+    "category": "video",
+    "outputType": "video",
+    "description": "Bytedance Seedance 2.0 Fast",
+    "searchText": "bytedance seedance 2.0 fast bytedance/seedance-2-fast video bytedance seedance 2.0 fast",
+    "supported": true
+  },
+  {
+    "providerId": "kie",
+    "locator": "kie://market/bytedance/seedance-2-mini",
+    "label": "Bytedance Seedance 2.0 Mini",
+    "category": "video",
+    "outputType": "video",
+    "description": "Bytedance Seedance 2.0 Mini",
+    "searchText": "bytedance seedance 2.0 mini bytedance/seedance-2-mini video bytedance seedance 2.0 mini",
+    "supported": false
+  },
+  {
+    "providerId": "kie",
+    "locator": "kie://market/bytedance/seedream",
+    "label": "Seedream3.0 - Text to Image",
+    "category": "image",
+    "outputType": "image",
+    "description": "Seedream3.0 - Text to Image",
+    "searchText": "seedream3.0 - text to image bytedance/seedream image seedream3.0 - text to image",
+    "supported": false
+  },
+  {
+    "providerId": "kie",
+    "locator": "kie://market/bytedance/seedream-v4-edit",
+    "label": "Seedream4.0 - Edit",
+    "category": "image",
+    "outputType": "image",
+    "description": "Seedream4.0 - Edit",
+    "searchText": "seedream4.0 - edit bytedance/seedream-v4-edit image seedream4.0 - edit",
+    "supported": false
+  },
+  {
+    "providerId": "kie",
+    "locator": "kie://market/bytedance/seedream-v4-text-to-image",
+    "label": "Seedream4.0 - Text to Image",
+    "category": "image",
+    "outputType": "image",
+    "description": "Seedream4.0 - Text to Image",
+    "searchText": "seedream4.0 - text to image bytedance/seedream-v4-text-to-image image seedream4.0 - text to image",
+    "supported": false
+  },
+  {
+    "providerId": "kie",
+    "locator": "kie://market/bytedance/v1-lite-image-to-video",
+    "label": "Bytedance - V1 Lite Image to Video",
+    "category": "video",
+    "outputType": "video",
+    "description": "Bytedance - V1 Lite Image to Video",
+    "searchText": "bytedance - v1 lite image to video bytedance/v1-lite-image-to-video video bytedance - v1 lite image to video",
+    "supported": false
+  },
+  {
+    "providerId": "kie",
+    "locator": "kie://market/bytedance/v1-lite-text-to-video",
+    "label": "Bytedance - V1 Lite Text to Video",
+    "category": "video",
+    "outputType": "video",
+    "description": "Bytedance - V1 Lite Text to Video",
+    "searchText": "bytedance - v1 lite text to video bytedance/v1-lite-text-to-video video bytedance - v1 lite text to video",
+    "supported": false
+  },
+  {
+    "providerId": "kie",
+    "locator": "kie://market/bytedance/v1-pro-fast-image-to-video",
+    "label": "Bytedance V1 Pro Fast Image to Video",
+    "category": "video",
+    "outputType": "video",
+    "description": "Bytedance V1 Pro Fast Image to Video",
+    "searchText": "bytedance v1 pro fast image to video bytedance/v1-pro-fast-image-to-video video bytedance v1 pro fast image to video",
+    "supported": false
+  },
+  {
+    "providerId": "kie",
+    "locator": "kie://market/bytedance/v1-pro-image-to-video",
+    "label": "Bytedance V1 Pro Image to Video",
+    "category": "video",
+    "outputType": "video",
+    "description": "Bytedance V1 Pro Image to Video",
+    "searchText": "bytedance v1 pro image to video bytedance/v1-pro-image-to-video video bytedance v1 pro image to video",
+    "supported": false
+  },
+  {
+    "providerId": "kie",
+    "locator": "kie://market/bytedance/v1-pro-text-to-video",
+    "label": "Bytedance - V1 Pro Text to Video",
+    "category": "video",
+    "outputType": "video",
+    "description": "Bytedance - V1 Pro Text to Video",
+    "searchText": "bytedance - v1 pro text to video bytedance/v1-pro-text-to-video video bytedance - v1 pro text to video",
+    "supported": false
+  },
+  {
+    "providerId": "kie",
+    "locator": "kie://market/elevenlabs/audio-isolation",
+    "label": "elevenlabs/audio-isolation",
+    "category": "audio",
+    "outputType": "audio",
+    "description": "elevenlabs/audio-isolation",
+    "searchText": "elevenlabs/audio-isolation elevenlabs/audio-isolation audio elevenlabs/audio-isolation",
+    "supported": false
+  },
+  {
+    "providerId": "kie",
+    "locator": "kie://market/elevenlabs/text-to-dialogue-v3",
+    "label": "elevenlabs/text-to-dialogue-v3",
+    "category": "audio",
+    "outputType": "audio",
+    "description": "elevenlabs/text-to-dialogue-v3",
+    "searchText": "elevenlabs/text-to-dialogue-v3 elevenlabs/text-to-dialogue-v3 audio elevenlabs/text-to-dialogue-v3",
+    "supported": true
+  },
+  {
+    "providerId": "kie",
+    "locator": "kie://market/elevenlabs/text-to-speech-multilingual-v2",
+    "label": "elevenlabs/text-to-speech-multilingual-v2",
+    "category": "audio",
+    "outputType": "audio",
+    "description": "elevenlabs/text-to-speech-multilingual-v2",
+    "searchText": "elevenlabs/text-to-speech-multilingual-v2 elevenlabs/text-to-speech-multilingual-v2 audio elevenlabs/text-to-speech-multilingual-v2",
+    "supported": true
+  },
+  {
+    "providerId": "kie",
+    "locator": "kie://market/elevenlabs/text-to-speech-turbo-2-5",
+    "label": "elevenlabs/text-to-speech-turbo-2-5",
+    "category": "audio",
+    "outputType": "audio",
+    "description": "elevenlabs/text-to-speech-turbo-2-5",
+    "searchText": "elevenlabs/text-to-speech-turbo-2-5 elevenlabs/text-to-speech-turbo-2-5 audio elevenlabs/text-to-speech-turbo-2-5",
+    "supported": false
+  },
+  {
+    "providerId": "kie",
+    "locator": "kie://market/flux-2/flex-image-to-image",
+    "label": "Flux-2 - Image to Image",
+    "category": "image",
+    "outputType": "image",
+    "description": "Flux-2 - Image to Image",
+    "searchText": "flux-2 - image to image flux-2/flex-image-to-image image flux-2 - image to image",
+    "supported": false
+  },
+  {
+    "providerId": "kie",
+    "locator": "kie://market/flux-2/flex-text-to-image",
+    "label": "Flux-2 - Text to Image",
+    "category": "image",
+    "outputType": "image",
+    "description": "Flux-2 - Text to Image",
+    "searchText": "flux-2 - text to image flux-2/flex-text-to-image image flux-2 - text to image",
+    "supported": false
+  },
+  {
+    "providerId": "kie",
+    "locator": "kie://market/flux-2/pro-image-to-image",
+    "label": "Flux-2 - Pro Image to Image",
+    "category": "image",
+    "outputType": "image",
+    "description": "Flux-2 - Pro Image to Image",
+    "searchText": "flux-2 - pro image to image flux-2/pro-image-to-image image flux-2 - pro image to image",
+    "supported": true
+  },
+  {
+    "providerId": "kie",
+    "locator": "kie://market/flux-2/pro-text-to-image",
+    "label": "Flux-2 - Pro Text to Image",
+    "category": "image",
+    "outputType": "image",
+    "description": "Flux-2 - Pro Text to Image",
+    "searchText": "flux-2 - pro text to image flux-2/pro-text-to-image image flux-2 - pro text to image",
+    "supported": true
+  },
+  {
+    "providerId": "kie",
+    "locator": "kie://market/gemini-omni-video",
+    "label": "Gemini Omni Video",
+    "category": "video",
+    "outputType": "video",
+    "description": "Gemini Omni Video",
+    "searchText": "gemini omni video gemini-omni-video video gemini omni video",
+    "supported": false
+  },
+  {
+    "providerId": "kie",
+    "locator": "kie://market/google/gemini-3-1-flash-tts",
+    "label": "Gemini 3.1 Flash Text to speech",
+    "category": "text",
+    "outputType": "text",
+    "description": "Gemini 3.1 Flash Text to speech",
+    "searchText": "gemini 3.1 flash text to speech google/gemini-3-1-flash-tts text gemini 3.1 flash text to speech",
+    "supported": false
+  },
+  {
+    "providerId": "kie",
+    "locator": "kie://market/google/imagen4",
+    "label": "Google - imagen4",
+    "category": "image",
+    "outputType": "image",
+    "description": "Google - imagen4",
+    "searchText": "google - imagen4 google/imagen4 image google - imagen4",
+    "supported": false
+  },
+  {
+    "providerId": "kie",
+    "locator": "kie://market/google/imagen4-fast",
+    "label": "Google - imagen4-fast",
+    "category": "image",
+    "outputType": "image",
+    "description": "Google - imagen4-fast",
+    "searchText": "google - imagen4-fast google/imagen4-fast image google - imagen4-fast",
+    "supported": false
+  },
+  {
+    "providerId": "kie",
+    "locator": "kie://market/google/imagen4-ultra",
+    "label": "Google - imagen4-ultra",
+    "category": "image",
+    "outputType": "image",
+    "description": "Google - imagen4-ultra",
+    "searchText": "google - imagen4-ultra google/imagen4-ultra image google - imagen4-ultra",
+    "supported": false
+  },
+  {
+    "providerId": "kie",
+    "locator": "kie://market/google/nano-banana",
+    "label": "Google - Nano Banana",
+    "category": "image",
+    "outputType": "image",
+    "description": "Google - Nano Banana",
+    "searchText": "google - nano banana google/nano-banana image google - nano banana",
+    "supported": false
+  },
+  {
+    "providerId": "kie",
+    "locator": "kie://market/google/nano-banana-edit",
+    "label": "Google - Nano Banana Edit",
+    "category": "image",
+    "outputType": "image",
+    "description": "Google - Nano Banana Edit",
+    "searchText": "google - nano banana edit google/nano-banana-edit image google - nano banana edit",
+    "supported": false
+  },
+  {
+    "providerId": "kie",
+    "locator": "kie://market/gpt-image-2-image-to-image",
+    "label": "GPT Image 2 - Image To Image",
+    "category": "text",
+    "outputType": "text",
+    "description": "GPT Image 2 - Image To Image",
+    "searchText": "gpt image 2 - image to image gpt-image-2-image-to-image text gpt image 2 - image to image",
+    "supported": false
+  },
+  {
+    "providerId": "kie",
+    "locator": "kie://market/gpt-image-2-text-to-image",
+    "label": "GPT Image-2 - Text to Image",
+    "category": "text",
+    "outputType": "text",
+    "description": "GPT Image-2 - Text to Image",
+    "searchText": "gpt image-2 - text to image gpt-image-2-text-to-image text gpt image-2 - text to image",
+    "supported": false
+  },
+  {
+    "providerId": "kie",
+    "locator": "kie://market/gpt-image/1.5-image-to-image",
+    "label": "GPT Image-1.5 - Image to Image",
+    "category": "text",
+    "outputType": "text",
+    "description": "GPT Image-1.5 - Image to Image",
+    "searchText": "gpt image-1.5 - image to image gpt-image/1.5-image-to-image text gpt image-1.5 - image to image",
+    "supported": false
+  },
+  {
+    "providerId": "kie",
+    "locator": "kie://market/gpt-image/1.5-text-to-image",
+    "label": "GPT Image-1.5 - Text to Image",
+    "category": "text",
+    "outputType": "text",
+    "description": "GPT Image-1.5 - Text to Image",
+    "searchText": "gpt image-1.5 - text to image gpt-image/1.5-text-to-image text gpt image-1.5 - text to image",
+    "supported": false
+  },
+  {
+    "providerId": "kie",
+    "locator": "kie://market/grok-imagine-video-1-5-preview",
+    "label": "Grok Imagine Video 1.5 Preview",
+    "category": "image",
+    "outputType": "image",
+    "description": "Grok Imagine Video 1.5 Preview",
+    "searchText": "grok imagine video 1.5 preview grok-imagine-video-1-5-preview image grok imagine video 1.5 preview",
+    "supported": false
+  },
+  {
+    "providerId": "kie",
+    "locator": "kie://market/grok-imagine/extend",
+    "label": "Grok Imagine - Video Extend",
+    "category": "image",
+    "outputType": "image",
+    "description": "Grok Imagine - Video Extend",
+    "searchText": "grok imagine - video extend grok-imagine/extend image grok imagine - video extend",
+    "supported": false
+  },
+  {
+    "providerId": "kie",
+    "locator": "kie://market/grok-imagine/image-to-image",
+    "label": "Grok Imagine - image to image",
+    "category": "image",
+    "outputType": "image",
+    "description": "Grok Imagine - image to image",
+    "searchText": "grok imagine - image to image grok-imagine/image-to-image image grok imagine - image to image",
+    "supported": true
+  },
+  {
+    "providerId": "kie",
+    "locator": "kie://market/grok-imagine/image-to-video",
+    "label": "Grok Imagine Image to Video",
+    "category": "video",
+    "outputType": "video",
+    "description": "Grok Imagine Image to Video",
+    "searchText": "grok imagine image to video grok-imagine/image-to-video video grok imagine image to video",
+    "supported": false
+  },
+  {
+    "providerId": "kie",
+    "locator": "kie://market/grok-imagine/text-to-image",
+    "label": "Grok Imagine - Text to Image",
+    "category": "image",
+    "outputType": "image",
+    "description": "Grok Imagine - Text to Image",
+    "searchText": "grok imagine - text to image grok-imagine/text-to-image image grok imagine - text to image",
+    "supported": true
+  },
+  {
+    "providerId": "kie",
+    "locator": "kie://market/grok-imagine/text-to-video",
+    "label": "Grok Imagine Text to Video",
+    "category": "video",
+    "outputType": "video",
+    "description": "Grok Imagine Text to Video",
+    "searchText": "grok imagine text to video grok-imagine/text-to-video video grok imagine text to video",
+    "supported": false
+  },
+  {
+    "providerId": "kie",
+    "locator": "kie://market/grok-imagine/upscale",
+    "label": "Grok Imagine - Video Upscale",
+    "category": "image",
+    "outputType": "image",
+    "description": "Grok Imagine - Video Upscale",
+    "searchText": "grok imagine - video upscale grok-imagine/upscale image grok imagine - video upscale",
+    "supported": false
+  },
+  {
+    "providerId": "kie",
+    "locator": "kie://market/hailuo/02-image-to-video-pro",
+    "label": "Hailuo Pro Image to Video",
+    "category": "video",
+    "outputType": "video",
+    "description": " Hailuo Pro Image to Video",
+    "searchText": "hailuo pro image to video hailuo/02-image-to-video-pro video  hailuo pro image to video",
+    "supported": false
+  },
+  {
+    "providerId": "kie",
+    "locator": "kie://market/hailuo/02-image-to-video-standard",
+    "label": "Hailuo Standard Image to Video",
+    "category": "video",
+    "outputType": "video",
+    "description": "Hailuo Standard Image to Video",
+    "searchText": "hailuo standard image to video hailuo/02-image-to-video-standard video hailuo standard image to video",
+    "supported": false
+  },
+  {
+    "providerId": "kie",
+    "locator": "kie://market/hailuo/02-text-to-video-pro",
+    "label": "Hailuo Pro Text to Video",
+    "category": "video",
+    "outputType": "video",
+    "description": "Hailuo Pro Text to Video",
+    "searchText": "hailuo pro text to video hailuo/02-text-to-video-pro video hailuo pro text to video",
+    "supported": false
+  },
+  {
+    "providerId": "kie",
+    "locator": "kie://market/hailuo/02-text-to-video-standard",
+    "label": "Hailuo Standard Text to Video",
+    "category": "video",
+    "outputType": "video",
+    "description": "Hailuo Standard Text to Video",
+    "searchText": "hailuo standard text to video hailuo/02-text-to-video-standard video hailuo standard text to video",
+    "supported": false
+  },
+  {
+    "providerId": "kie",
+    "locator": "kie://market/hailuo/2-3-image-to-video-pro",
+    "label": "Hailuo 2.3 Pro Image to Video",
+    "category": "video",
+    "outputType": "video",
+    "description": "Hailuo 2.3 Pro Image to Video",
+    "searchText": "hailuo 2.3 pro image to video hailuo/2-3-image-to-video-pro video hailuo 2.3 pro image to video",
+    "supported": false
+  },
+  {
+    "providerId": "kie",
+    "locator": "kie://market/hailuo/2-3-image-to-video-standard",
+    "label": "Hailuo 2.3 Standard Image to Video",
+    "category": "video",
+    "outputType": "video",
+    "description": "Hailuo 2.3 Standard Image to Video",
+    "searchText": "hailuo 2.3 standard image to video hailuo/2-3-image-to-video-standard video hailuo 2.3 standard image to video",
+    "supported": false
+  },
+  {
+    "providerId": "kie",
+    "locator": "kie://market/happyhorse-1-1/image-to-video",
+    "label": "HappyHorse-1-1 image-to-video",
+    "category": "video",
+    "outputType": "video",
+    "description": "HappyHorse-1-1 image-to-video",
+    "searchText": "happyhorse-1-1 image-to-video happyhorse-1-1/image-to-video video happyhorse-1-1 image-to-video",
+    "supported": false
+  },
+  {
+    "providerId": "kie",
+    "locator": "kie://market/happyhorse-1-1/reference-to-video",
+    "label": "HappyHorse-1-1 reference-to-video",
+    "category": "video",
+    "outputType": "video",
+    "description": "HappyHorse-1-1 reference-to-video",
+    "searchText": "happyhorse-1-1 reference-to-video happyhorse-1-1/reference-to-video video happyhorse-1-1 reference-to-video",
+    "supported": false
+  },
+  {
+    "providerId": "kie",
+    "locator": "kie://market/happyhorse-1-1/text-to-video",
+    "label": "HappyHorse-1-1 text-to-video",
+    "category": "video",
+    "outputType": "video",
+    "description": "HappyHorse-1-1 text-to-video",
+    "searchText": "happyhorse-1-1 text-to-video happyhorse-1-1/text-to-video video happyhorse-1-1 text-to-video",
+    "supported": false
+  },
+  {
+    "providerId": "kie",
+    "locator": "kie://market/happyhorse/image-to-video",
+    "label": "HappyHorse - image-to-video",
+    "category": "video",
+    "outputType": "video",
+    "description": "HappyHorse - image-to-video",
+    "searchText": "happyhorse - image-to-video happyhorse/image-to-video video happyhorse - image-to-video",
+    "supported": false
+  },
+  {
+    "providerId": "kie",
+    "locator": "kie://market/happyhorse/reference-to-video",
+    "label": "HappyHorse - reference-to-video",
+    "category": "video",
+    "outputType": "video",
+    "description": "HappyHorse - reference-to-video",
+    "searchText": "happyhorse - reference-to-video happyhorse/reference-to-video video happyhorse - reference-to-video",
+    "supported": false
+  },
+  {
+    "providerId": "kie",
+    "locator": "kie://market/happyhorse/text-to-video",
+    "label": "HappyHorse - text-to-video",
+    "category": "video",
+    "outputType": "video",
+    "description": "HappyHorse - text-to-video",
+    "searchText": "happyhorse - text-to-video happyhorse/text-to-video video happyhorse - text-to-video",
+    "supported": false
+  },
+  {
+    "providerId": "kie",
+    "locator": "kie://market/happyhorse/video-edit",
+    "label": "HappyHorse - video-edit",
+    "category": "video",
+    "outputType": "video",
+    "description": "HappyHorse - video-edit",
+    "searchText": "happyhorse - video-edit happyhorse/video-edit video happyhorse - video-edit",
+    "supported": false
+  },
+  {
+    "providerId": "kie",
+    "locator": "kie://market/ideogram/character",
+    "label": "Ideogram - Character",
+    "category": "image",
+    "outputType": "image",
+    "description": "Ideogram - Character",
+    "searchText": "ideogram - character ideogram/character image ideogram - character",
+    "supported": false
+  },
+  {
+    "providerId": "kie",
+    "locator": "kie://market/ideogram/character-edit",
+    "label": "Ideogram - Character Edit",
+    "category": "image",
+    "outputType": "image",
+    "description": "Ideogram - Character Edit",
+    "searchText": "ideogram - character edit ideogram/character-edit image ideogram - character edit",
+    "supported": false
+  },
+  {
+    "providerId": "kie",
+    "locator": "kie://market/ideogram/character-remix",
+    "label": "Ideogram - Character Remix",
+    "category": "image",
+    "outputType": "image",
+    "description": "Ideogram - Character Remix",
+    "searchText": "ideogram - character remix ideogram/character-remix image ideogram - character remix",
+    "supported": false
+  },
+  {
+    "providerId": "kie",
+    "locator": "kie://market/ideogram/v3-edit",
+    "label": "Ideogram V3 Edit",
+    "category": "image",
+    "outputType": "image",
+    "description": "Ideogram V3 Edit",
+    "searchText": "ideogram v3 edit ideogram/v3-edit image ideogram v3 edit",
+    "supported": false
+  },
+  {
+    "providerId": "kie",
+    "locator": "kie://market/ideogram/v3-remix",
+    "label": "Ideogram V3 Remix",
+    "category": "image",
+    "outputType": "image",
+    "description": "Ideogram V3 Remix",
+    "searchText": "ideogram v3 remix ideogram/v3-remix image ideogram v3 remix",
+    "supported": false
+  },
+  {
+    "providerId": "kie",
+    "locator": "kie://market/ideogram/v3-text-to-image",
+    "label": "Ideogram V3 Text to Image",
+    "category": "image",
+    "outputType": "image",
+    "description": "Ideogram V3 Text to Image",
+    "searchText": "ideogram v3 text to image ideogram/v3-text-to-image image ideogram v3 text to image",
+    "supported": false
+  },
+  {
+    "providerId": "kie",
+    "locator": "kie://market/infinitalk/from-audio",
+    "label": "Infinitalk - From Audio",
+    "category": "audio",
+    "outputType": "audio",
+    "description": "Infinitalk - From Audio",
+    "searchText": "infinitalk - from audio infinitalk/from-audio audio infinitalk - from audio",
+    "supported": false
+  },
+  {
+    "providerId": "kie",
+    "locator": "kie://market/kling-2.6/image-to-video",
+    "label": "Kling 2.6 Image to Video",
+    "category": "video",
+    "outputType": "video",
+    "description": "Kling 2.6 Image to Video",
+    "searchText": "kling 2.6 image to video kling-2.6/image-to-video video kling 2.6 image to video",
+    "supported": false
+  },
+  {
+    "providerId": "kie",
+    "locator": "kie://market/kling-2.6/motion-control",
+    "label": "Kling 2.6 motion-control",
+    "category": "video",
+    "outputType": "video",
+    "description": "Kling 2.6 motion-control",
+    "searchText": "kling 2.6 motion-control kling-2.6/motion-control video kling 2.6 motion-control",
+    "supported": false
+  },
+  {
+    "providerId": "kie",
+    "locator": "kie://market/kling-2.6/text-to-video",
+    "label": "Kling 2.6 Text to Video",
+    "category": "video",
+    "outputType": "video",
+    "description": "Kling 2.6 Text to Video",
+    "searchText": "kling 2.6 text to video kling-2.6/text-to-video video kling 2.6 text to video",
+    "supported": false
+  },
+  {
+    "providerId": "kie",
+    "locator": "kie://market/kling-3.0/motion-control",
+    "label": "Kling-3.0 motion-control",
+    "category": "video",
+    "outputType": "video",
+    "description": "Kling-3.0 motion-control",
+    "searchText": "kling-3.0 motion-control kling-3.0/motion-control video kling-3.0 motion-control",
+    "supported": true
+  },
+  {
+    "providerId": "kie",
+    "locator": "kie://market/kling-3.0/video",
+    "label": "Kling 3.0",
+    "category": "video",
+    "outputType": "video",
+    "description": "Kling 3.0",
+    "searchText": "kling 3.0 kling-3.0/video video kling 3.0",
+    "supported": true
+  },
+  {
+    "providerId": "kie",
+    "locator": "kie://market/kling/ai-avatar-pro",
+    "label": "Kling AI Avatar Pro",
+    "category": "video",
+    "outputType": "video",
+    "description": "Kling AI Avatar Pro",
+    "searchText": "kling ai avatar pro kling/ai-avatar-pro video kling ai avatar pro",
+    "supported": false
+  },
+  {
+    "providerId": "kie",
+    "locator": "kie://market/kling/ai-avatar-standard",
+    "label": "Kling AI Avatar Standard",
+    "category": "video",
+    "outputType": "video",
+    "description": "Kling AI Avatar Standard",
+    "searchText": "kling ai avatar standard kling/ai-avatar-standard video kling ai avatar standard",
+    "supported": false
+  },
+  {
+    "providerId": "kie",
+    "locator": "kie://market/kling/v2-1-master-image-to-video",
+    "label": "Kling V2.1 Master Image to Video",
+    "category": "video",
+    "outputType": "video",
+    "description": "Kling V2.1 Master Image to Video",
+    "searchText": "kling v2.1 master image to video kling/v2-1-master-image-to-video video kling v2.1 master image to video",
+    "supported": false
+  },
+  {
+    "providerId": "kie",
+    "locator": "kie://market/kling/v2-1-master-text-to-video",
+    "label": "Kling V2.1 Master Text to Video",
+    "category": "video",
+    "outputType": "video",
+    "description": "Kling V2.1 Master Text to Video",
+    "searchText": "kling v2.1 master text to video kling/v2-1-master-text-to-video video kling v2.1 master text to video",
+    "supported": false
+  },
+  {
+    "providerId": "kie",
+    "locator": "kie://market/kling/v2-1-pro",
+    "label": "Kling V2.1 Pro",
+    "category": "video",
+    "outputType": "video",
+    "description": "Kling V2.1 Pro",
+    "searchText": "kling v2.1 pro kling/v2-1-pro video kling v2.1 pro",
+    "supported": false
+  },
+  {
+    "providerId": "kie",
+    "locator": "kie://market/kling/v2-1-standard",
+    "label": "Kling V2.1 Standard",
+    "category": "video",
+    "outputType": "video",
+    "description": "Kling V2.1 Standard",
+    "searchText": "kling v2.1 standard kling/v2-1-standard video kling v2.1 standard",
+    "supported": false
+  },
+  {
+    "providerId": "kie",
+    "locator": "kie://market/kling/v2-5-turbo-text-to-video-pro",
+    "label": "Kling - V2.5 Turbo Text to Video Pro",
+    "category": "video",
+    "outputType": "video",
+    "description": "Kling - V2.5 Turbo Text to Video Pro",
+    "searchText": "kling - v2.5 turbo text to video pro kling/v2-5-turbo-text-to-video-pro video kling - v2.5 turbo text to video pro",
+    "supported": false
+  },
+  {
+    "providerId": "kie",
+    "locator": "kie://market/kling/v3-turbo-image-to-video",
+    "label": "Kling - V3 Turbo Image to Video",
+    "category": "video",
+    "outputType": "video",
+    "description": "Kling - V3 Turbo Image to Video",
+    "searchText": "kling - v3 turbo image to video kling/v3-turbo-image-to-video video kling - v3 turbo image to video",
+    "supported": false
+  },
+  {
+    "providerId": "kie",
+    "locator": "kie://market/kling/v3-turbo-text-to-video",
+    "label": "Kling - V3 Turbo Text to Video",
+    "category": "video",
+    "outputType": "video",
+    "description": "Kling - V3 Turbo Text to Video",
+    "searchText": "kling - v3 turbo text to video kling/v3-turbo-text-to-video video kling - v3 turbo text to video",
+    "supported": false
+  },
+  {
+    "providerId": "kie",
+    "locator": "kie://market/minimax-h3/image-to-video",
+    "label": "MiniMax H3 Image-to-Video",
+    "category": "video",
+    "outputType": "video",
+    "description": "MiniMax H3 Image-to-Video",
+    "searchText": "minimax h3 image-to-video minimax-h3/image-to-video video minimax h3 image-to-video",
+    "supported": false
+  },
+  {
+    "providerId": "kie",
+    "locator": "kie://market/minimax-h3/reference-to-video",
+    "label": "MiniMax H3 Reference-to-Video",
+    "category": "video",
+    "outputType": "video",
+    "description": "MiniMax H3 Reference-to-Video",
+    "searchText": "minimax h3 reference-to-video minimax-h3/reference-to-video video minimax h3 reference-to-video",
+    "supported": false
+  },
+  {
+    "providerId": "kie",
+    "locator": "kie://market/minimax-h3/text-to-video",
+    "label": "MiniMax H3 Text-to-Video",
+    "category": "video",
+    "outputType": "video",
+    "description": "MiniMax H3 Text-to-Video",
+    "searchText": "minimax h3 text-to-video minimax-h3/text-to-video video minimax h3 text-to-video",
+    "supported": false
+  },
+  {
+    "providerId": "kie",
+    "locator": "kie://market/nano-banana-2",
+    "label": "Google - Nano Banana 2",
+    "category": "image",
+    "outputType": "image",
+    "description": "Google - Nano Banana 2",
+    "searchText": "google - nano banana 2 nano-banana-2 image google - nano banana 2",
+    "supported": false
+  },
+  {
+    "providerId": "kie",
+    "locator": "kie://market/nano-banana-2-lite",
+    "label": "Google - Nano Banana 2 Lite",
+    "category": "image",
+    "outputType": "image",
+    "description": "Google - Nano Banana 2 Lite",
+    "searchText": "google - nano banana 2 lite nano-banana-2-lite image google - nano banana 2 lite",
+    "supported": false
+  },
+  {
+    "providerId": "kie",
+    "locator": "kie://market/nano-banana-pro",
+    "label": "Google - Nano Banana Pro",
+    "category": "image",
+    "outputType": "image",
+    "description": "Google - Nano Banana Pro",
+    "searchText": "google - nano banana pro nano-banana-pro image google - nano banana pro",
+    "supported": false
+  },
+  {
+    "providerId": "kie",
+    "locator": "kie://market/omnihuman-1-5",
+    "label": "Omnihuman 1.5",
+    "category": "video",
+    "outputType": "video",
+    "description": "Omnihuman 1.5",
+    "searchText": "omnihuman 1.5 omnihuman-1-5 video omnihuman 1.5",
+    "supported": false
+  },
+  {
+    "providerId": "kie",
+    "locator": "kie://market/omnihuman-1-5/human-identification",
+    "label": "Omnihuman 1.5 Human Identification",
+    "category": "video",
+    "outputType": "video",
+    "description": "Omnihuman 1.5 Human Identification",
+    "searchText": "omnihuman 1.5 human identification omnihuman-1-5/human-identification video omnihuman 1.5 human identification",
+    "supported": false
+  },
+  {
+    "providerId": "kie",
+    "locator": "kie://market/omnihuman-1-5/subject-detection",
+    "label": "OmniHuman 1.5 Subject Detection",
+    "category": "video",
+    "outputType": "video",
+    "description": "OmniHuman 1.5 Subject Detection",
+    "searchText": "omnihuman 1.5 subject detection omnihuman-1-5/subject-detection video omnihuman 1.5 subject detection",
+    "supported": false
+  },
+  {
+    "providerId": "kie",
+    "locator": "kie://market/pixverse-v6/extend",
+    "label": "PixVerse V6 Video Extension",
+    "category": "video",
+    "outputType": "video",
+    "description": "PixVerse V6 Video Extension",
+    "searchText": "pixverse v6 video extension pixverse-v6/extend video pixverse v6 video extension",
+    "supported": false
+  },
+  {
+    "providerId": "kie",
+    "locator": "kie://market/pixverse-v6/image-to-video",
+    "label": "PixVerse V6 Image-to-Video",
+    "category": "video",
+    "outputType": "video",
+    "description": "PixVerse V6 Image-to-Video",
+    "searchText": "pixverse v6 image-to-video pixverse-v6/image-to-video video pixverse v6 image-to-video",
+    "supported": false
+  },
+  {
+    "providerId": "kie",
+    "locator": "kie://market/pixverse-v6/reference-to-video",
+    "label": "PixVerse V6 Fusion / Reference-to-Video",
+    "category": "video",
+    "outputType": "video",
+    "description": "PixVerse V6 Fusion / Reference-to-Video",
+    "searchText": "pixverse v6 fusion / reference-to-video pixverse-v6/reference-to-video video pixverse v6 fusion / reference-to-video",
+    "supported": false
+  },
+  {
+    "providerId": "kie",
+    "locator": "kie://market/pixverse-v6/text-to-video",
+    "label": "PixVerse V6 Text-to-Video",
+    "category": "video",
+    "outputType": "video",
+    "description": "PixVerse V6 Text-to-Video",
+    "searchText": "pixverse v6 text-to-video pixverse-v6/text-to-video video pixverse v6 text-to-video",
+    "supported": false
+  },
+  {
+    "providerId": "kie",
+    "locator": "kie://market/pixverse-v6/transition",
+    "label": "PixVerse V6 First & Last Frame Transition",
+    "category": "video",
+    "outputType": "video",
+    "description": "PixVerse V6 First & Last Frame Transition",
+    "searchText": "pixverse v6 first & last frame transition pixverse-v6/transition video pixverse v6 first & last frame transition",
+    "supported": false
+  },
+  {
+    "providerId": "kie",
+    "locator": "kie://market/qwen/image-edit",
+    "label": "Qwen - Image Edit",
+    "category": "image",
+    "outputType": "image",
+    "description": "Qwen - Image Edit",
+    "searchText": "qwen - image edit qwen/image-edit image qwen - image edit",
+    "supported": false
+  },
+  {
+    "providerId": "kie",
+    "locator": "kie://market/qwen/image-to-image",
+    "label": "Qwen - Image to Image",
+    "category": "image",
+    "outputType": "image",
+    "description": "Qwen - Image to Image",
+    "searchText": "qwen - image to image qwen/image-to-image image qwen - image to image",
+    "supported": false
+  },
+  {
+    "providerId": "kie",
+    "locator": "kie://market/qwen/text-to-image",
+    "label": "Qwen - Text to Image",
+    "category": "image",
+    "outputType": "image",
+    "description": "Qwen - Text to Image",
+    "searchText": "qwen - text to image qwen/text-to-image image qwen - text to image",
+    "supported": false
+  },
+  {
+    "providerId": "kie",
+    "locator": "kie://market/qwen2/image-edit",
+    "label": "Qwen2 - Image Edit",
+    "category": "image",
+    "outputType": "image",
+    "description": "Qwen2 - Image Edit",
+    "searchText": "qwen2 - image edit qwen2/image-edit image qwen2 - image edit",
+    "supported": false
+  },
+  {
+    "providerId": "kie",
+    "locator": "kie://market/recraft/crisp-upscale",
+    "label": "Recraft - Crisp Upscale",
+    "category": "image",
+    "outputType": "image",
+    "description": "Recraft - Crisp Upscale",
+    "searchText": "recraft - crisp upscale recraft/crisp-upscale image recraft - crisp upscale",
+    "supported": false
+  },
+  {
+    "providerId": "kie",
+    "locator": "kie://market/recraft/remove-background",
+    "label": "Recraft - Remove Background",
+    "category": "image",
+    "outputType": "image",
+    "description": "Recraft - Remove Background",
+    "searchText": "recraft - remove background recraft/remove-background image recraft - remove background",
+    "supported": false
+  },
+  {
+    "providerId": "kie",
+    "locator": "kie://market/seedream/4.5-edit",
+    "label": "Seedream4.5 - Edit",
+    "category": "image",
+    "outputType": "image",
+    "description": "Seedream4.5 - Edit",
+    "searchText": "seedream4.5 - edit seedream/4.5-edit image seedream4.5 - edit",
+    "supported": false
+  },
+  {
+    "providerId": "kie",
+    "locator": "kie://market/seedream/4.5-text-to-image",
+    "label": "Seedream4.5 - Text to Image",
+    "category": "image",
+    "outputType": "image",
+    "description": "Seedream4.5 - Text to Image",
+    "searchText": "seedream4.5 - text to image seedream/4.5-text-to-image image seedream4.5 - text to image",
+    "supported": false
+  },
+  {
+    "providerId": "kie",
+    "locator": "kie://market/seedream/5-lite-image-to-image",
+    "label": "Seedream5.0 Lite - Image to Image",
+    "category": "image",
+    "outputType": "image",
+    "description": "Seedream5.0 Lite - Image to Image",
+    "searchText": "seedream5.0 lite - image to image seedream/5-lite-image-to-image image seedream5.0 lite - image to image",
+    "supported": false
+  },
+  {
+    "providerId": "kie",
+    "locator": "kie://market/seedream/5-lite-text-to-image",
+    "label": "Seedream5.0 Lite - Text to Image",
+    "category": "image",
+    "outputType": "image",
+    "description": "Seedream5.0 Lite - Text to Image",
+    "searchText": "seedream5.0 lite - text to image seedream/5-lite-text-to-image image seedream5.0 lite - text to image",
+    "supported": false
+  },
+  {
+    "providerId": "kie",
+    "locator": "kie://market/seedream/5-pro-image-to-image",
+    "label": "Seedream5.0 Pro - Image to Image",
+    "category": "image",
+    "outputType": "image",
+    "description": "Seedream5.0 Pro - Image to Image",
+    "searchText": "seedream5.0 pro - image to image seedream/5-pro-image-to-image image seedream5.0 pro - image to image",
+    "supported": true
+  },
+  {
+    "providerId": "kie",
+    "locator": "kie://market/seedream/5-pro-text-to-image",
+    "label": "Seedream5.0 Pro - Text to Image",
+    "category": "image",
+    "outputType": "image",
+    "description": "Seedream5.0 Pro - Text to Image",
+    "searchText": "seedream5.0 pro - text to image seedream/5-pro-text-to-image image seedream5.0 pro - text to image",
+    "supported": true
+  },
+  {
+    "providerId": "kie",
+    "locator": "kie://market/topaz/image-upscale",
+    "label": "Topaz - Image Upscale",
+    "category": "image",
+    "outputType": "image",
+    "description": "Topaz - Image Upscale",
+    "searchText": "topaz - image upscale topaz/image-upscale image topaz - image upscale",
+    "supported": false
+  },
+  {
+    "providerId": "kie",
+    "locator": "kie://market/topaz/video-upscale",
+    "label": "Topaz - Video Upscale",
+    "category": "video",
+    "outputType": "video",
+    "description": "Topaz - Video Upscale",
+    "searchText": "topaz - video upscale topaz/video-upscale video topaz - video upscale",
+    "supported": false
+  },
+  {
+    "providerId": "kie",
+    "locator": "kie://market/volcengine/video-to-video-lip-sync",
+    "label": "Volcengine video to video lip sync",
+    "category": "video",
+    "outputType": "video",
+    "description": "Volcengine video to video lip sync",
+    "searchText": "volcengine video to video lip sync volcengine/video-to-video-lip-sync video volcengine video to video lip sync",
+    "supported": false
+  },
+  {
+    "providerId": "kie",
+    "locator": "kie://market/wan/2-2-a14b-image-to-video-turbo",
+    "label": "Wan - Image to Video",
+    "category": "video",
+    "outputType": "video",
+    "description": "Wan - Image to Video",
+    "searchText": "wan - image to video wan/2-2-a14b-image-to-video-turbo video wan - image to video",
+    "supported": false
+  },
+  {
+    "providerId": "kie",
+    "locator": "kie://market/wan/2-2-a14b-speech-to-video-turbo",
+    "label": "Wan - 2.2 A14B Speech to Video Turbo",
+    "category": "video",
+    "outputType": "video",
+    "description": "Wan - 2.2 A14B Speech to Video Turbo",
+    "searchText": "wan - 2.2 a14b speech to video turbo wan/2-2-a14b-speech-to-video-turbo video wan - 2.2 a14b speech to video turbo",
+    "supported": false
+  },
+  {
+    "providerId": "kie",
+    "locator": "kie://market/wan/2-2-a14b-text-to-video-turbo",
+    "label": "Wan - Text to Video",
+    "category": "video",
+    "outputType": "video",
+    "description": "Wan - Text to Video",
+    "searchText": "wan - text to video wan/2-2-a14b-text-to-video-turbo video wan - text to video",
+    "supported": false
+  },
+  {
+    "providerId": "kie",
+    "locator": "kie://market/wan/2-2-animate-move",
+    "label": "Wan - Animate Move",
+    "category": "video",
+    "outputType": "video",
+    "description": "Wan - Animate Move",
+    "searchText": "wan - animate move wan/2-2-animate-move video wan - animate move",
+    "supported": false
+  },
+  {
+    "providerId": "kie",
+    "locator": "kie://market/wan/2-2-animate-replace",
+    "label": "Wan - Animate Replace",
+    "category": "video",
+    "outputType": "video",
+    "description": "Wan - Animate Replace",
+    "searchText": "wan - animate replace wan/2-2-animate-replace video wan - animate replace",
+    "supported": false
+  },
+  {
+    "providerId": "kie",
+    "locator": "kie://market/wan/2-5-image-to-video",
+    "label": "Wan 2.5 - Image to Video",
+    "category": "video",
+    "outputType": "video",
+    "description": "Wan 2.5 - Image to Video",
+    "searchText": "wan 2.5 - image to video wan/2-5-image-to-video video wan 2.5 - image to video",
+    "supported": false
+  },
+  {
+    "providerId": "kie",
+    "locator": "kie://market/wan/2-5-text-to-video",
+    "label": "Wan 2.5 - Text to Video",
+    "category": "video",
+    "outputType": "video",
+    "description": "Wan 2.5 - Text to Video",
+    "searchText": "wan 2.5 - text to video wan/2-5-text-to-video video wan 2.5 - text to video",
+    "supported": false
+  },
+  {
+    "providerId": "kie",
+    "locator": "kie://market/wan/2-6-flash-image-to-video",
+    "label": "Wan - 2.6-flash-image-to-video",
+    "category": "video",
+    "outputType": "video",
+    "description": "Wan - 2.6-flash-image-to-video",
+    "searchText": "wan - 2.6-flash-image-to-video wan/2-6-flash-image-to-video video wan - 2.6-flash-image-to-video",
+    "supported": false
+  },
+  {
+    "providerId": "kie",
+    "locator": "kie://market/wan/2-6-flash-video-to-video",
+    "label": "Wan - 2-6-flash-video-to-video",
+    "category": "video",
+    "outputType": "video",
+    "description": "Wan - 2-6-flash-video-to-video",
+    "searchText": "wan - 2-6-flash-video-to-video wan/2-6-flash-video-to-video video wan - 2-6-flash-video-to-video",
+    "supported": false
+  },
+  {
+    "providerId": "kie",
+    "locator": "kie://market/wan/2-6-image-to-video",
+    "label": "Wan 2.6 - Image to Video",
+    "category": "video",
+    "outputType": "video",
+    "description": "Wan 2.6 - Image to Video",
+    "searchText": "wan 2.6 - image to video wan/2-6-image-to-video video wan 2.6 - image to video",
+    "supported": false
+  },
+  {
+    "providerId": "kie",
+    "locator": "kie://market/wan/2-6-text-to-video",
+    "label": "Wan 2.6 - Text to Video",
+    "category": "video",
+    "outputType": "video",
+    "description": "Wan 2.6 - Text to Video",
+    "searchText": "wan 2.6 - text to video wan/2-6-text-to-video video wan 2.6 - text to video",
+    "supported": false
+  },
+  {
+    "providerId": "kie",
+    "locator": "kie://market/wan/2-6-video-to-video",
+    "label": "Wan 2.6 - Video to Video",
+    "category": "video",
+    "outputType": "video",
+    "description": "Wan 2.6 - Video to Video",
+    "searchText": "wan 2.6 - video to video wan/2-6-video-to-video video wan 2.6 - video to video",
+    "supported": false
+  },
+  {
+    "providerId": "kie",
+    "locator": "kie://market/wan/2-7-image",
+    "label": "Wan 2.7 Image",
+    "category": "video",
+    "outputType": "video",
+    "description": "Wan 2.7 Image",
+    "searchText": "wan 2.7 image wan/2-7-image video wan 2.7 image",
+    "supported": false
+  },
+  {
+    "providerId": "kie",
+    "locator": "kie://market/wan/2-7-image-pro",
+    "label": "Wan 2.7 Image Pro",
+    "category": "video",
+    "outputType": "video",
+    "description": "Wan 2.7 Image Pro",
+    "searchText": "wan 2.7 image pro wan/2-7-image-pro video wan 2.7 image pro",
+    "supported": false
+  },
+  {
+    "providerId": "kie",
+    "locator": "kie://market/wan/2-7-image-to-video",
+    "label": "Wan 2.7 - Image to Video",
+    "category": "video",
+    "outputType": "video",
+    "description": "Wan 2.7 - Image to Video",
+    "searchText": "wan 2.7 - image to video wan/2-7-image-to-video video wan 2.7 - image to video",
+    "supported": false
+  },
+  {
+    "providerId": "kie",
+    "locator": "kie://market/wan/2-7-r2v",
+    "label": "Wan 2.7 - Reference to Video",
+    "category": "video",
+    "outputType": "video",
+    "description": "Wan 2.7 - Reference to Video",
+    "searchText": "wan 2.7 - reference to video wan/2-7-r2v video wan 2.7 - reference to video",
+    "supported": false
+  },
+  {
+    "providerId": "kie",
+    "locator": "kie://market/wan/2-7-text-to-video",
+    "label": "Wan 2.7 - Text to Video",
+    "category": "video",
+    "outputType": "video",
+    "description": "Wan 2.7 - Text to Video",
+    "searchText": "wan 2.7 - text to video wan/2-7-text-to-video video wan 2.7 - text to video",
+    "supported": false
+  },
+  {
+    "providerId": "kie",
+    "locator": "kie://market/wan/2-7-videoedit",
+    "label": "Wan 2.7 - Video Edit",
+    "category": "video",
+    "outputType": "video",
+    "description": "Wan 2.7 - Video Edit",
+    "searchText": "wan 2.7 - video edit wan/2-7-videoedit video wan 2.7 - video edit",
+    "supported": false
+  },
+  {
+    "providerId": "kie",
+    "locator": "kie://market/z-image",
+    "label": "Z-Image",
+    "category": "image",
+    "outputType": "image",
+    "description": "Z-Image",
+    "searchText": "z-image z-image image z-image",
+    "supported": false
+  }
+]

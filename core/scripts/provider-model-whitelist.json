@@ -1,0 +1,126 @@
+{
+  "kie": [
+    {
+      "label": "Seedream 5 Pro T2I",
+      "modelId": "seedream/5-pro-text-to-image",
+      "locator": "kie://market/seedream/5-pro-text-to-image"
+    },
+    {
+      "label": "Seedream 5 Pro I2I",
+      "modelId": "seedream/5-pro-image-to-image",
+      "locator": "kie://market/seedream/5-pro-image-to-image"
+    },
+    {
+      "label": "Flux 2 Pro T2I",
+      "modelId": "flux-2/pro-text-to-image",
+      "locator": "kie://market/flux-2/pro-text-to-image"
+    },
+    {
+      "label": "Flux 2 Pro I2I",
+      "modelId": "flux-2/pro-image-to-image",
+      "locator": "kie://market/flux-2/pro-image-to-image"
+    },
+    {
+      "label": "Grok Imagine T2I",
+      "modelId": "grok-imagine/text-to-image",
+      "locator": "kie://market/grok-imagine/text-to-image"
+    },
+    {
+      "label": "Grok Imagine I2I",
+      "modelId": "grok-imagine/image-to-image",
+      "locator": "kie://market/grok-imagine/image-to-image"
+    },
+    {
+      "label": "Seedance 2",
+      "modelId": "bytedance/seedance-2",
+      "locator": "kie://market/bytedance/seedance-2"
+    },
+    {
+      "label": "Seedance 2 Fast",
+      "modelId": "bytedance/seedance-2-fast",
+      "locator": "kie://market/bytedance/seedance-2-fast"
+    },
+    {
+      "label": "Kling 3 Video",
+      "modelId": "kling-3.0/video",
+      "locator": "kie://market/kling-3.0/video"
+    },
+    {
+      "label": "Kling 3 Motion Control",
+      "modelId": "kling-3.0/motion-control",
+      "locator": "kie://market/kling-3.0/motion-control"
+    },
+    {
+      "label": "ElevenLabs Multilingual TTS",
+      "modelId": "elevenlabs/text-to-speech-multilingual-v2",
+      "locator": "kie://market/elevenlabs/text-to-speech-multilingual-v2"
+    },
+    {
+      "label": "ElevenLabs Text to Dialogue",
+      "modelId": "elevenlabs/text-to-dialogue-v3",
+      "locator": "kie://market/elevenlabs/text-to-dialogue-v3"
+    }
+  ],
+  "apiframe": [
+    {
+      "label": "Seedream 5 Pro",
+      "modelId": "seedream-5-pro",
+      "modality": "image",
+      "locator": "apiframe://image/seedream-5-pro"
+    },
+    {
+      "label": "Flux 2 Pro",
+      "modelId": "flux-2-pro",
+      "modality": "image",
+      "locator": "apiframe://image/flux-2-pro"
+    },
+    {
+      "label": "Nano Banana Pro",
+      "modelId": "nano-banana-pro",
+      "modality": "image",
+      "locator": "apiframe://image/nano-banana-pro"
+    },
+    {
+      "label": "GPT Image 1.5",
+      "modelId": "gpt-image-1.5",
+      "modality": "image",
+      "locator": "apiframe://image/gpt-image-1.5"
+    },
+    {
+      "label": "Kling 3.0",
+      "modelId": "kling-3.0",
+      "modality": "video",
+      "locator": "apiframe://video/kling-3.0"
+    },
+    {
+      "label": "Veo 3.1",
+      "modelId": "veo-3.1",
+      "modality": "video",
+      "locator": "apiframe://video/veo-3.1"
+    },
+    {
+      "label": "Sora 2 Pro",
+      "modelId": "sora-2-pro",
+      "modality": "video",
+      "locator": "apiframe://video/sora-2-pro"
+    },
+    {
+      "label": "Seedance 2",
+      "modelId": "seedance-2",
+      "modality": "video",
+      "locator": "apiframe://video/seedance-2"
+    },
+    {
+      "label": "Suno",
+      "modelId": "suno",
+      "modality": "music",
+      "locator": "apiframe://music/suno"
+    },
+    {
+      "label": "Mureka",
+      "modelId": "mureka",
+      "modality": "music",
+      "locator": "apiframe://music/mureka"
+    }
+  ]
+}

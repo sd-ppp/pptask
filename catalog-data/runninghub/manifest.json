@@ -1,0 +1,17 @@
+{
+  "provider": "runninghub",
+  "transactionId": "4d043236-29f2-4478-959a-48c67013ee3c",
+  "sourceUrls": [
+    "https://raw.githubusercontent.com/HM-RunningHub/ComfyUI_RH_OpenAPI/refs/heads/main/models_registry.json",
+    "/data/workspace/nx/libs/domain/pptask/core/scripts/runninghub-registry-overlay.json"
+  ],
+  "fileCount": 1,
+  "syncedAt": "2026-08-02T16:59:05.330Z",
+  "contentHash": "sha256:f3081c35598e4ea637456eefb478e5e68c04090a438d6eefa88cc0f8103bd9fc",
+  "files": [
+    {
+      "path": "models_registry.json",
+      "sha256": "d1ae3b33ae49833845f402b5cc09f64f9e529fd6259be2b602693e73335f4877"
+    }
+  ]
+}

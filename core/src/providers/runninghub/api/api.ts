@@ -25,7 +25,7 @@ export async function describeRunninghubApi(
   const modelPath = parseRunninghubApiPath(url);
   
   // 新 API 没有模板接口，返回预定义的 schema
-  const { schema, defaults } = getModelSchema(modelPath);
+  const { schema, defaults } = await getModelSchema(modelPath);
   
   return {
     provider: 'runninghub-api',
@@ -90,13 +90,18 @@ export async function createRunninghubApiTask(
   }
   
   const result = await response.json();
-
-  if (result?.errorCode || result?.errorMessage) {
-    throw createRunninghubApiError('create', result);
-  }
   
   // 检查响应格式
-  const taskId = result.taskId || result.data?.taskId;
+  const providerCode = result.code ?? result.errorCode ?? result.data?.code ?? result.data?.errorCode;
+  const hasProviderErrorCode = providerCode !== undefined
+    && providerCode !== null
+    && String(providerCode).trim() !== ''
+    && String(providerCode) !== '0';
+  if (result.success === false || result.data?.success === false || hasProviderErrorCode) {
+    console.error('[pptask][runninghub-api] create provider failure', JSON.stringify(result, null, 2));
+    throw createRunninghubApiError('create', result);
+  }
+  const taskId = result.taskId || result.data?.taskId || result.task_id || result.data?.task_id || result.id || result.data?.id;
   
   if (!taskId) {
     console.error(
@@ -167,12 +172,13 @@ export async function checkRunninghubApiStatus(
   
   const result = await response.json();
   
-  // 检查错误
-  if (result.errorCode) {
+  const status = mapRunninghubApiStatus(result.status);
+
+  // A failed provider task is a valid terminal status. Let the task runner
+  // surface its error instead of retrying the status request three times.
+  if (result.errorCode && status !== 'failed') {
     throw createRunninghubApiError('query', result);
   }
-  
-  const status = mapRunninghubApiStatus(result.status);
   
   return {
     provider: 'runninghub-api',

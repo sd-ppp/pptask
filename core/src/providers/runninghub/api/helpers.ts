@@ -1,5 +1,25 @@
 import type { PlatformConfig, TaskStatus } from '../../../types.ts';
 
+type RunninghubModelParameter = {
+  fieldKey: string;
+  type: 'STRING' | 'LIST' | 'INT' | 'FLOAT' | 'BOOLEAN' | 'IMAGE' | 'VIDEO' | 'AUDIO';
+  required?: boolean;
+  label?: string;
+  description?: string;
+  defaultValue?: unknown;
+  options?: Array<{ value: unknown; description?: string; descriptionEn?: string }>;
+  min?: number;
+  max?: number;
+  step?: number;
+  accept?: string;
+  maxSize?: number;
+};
+
+type RunninghubModel = {
+  endpoint: string;
+  params: RunninghubModelParameter[];
+};
+
 export type RunninghubApiConfig = {
   apiKey: string;
 };
@@ -84,271 +104,41 @@ export function mapRunninghubApiStatus(apiStatus: string | undefined): TaskStatu
  * 创建 RunningHub API 错误
  */
 export function createRunninghubApiError(context: string, response: any): Error {
-  const errorCode = response?.errorCode || 'UNKNOWN';
-  const errorMessage = response?.errorMessage || response?.message || 'Unknown error';
+  const errorCode = response?.errorCode ?? response?.code ?? response?.data?.errorCode ?? response?.data?.code ?? 'UNKNOWN';
+  const errorMessage = response?.errorMessage
+    ?? response?.message
+    ?? response?.msg
+    ?? response?.data?.errorMessage
+    ?? response?.data?.message
+    ?? response?.data?.msg
+    ?? (response ? JSON.stringify(response) : 'Unknown error');
   
   const error = new Error(`RunningHub API ${context} failed: [${errorCode}] ${errorMessage}`);
   (error as any).response = response;
   return error;
 }
 
-/**
- * 获取模型的 schema 配置
- * TODO: 后续可以从配置文件或 API 获取
- */
-export function getModelSchema(modelPath: string): {
+/** Returns the Formily schema declared for a RunningHub OpenAPI endpoint. */
+export async function getModelSchema(modelPath: string): Promise<{
   schema: any;
   defaults: Record<string, any>;
-} {
-  // rhart-image-v1/text-to-image: 只有 prompt 和 aspectRatio
-  if (modelPath === 'rhart-image-v1/text-to-image') {
-    return {
-      schema: {
-        type: 'object',
-        properties: {
-          prompt: {
-            type: 'string',
-            title: 'Prompt',
-            'x-decorator': 'FormItem',
-            'x-component': 'Input.TextArea',
-            'x-component-props': {
-              placeholder: 'Enter your prompt here',
-              rows: 4,
-            },
-            required: true,
-          },
-          aspectRatio: {
-            type: 'string',
-            title: 'Aspect Ratio',
-            'x-decorator': 'FormItem',
-            'x-component': 'Select',
-            enum: ['1:1', '3:4', '4:3', '16:9', '9:16'],
-            default: '3:4',
-          },
-        },
-      },
-      defaults: {
-        aspectRatio: '3:4',
-      },
-    };
-  }
-  
-  // rhart-image-n-pro/text-to-image: 有 prompt, aspectRatio, resolution
-  if (modelPath === 'rhart-image-n-pro/text-to-image') {
-    return {
-      schema: {
-        type: 'object',
-        properties: {
-          prompt: {
-            type: 'string',
-            title: 'Prompt',
-            'x-decorator': 'FormItem',
-            'x-component': 'Input.TextArea',
-            'x-component-props': {
-              placeholder: 'Enter your prompt here',
-              rows: 4,
-            },
-            required: true,
-          },
-          aspectRatio: {
-            type: 'string',
-            title: 'Aspect Ratio',
-            'x-decorator': 'FormItem',
-            'x-component': 'Select',
-            enum: ['1:1', '4:3', '3:4', '16:9', '9:16'],
-            default: '9:16',
-          },
-          resolution: {
-            type: 'string',
-            title: 'Resolution',
-            'x-decorator': 'FormItem',
-            'x-component': 'Select',
-            enum: ['1k', '2k', '4k'],
-            default: '1k',
-          },
-        },
-      },
-      defaults: {
-        aspectRatio: '9:16',
-        resolution: '1k',
-      },
-    };
-  }
+}> {
+  const { getRunningHubCatalogModel } = await import('./model-catalog.ts');
+  const model = getRunningHubCatalogModel(modelPath) as RunninghubModel | undefined;
+  if (model) {
+    const properties: Record<string, any> = {};
+    const defaults: Record<string, unknown> = {};
 
-  // rhart-image-n-pro-official/edit: 有 imageUrls, prompt, resolution, aspectRatio
-  if (modelPath === 'rhart-image-n-pro-official/edit') {
-    return {
-      schema: {
-        type: 'object',
-        properties: {
-          imageUrls: {
-            type: 'array',
-            title: '上传参考图像',
-            'x-decorator': 'FormItem',
-            'x-component': 'Upload',
-            required: true,
-            description: '最多 10 张图片，每张不超过 10 MB',
-            'x-component-props': {
-              variant: 'nomask',
-              maxCount: 10,
-              listType: 'picture-card',
-              accept: 'image/*',
-            },
-            'x-runninghub': {
-              outputType: 'images',
-              componentProps: {
-                maxCount: 10,
-              },
-            },
-          },
-          prompt: {
-            type: 'string',
-            title: 'Prompt',
-            'x-decorator': 'FormItem',
-            'x-component': 'Input.TextArea',
-            'x-component-props': {
-              placeholder: 'Enter your prompt here',
-              rows: 4,
-            },
-            required: true,
-            description: '文本长度 5-4000',
-          },
-          resolution: {
-            type: 'string',
-            title: 'Resolution',
-            'x-decorator': 'FormItem',
-            'x-component': 'Select',
-            enum: ['1k', '2k', '4k'],
-            default: '1k',
-            required: true,
-          },
-          aspectRatio: {
-            type: 'string',
-            title: 'Aspect Ratio',
-            'x-decorator': 'FormItem',
-            'x-component': 'Select',
-            enum: ['1:1', '3:2', '2:3', '3:4', '4:3', '4:5', '5:4', '9:16', '16:9', '21:9'],
-          },
-        },
-      },
-      defaults: {
-        resolution: '1k',
-      },
-    };
-  }
+    for (const parameter of model.params) {
+      properties[parameter.fieldKey] = buildRunninghubParameterSchema(parameter);
+      // The registry's text defaults are example prompts. Keep the Canvas blank
+      // while retaining meaningful defaults such as aspect ratio and resolution.
+      if (parameter.defaultValue !== undefined && parameter.defaultValue !== null && parameter.fieldKey !== 'prompt') {
+        defaults[parameter.fieldKey] = parameter.defaultValue;
+      }
+    }
 
-  // rhart-image-n-pro/edit: 有 imageUrls, prompt, aspectRatio, resolution
-  if (modelPath === 'rhart-image-n-pro/edit') {
-    return {
-      schema: {
-        type: 'object',
-        properties: {
-          imageUrls: {
-            type: 'array',
-            title: '上传参考图像',
-            'x-decorator': 'FormItem',
-            'x-component': 'Upload',
-            required: true,
-            description: '最多 10 张图片，每张不超过 10 MB',
-            'x-component-props': {
-              variant: 'nomask',
-              maxCount: 10,
-              listType: 'picture-card',
-              accept: 'image/*',
-            },
-            'x-runninghub': {
-              outputType: 'images',
-              componentProps: {
-                maxCount: 10,
-              },
-            },
-          },
-          prompt: {
-            type: 'string',
-            title: 'Prompt',
-            'x-decorator': 'FormItem',
-            'x-component': 'Input.TextArea',
-            'x-component-props': {
-              placeholder: 'Enter your prompt here',
-              rows: 4,
-            },
-            required: true,
-            description: '文本长度 5-4000',
-          },
-          aspectRatio: {
-            type: 'string',
-            title: 'Aspect Ratio',
-            'x-decorator': 'FormItem',
-            'x-component': 'Select',
-            enum: ['1:1', '16:9', '9:16', '4:3', '3:4', '3:2', '2:3', '5:4', '4:5', '21:9'],
-          },
-          resolution: {
-            type: 'string',
-            title: 'Resolution',
-            'x-decorator': 'FormItem',
-            'x-component': 'Select',
-            enum: ['1k', '2k', '4k', '1K', '2K', '4K'],
-            default: '1k',
-            required: true,
-          },
-        },
-      },
-      defaults: {
-        resolution: '1k',
-      },
-    };
-  }
-
-  // rhart-image-v1/edit: 有 prompt, aspectRatio, imageUrls
-  if (modelPath === 'rhart-image-v1/edit') {
-    return {
-      schema: {
-        type: 'object',
-        properties: {
-          prompt: {
-            type: 'string',
-            title: 'Prompt',
-            'x-decorator': 'FormItem',
-            'x-component': 'Input.TextArea',
-            'x-component-props': {
-              placeholder: 'Enter your prompt here',
-              rows: 4,
-            },
-            required: true,
-            description: '文本长度 5-4000',
-          },
-          aspectRatio: {
-            type: 'string',
-            title: 'Aspect Ratio',
-            'x-decorator': 'FormItem',
-            'x-component': 'Select',
-            enum: ['auto', '1:1', '16:9', '9:16', '4:3', '3:4', '3:2', '2:3', '5:4', '4:5', '21:9'],
-            required: true,
-          },
-          imageUrls: {
-            type: 'array',
-            title: '上传参考图像',
-            'x-decorator': 'FormItem',
-            'x-component': 'Upload',
-            required: true,
-            description: '最多 5 张图片，每张不超过 10 MB',
-            'x-component-props': {
-              variant: 'nomask',
-              maxCount: 5,
-              listType: 'picture-card',
-              accept: 'image/*',
-            },
-            'x-runninghub': {
-              outputType: 'images',
-              componentProps: {
-                maxCount: 5,
-              },
-            },
-          },
-        },
-      },
-      defaults: {},
-    };
+    return { schema: { type: 'object', properties }, defaults };
   }
   
   // 未知模型，返回通用 schema
@@ -367,4 +157,58 @@ export function getModelSchema(modelPath: string): {
     },
     defaults: {},
   };
+}
+
+function buildRunninghubParameterSchema(parameter: RunninghubModelParameter): Record<string, unknown> {
+  const component = getRunninghubComponent(parameter);
+  const defaultValue = parameter.defaultValue === null ? undefined : parameter.defaultValue;
+  const componentProps: Record<string, unknown> = {};
+
+  if (parameter.type === 'STRING' && isPromptLike(parameter)) {
+    componentProps.placeholder = 'Enter your prompt here';
+    componentProps.rows = 4;
+  }
+  if (typeof parameter.min === 'number') componentProps.min = parameter.min;
+  if (typeof parameter.max === 'number') componentProps.max = parameter.max;
+  if (typeof parameter.step === 'number') componentProps.step = parameter.step;
+  if (parameter.accept) componentProps.accept = parameter.accept;
+
+  return {
+    type: getRunninghubJsonType(parameter.type),
+    title: parameter.label || parameter.fieldKey,
+    description: parameter.description,
+    'x-decorator': 'FormItem',
+    'x-component': component,
+    'x-component-props': componentProps,
+    ...(parameter.options?.length ? {
+      enum: parameter.options.map(option => ({
+        label: option.description || option.descriptionEn || String(option.value),
+        value: option.value,
+      })),
+    } : {}),
+    ...(defaultValue !== undefined ? { default: defaultValue } : {}),
+    ...(parameter.required ? { required: true } : {}),
+    'x-runninghub': {
+      type: parameter.type,
+      accept: parameter.accept,
+      maxSize: parameter.maxSize,
+    },
+  };
+}
+
+function getRunninghubJsonType(type: RunninghubModelParameter['type']): 'string' | 'number' | 'boolean' {
+  if (type === 'INT' || type === 'FLOAT') return 'number';
+  if (type === 'BOOLEAN') return 'boolean';
+  return 'string';
+}
+
+function getRunninghubComponent(parameter: RunninghubModelParameter): string {
+  if (parameter.type === 'LIST') return 'Select';
+  if (parameter.type === 'BOOLEAN') return 'Switch';
+  if (parameter.type === 'INT' || parameter.type === 'FLOAT') return 'NumberPicker';
+  return parameter.type === 'STRING' && isPromptLike(parameter) ? 'Input.TextArea' : 'Input';
+}
+
+function isPromptLike(parameter: RunninghubModelParameter): boolean {
+  return /prompt|text|description|提示词|文本|描述/i.test(`${parameter.fieldKey} ${parameter.label ?? ''}`);
 }

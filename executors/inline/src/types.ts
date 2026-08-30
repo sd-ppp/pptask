@@ -4,7 +4,7 @@ import type {
   TaskStatusResult,
   TaskResult,
   PlatformConfig,
-} from '../../../core/src/types.ts';
+} from '../../../core/src/index.ts';
 
 export type SignalLike = TaskRequestOptions['signal'];
 
@@ -19,6 +19,9 @@ export type RunOptions = {
   context?: Record<string, any>;
   reporter?: Reporter;
 };
+
+// Backward-compatible alias used by server-side template registry
+export type ExecutionOptions = RunOptions;
 
 export type PlatformConfigSource =
   | PlatformConfig

@@ -2,7 +2,7 @@ import {
   describeResource as coreDescribeResource,
   upload as coreUpload,
 } from '../../../core/src/index.ts';
-import type { PlatformConfig, TaskRequestOptions } from '../../../core/src/types.ts';
+import type { PlatformConfig, TaskRequestOptions } from '../../../core/src/index.ts';
 import type {
   InlineExecutor,
   InlineExecutorConfig,
@@ -89,8 +89,9 @@ function resolveConfigForUpload(
 }
 
 export type { InlineExecutor, InlineExecutorConfig } from './types.ts';
-export type { RunOptions, TaskHandle, DescribeParams, RunParams, UploadParams, TaskRunReporter } from './types.ts';
+export type { RunOptions, ExecutionOptions, TaskHandle, DescribeParams, RunParams, UploadParams, TaskRunReporter } from './types.ts';
 
 // Export enhanced task runner with async generator support
+export { createTaskHandle } from './task-runner.ts';
 export { createTaskHandleStream } from './task-runner-enhanced.ts';
 export type { TaskEvent } from './task-runner-enhanced.ts';

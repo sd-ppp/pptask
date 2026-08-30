@@ -5,8 +5,9 @@ export default defineConfig({
   build: {
     lib: {
       entry: {
-        index: resolve(__dirname, 'core/src/index.ts'),
-        'executors/inline': resolve(__dirname, 'executors/inline/src/index.ts'),
+        index: resolve(import.meta.dirname, 'core/src/index.ts'),
+        'executors/inline': resolve(import.meta.dirname, 'executors/inline/src/index.ts'),
+        'locator-catalog': resolve(import.meta.dirname, 'core/src/locator-catalog.ts'),
       },
       formats: ['es'],
       fileName: (format, entryName) => {
@@ -16,7 +17,7 @@ export default defineConfig({
     },
     outDir: 'dist',
     sourcemap: true,
-    rollupOptions: {
+    rolldownOptions: {
       // Externalize dependencies that shouldn't be bundled
       external: [
         '@google/genai',

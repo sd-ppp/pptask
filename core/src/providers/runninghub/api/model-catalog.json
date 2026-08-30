@@ -1,0 +1,3114 @@
+[
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/alibaba/happyhorse-1.0/image-to-video",
+    "label": "RH happyhorse-1.0/image-to-video",
+    "category": "RunningHub/HappyHorse",
+    "outputType": "video",
+    "searchText": "rh happyhorse-1.0/image-to-video happyhorse-1.0/image-to-video happyhorse-1.0/image-to-video runninghub/happyhorse video alibaba/happyhorse-1.0/image-to-video"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/alibaba/happyhorse-1.0/reference-to-video",
+    "label": "RH happyhorse-1.0/reference-to-video",
+    "category": "RunningHub/HappyHorse",
+    "outputType": "video",
+    "searchText": "rh happyhorse-1.0/reference-to-video happyhorse-1.0/reference-to-video happyhorse-1.0/reference-to-video runninghub/happyhorse video alibaba/happyhorse-1.0/reference-to-video"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/alibaba/happyhorse-1.0/text-to-video",
+    "label": "RH happyhorse-1.0/text-to-video",
+    "category": "RunningHub/HappyHorse",
+    "outputType": "video",
+    "searchText": "rh happyhorse-1.0/text-to-video happyhorse-1.0/text-to-video happyhorse-1.0/text-to-video runninghub/happyhorse video alibaba/happyhorse-1.0/text-to-video"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/alibaba/happyhorse-1.0/video-edit",
+    "label": "RH happyhorse-1.0/video-edit",
+    "category": "RunningHub/HappyHorse",
+    "outputType": "video",
+    "searchText": "rh happyhorse-1.0/video-edit happyhorse-1.0/video-edit happyhorse-1.0/video-edit runninghub/happyhorse video alibaba/happyhorse-1.0/video-edit"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/alibaba/happyhorse-1.1/image-to-video",
+    "label": "RH happyhorse-1.1/image-to-video",
+    "category": "RunningHub/HappyHorse",
+    "outputType": "video",
+    "searchText": "rh happyhorse-1.1/image-to-video happyhorse-1.1/image-to-video happyhorse-1.1/image-to-video runninghub/happyhorse video alibaba/happyhorse-1.1/image-to-video"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/alibaba/happyhorse-1.1/reference-to-video",
+    "label": "RH happyhorse-1.1/reference-to-video",
+    "category": "RunningHub/HappyHorse",
+    "outputType": "video",
+    "searchText": "rh happyhorse-1.1/reference-to-video happyhorse-1.1/reference-to-video happyhorse-1.1/reference-to-video runninghub/happyhorse video alibaba/happyhorse-1.1/reference-to-video"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/alibaba/happyhorse-1.1/text-to-video",
+    "label": "RH happyhorse-1.1/text-to-video",
+    "category": "RunningHub/HappyHorse",
+    "outputType": "video",
+    "searchText": "rh happyhorse-1.1/text-to-video happyhorse-1.1/text-to-video happyhorse-1.1/text-to-video runninghub/happyhorse video alibaba/happyhorse-1.1/text-to-video"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/alibaba/qwen-image-2.0-pro/image-edit",
+    "label": "RH 千问2.0Pro-图像编辑",
+    "category": "RunningHub/Qwe",
+    "outputType": "image",
+    "searchText": "rh 千问2.0pro-图像编辑 千问2.0pro-图像编辑 qwen-image-2.0-pro/image-edit runninghub/qwe image alibaba/qwen-image-2.0-pro/image-edit"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/alibaba/qwen-image-2.0-pro/text-to-image",
+    "label": "RH 千问2.0Pro-文生图",
+    "category": "RunningHub/Qwe",
+    "outputType": "image",
+    "searchText": "rh 千问2.0pro-文生图 千问2.0pro-文生图 qwen-image-2.0-pro/text-to-image runninghub/qwe image alibaba/qwen-image-2.0-pro/text-to-image"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/alibaba/qwen-image-2.0/image-edit",
+    "label": "RH 千问2.0-图像编辑",
+    "category": "RunningHub/Qwe",
+    "outputType": "image",
+    "searchText": "rh 千问2.0-图像编辑 千问2.0-图像编辑 qwen-image-2.0/image-edit runninghub/qwe image alibaba/qwen-image-2.0/image-edit"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/alibaba/qwen-image-2.0/text-to-image",
+    "label": "RH 千问2.0-文生图",
+    "category": "RunningHub/Qwe",
+    "outputType": "image",
+    "searchText": "rh 千问2.0-文生图 千问2.0-文生图 qwen-image-2.0/text-to-image runninghub/qwe image alibaba/qwen-image-2.0/text-to-image"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/alibaba/qwen3-tts-flash",
+    "label": "RH 千问3-语音合成-Flash",
+    "category": "RunningHub/Qwe",
+    "outputType": "string",
+    "searchText": "rh 千问3-语音合成-flash 千问3-语音合成-flash qwen3-tts-flash runninghub/qwe string alibaba/qwen3-tts-flash"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/alibaba/qwen3-tts-instruct-flash",
+    "label": "RH 千问3-语音合成-Instruct-Flash",
+    "category": "RunningHub/Qwe",
+    "outputType": "string",
+    "searchText": "rh 千问3-语音合成-instruct-flash 千问3-语音合成-instruct-flash qwen3-tts-instruct-flash runninghub/qwe string alibaba/qwen3-tts-instruct-flash"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/alibaba/wan-2.5-preview/image-to-image",
+    "label": "RH 万相2.5 Preview 图生图",
+    "category": "RunningHub/Wan",
+    "outputType": "image",
+    "searchText": "rh 万相2.5 preview 图生图 万相2.5 preview 图生图 wan-2.5-preview/image-to-image runninghub/wan image alibaba/wan-2.5-preview/image-to-image"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/alibaba/wan-2.5-preview/image-to-video",
+    "label": "RH 万相2.5 Preview 图生视频",
+    "category": "RunningHub/Wan",
+    "outputType": "video",
+    "searchText": "rh 万相2.5 preview 图生视频 万相2.5 preview 图生视频 wan-2.5-preview/image-to-video runninghub/wan video alibaba/wan-2.5-preview/image-to-video"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/alibaba/wan-2.5-preview/text-to-image",
+    "label": "RH 万相2.5 Preview 文生图",
+    "category": "RunningHub/Wan",
+    "outputType": "image",
+    "searchText": "rh 万相2.5 preview 文生图 万相2.5 preview 文生图 wan-2.5-preview/text-to-image runninghub/wan image alibaba/wan-2.5-preview/text-to-image"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/alibaba/wan-2.5-preview/text-to-video",
+    "label": "RH 万相2.5 Preview 文生视频",
+    "category": "RunningHub/Wan",
+    "outputType": "video",
+    "searchText": "rh 万相2.5 preview 文生视频 万相2.5 preview 文生视频 wan-2.5-preview/text-to-video runninghub/wan video alibaba/wan-2.5-preview/text-to-video"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/alibaba/wan-2.6/image-to-video",
+    "label": "RH 万相2.6-图生视频",
+    "category": "RunningHub/Wan",
+    "outputType": "video",
+    "searchText": "rh 万相2.6-图生视频 万相2.6-图生视频 alibaba/wan-2.6/image-to-video runninghub/wan video alibaba/wan-2.6/image-to-video"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/alibaba/wan-2.6/image-to-video-flash",
+    "label": "RH 万相2.6-图生视频Flash",
+    "category": "RunningHub/Wan",
+    "outputType": "video",
+    "searchText": "rh 万相2.6-图生视频flash 万相2.6-图生视频flash wan-2.6-image-to-video-flash runninghub/wan video alibaba/wan-2.6/image-to-video-flash"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/alibaba/wan-2.6/reference-to-video",
+    "label": "RH 万相2.6-参考生视频",
+    "category": "RunningHub/Wan",
+    "outputType": "video",
+    "searchText": "rh 万相2.6-参考生视频 万相2.6-参考生视频 wan-2.6-reference-to-video runninghub/wan video alibaba/wan-2.6/reference-to-video"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/alibaba/wan-2.6/reference-to-video-flash",
+    "label": "RH 万相2.6-参考生视频Flash",
+    "category": "RunningHub/Wan",
+    "outputType": "video",
+    "searchText": "rh 万相2.6-参考生视频flash 万相2.6-参考生视频flash wan-2.6-reference-to-video-flash runninghub/wan video alibaba/wan-2.6/reference-to-video-flash"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/alibaba/wan-2.6/text-to-video",
+    "label": "RH 万相2.6-文生视频",
+    "category": "RunningHub/Wan",
+    "outputType": "video",
+    "searchText": "rh 万相2.6-文生视频 万相2.6-文生视频 alibaba/wan-2.6/text-to-video runninghub/wan video alibaba/wan-2.6/text-to-video"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/alibaba/wan-2.7-spicy/image-to-video",
+    "label": "RH 万相2.7-spicy-图生视频",
+    "category": "RunningHub/Wan",
+    "outputType": "video",
+    "searchText": "rh 万相2.7-spicy-图生视频 万相2.7-spicy-图生视频 wan-2.7-spicy/image-to-video runninghub/wan video alibaba/wan-2.7-spicy/image-to-video"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/alibaba/wan-2.7/image-edit",
+    "label": "RH 万相2.7-图像编辑",
+    "category": "RunningHub/Wan",
+    "outputType": "image",
+    "searchText": "rh 万相2.7-图像编辑 万相2.7-图像编辑 wan-2.7/image-edit runninghub/wan image alibaba/wan-2.7/image-edit"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/alibaba/wan-2.7/image-edit-pro",
+    "label": "RH 万相2.7-图像编辑Pro",
+    "category": "RunningHub/Wan",
+    "outputType": "image",
+    "searchText": "rh 万相2.7-图像编辑pro 万相2.7-图像编辑pro wan-2.7/image-edit-pro runninghub/wan image alibaba/wan-2.7/image-edit-pro"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/alibaba/wan-2.7/image-to-video",
+    "label": "RH 万相2.7-图生视频",
+    "category": "RunningHub/Wan",
+    "outputType": "video",
+    "searchText": "rh 万相2.7-图生视频 万相2.7-图生视频 wan-2.7/image-to-video runninghub/wan video alibaba/wan-2.7/image-to-video"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/alibaba/wan-2.7/reference-to-video",
+    "label": "RH 万相2.7-参考生视频",
+    "category": "RunningHub/Wan",
+    "outputType": "video",
+    "searchText": "rh 万相2.7-参考生视频 万相2.7-参考生视频 wan-2.7-reference-to-video runninghub/wan video alibaba/wan-2.7/reference-to-video"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/alibaba/wan-2.7/text-to-image",
+    "label": "RH 万相2.7-文生图",
+    "category": "RunningHub/Wan",
+    "outputType": "image",
+    "searchText": "rh 万相2.7-文生图 万相2.7-文生图 wan-2.7/text-to-image runninghub/wan image alibaba/wan-2.7/text-to-image"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/alibaba/wan-2.7/text-to-image-pro",
+    "label": "RH 万相2.7-文生图Pro",
+    "category": "RunningHub/Wan",
+    "outputType": "image",
+    "searchText": "rh 万相2.7-文生图pro 万相2.7-文生图pro wan-2.7/text-to-image-pro runninghub/wan image alibaba/wan-2.7/text-to-image-pro"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/alibaba/wan-2.7/text-to-video",
+    "label": "RH 万相2.7-文生视频",
+    "category": "RunningHub/Wan",
+    "outputType": "video",
+    "searchText": "rh 万相2.7-文生视频 万相2.7-文生视频 wan-2.7/text-to-video runninghub/wan video alibaba/wan-2.7/text-to-video"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/alibaba/wan-2.7/video-edit",
+    "label": "RH 万相2.7-视频编辑",
+    "category": "RunningHub/Wan",
+    "outputType": "video",
+    "searchText": "rh 万相2.7-视频编辑 万相2.7-视频编辑 wan-2.7/video-edit runninghub/wan video alibaba/wan-2.7/video-edit"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/alibaba/wan-2.7/video-extend",
+    "label": "RH 万相2.7-视频续写",
+    "category": "RunningHub/Wan",
+    "outputType": "video",
+    "searchText": "rh 万相2.7-视频续写 万相2.7-视频续写 wan-2.7/video-extend runninghub/wan video alibaba/wan-2.7/video-extend"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/bytedance/doubao-seed-audio-1.0",
+    "label": "RH Doubao-音频生成-1.0",
+    "category": "RunningHub/Seedance",
+    "outputType": "audio",
+    "searchText": "rh doubao-音频生成-1.0 doubao-音频生成-1.0 doubao-seed-audio-1.0 runninghub/seedance audio bytedance/doubao-seed-audio-1.0"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/bytedance/doubao-seed-tts-2.0",
+    "label": "RH Doubao-语音合成-2.0",
+    "category": "RunningHub/Seedance",
+    "outputType": "string",
+    "searchText": "rh doubao-语音合成-2.0 doubao-语音合成-2.0 doubao-seed-tts-2.0 runninghub/seedance string bytedance/doubao-seed-tts-2.0"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/bytedance/dreamactor-v2",
+    "label": "RH SD2.0 视频参考生视频(体验版)",
+    "category": "RunningHub/RHArt Video",
+    "outputType": "video",
+    "searchText": "rh sd2.0 视频参考生视频(体验版) sd2.0 视频参考生视频(体验版) sd2.0/video-ref-to-video-trial runninghub/rhart video video bytedance/dreamactor-v2"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/bytedance/jimeng-4.6/image-to-image",
+    "label": "RH 即梦图片 4.6 图生图",
+    "category": "RunningHub/Seedream",
+    "outputType": "image",
+    "searchText": "rh 即梦图片 4.6 图生图 即梦图片 4.6 图生图 bytedance/jimeng-4.6/image-to-image runninghub/seedream image bytedance/jimeng-4.6/image-to-image"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/bytedance/jimeng-4.6/text-to-image",
+    "label": "RH 即梦图片 4.6 文生图",
+    "category": "RunningHub/Seedream",
+    "outputType": "image",
+    "searchText": "rh 即梦图片 4.6 文生图 即梦图片 4.6 文生图 bytedance/jimeng-4.6/text-to-image runninghub/seedream image bytedance/jimeng-4.6/text-to-image"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/bytedance/seedance-2.0-global-fast/image-to-video",
+    "label": "RH seedance2.0-global-fast/图生视频",
+    "category": "RunningHub/Seedance",
+    "outputType": "video",
+    "searchText": "rh seedance2.0-global-fast/图生视频 seedance2.0-global-fast/图生视频 seedance-2.0-global-fast/image-to-video runninghub/seedance video bytedance/seedance-2.0-global-fast/image-to-video"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/bytedance/seedance-2.0-global-fast/multimodal-video",
+    "label": "RH seedance2.0-global-fast/多模态视频",
+    "category": "RunningHub/Seedance",
+    "outputType": "video",
+    "searchText": "rh seedance2.0-global-fast/多模态视频 seedance2.0-global-fast/多模态视频 seedance-2.0-global-fast/multimodal-video runninghub/seedance video bytedance/seedance-2.0-global-fast/multimodal-video"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/bytedance/seedance-2.0-global-fast/text-to-video",
+    "label": "RH seedance2.0-global-fast/文生视频",
+    "category": "RunningHub/Seedance",
+    "outputType": "video",
+    "searchText": "rh seedance2.0-global-fast/文生视频 seedance2.0-global-fast/文生视频 seedance-2.0-global-fast/text-to-video runninghub/seedance video bytedance/seedance-2.0-global-fast/text-to-video"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/bytedance/seedance-2.0-global/image-to-video",
+    "label": "RH seedance2.0-global/图生视频",
+    "category": "RunningHub/Seedance",
+    "outputType": "video",
+    "searchText": "rh seedance2.0-global/图生视频 seedance2.0-global/图生视频 seedance-2.0-global/image-to-video runninghub/seedance video bytedance/seedance-2.0-global/image-to-video"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/bytedance/seedance-2.0-global/multimodal-video",
+    "label": "RH seedance2.0-global/多模态视频",
+    "category": "RunningHub/Seedance",
+    "outputType": "video",
+    "searchText": "rh seedance2.0-global/多模态视频 seedance2.0-global/多模态视频 seedance-2.0-global/multimodal-video runninghub/seedance video bytedance/seedance-2.0-global/multimodal-video"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/bytedance/seedance-2.0-global/text-to-video",
+    "label": "RH seedance2.0-global/文生视频",
+    "category": "RunningHub/Seedance",
+    "outputType": "video",
+    "searchText": "rh seedance2.0-global/文生视频 seedance2.0-global/文生视频 seedance-2.0-global/text-to-video runninghub/seedance video bytedance/seedance-2.0-global/text-to-video"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/dola-Seedream-5.0-pro/image-to-image",
+    "label": "RH Dola-Seedream-5.0-pro-图生图",
+    "category": "RunningHub/Seedream",
+    "outputType": "image",
+    "searchText": "rh dola-seedream-5.0-pro-图生图 dola-seedream-5.0-pro-图生图 dola-seedream-5.0-pro/image-to-image runninghub/seedream image dola-seedream-5.0-pro/image-to-image"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/dola-Seedream-5.0-pro/text-to-image",
+    "label": "RH Dola-Seedream-5.0-pro-文生图",
+    "category": "RunningHub/Seedream",
+    "outputType": "image",
+    "searchText": "rh dola-seedream-5.0-pro-文生图 dola-seedream-5.0-pro-文生图 dola-seedream-5.0-pro/text-to-image runninghub/seedream image dola-seedream-5.0-pro/text-to-image"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/gemini-omni-flash/image-to-video",
+    "label": "RH 全能视频 Omni Flash 图生视频-低价渠道版",
+    "category": "RunningHub/RHArt Video",
+    "outputType": "video",
+    "searchText": "rh 全能视频 omni flash 图生视频-低价渠道版 全能视频 omni flash 图生视频-低价渠道版 gemini-omni-flash/image-to-video/channel-low-price runninghub/rhart video video gemini-omni-flash/image-to-video"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/gemini-omni-flash/text-to-video",
+    "label": "RH 全能视频 Omni Flash 文生视频-低价渠道版",
+    "category": "RunningHub/RHArt Video",
+    "outputType": "video",
+    "searchText": "rh 全能视频 omni flash 文生视频-低价渠道版 全能视频 omni flash 文生视频-低价渠道版 gemini-omni-flash/text-to-video/channel-low-price runninghub/rhart video video gemini-omni-flash/text-to-video"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/gemini-omni-flash/video-edit",
+    "label": "RH 全能视频 Omni Flash 视频编辑-低价渠道版",
+    "category": "RunningHub/RHArt Video",
+    "outputType": "video",
+    "searchText": "rh 全能视频 omni flash 视频编辑-低价渠道版 全能视频 omni flash 视频编辑-低价渠道版 gemini-omni-flash/video-edit/channel-low-price runninghub/rhart video video gemini-omni-flash/video-edit"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/higgsfield/dop/image-to-video",
+    "label": "RH Higgsfield DoP 图生视频",
+    "category": "RunningHub/Higgsfield",
+    "outputType": "video",
+    "searchText": "rh higgsfield dop 图生视频 higgsfield dop 图生视频 higgsfield/dop/image-to-video runninghub/higgsfield video higgsfield/dop/image-to-video"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/higgsfield/soul/image-to-image",
+    "label": "RH Higgsfield Soul 图生图",
+    "category": "RunningHub/Higgsfield",
+    "outputType": "image",
+    "searchText": "rh higgsfield soul 图生图 higgsfield soul 图生图 higgsfield/soul/image-to-image runninghub/higgsfield image higgsfield/soul/image-to-image"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/hitem3d-portrait-v15/image-to-3d",
+    "label": "RH hitem3d-portrait-v15/image-to-3d",
+    "category": "RunningHub/HiTem3D",
+    "outputType": "3d",
+    "searchText": "rh hitem3d-portrait-v15/image-to-3d hitem3d-portrait-v15/image-to-3d hitem3d-portrait-v15/image-to-3d runninghub/hitem3d 3d hitem3d-portrait-v15/image-to-3d"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/hitem3d-portrait-v15/multi-image-to-3d",
+    "label": "RH hitem3d-portrait-v15/multi-image-to-3d",
+    "category": "RunningHub/HiTem3D",
+    "outputType": "3d",
+    "searchText": "rh hitem3d-portrait-v15/multi-image-to-3d hitem3d-portrait-v15/multi-image-to-3d hitem3d-portrait-v15/multi-image-to-3d runninghub/hitem3d 3d hitem3d-portrait-v15/multi-image-to-3d"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/hitem3d-portrait-v20/image-to-3d",
+    "label": "RH hitem3d-portrait-v20/image-to-3d",
+    "category": "RunningHub/HiTem3D",
+    "outputType": "3d",
+    "searchText": "rh hitem3d-portrait-v20/image-to-3d hitem3d-portrait-v20/image-to-3d hitem3d-portrait-v20/image-to-3d runninghub/hitem3d 3d hitem3d-portrait-v20/image-to-3d"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/hitem3d-portrait-v20/multi-image-to-3d",
+    "label": "RH hitem3d-portrait-v20/multi-image-to-3d",
+    "category": "RunningHub/HiTem3D",
+    "outputType": "3d",
+    "searchText": "rh hitem3d-portrait-v20/multi-image-to-3d hitem3d-portrait-v20/multi-image-to-3d hitem3d-portrait-v20/multi-image-to-3d runninghub/hitem3d 3d hitem3d-portrait-v20/multi-image-to-3d"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/hitem3d-portrait-v21/image-to-3d",
+    "label": "RH hitem3d-portrait-v21/image-to-3d",
+    "category": "RunningHub/HiTem3D",
+    "outputType": "3d",
+    "searchText": "rh hitem3d-portrait-v21/image-to-3d hitem3d-portrait-v21/image-to-3d hitem3d-portrait-v21/image-to-3d runninghub/hitem3d 3d hitem3d-portrait-v21/image-to-3d"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/hitem3d-portrait-v21/multi-image-to-3d",
+    "label": "RH hitem3d-portrait-v21/multi-image-to-3d",
+    "category": "RunningHub/HiTem3D",
+    "outputType": "3d",
+    "searchText": "rh hitem3d-portrait-v21/multi-image-to-3d hitem3d-portrait-v21/multi-image-to-3d hitem3d-portrait-v21/multi-image-to-3d runninghub/hitem3d 3d hitem3d-portrait-v21/multi-image-to-3d"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/hitem3d-v15/image-to-3d",
+    "label": "RH hitem3d-v15/image-to-3d",
+    "category": "RunningHub/HiTem3D",
+    "outputType": "3d",
+    "searchText": "rh hitem3d-v15/image-to-3d hitem3d-v15/image-to-3d hitem3d-v15/image-to-3d runninghub/hitem3d 3d hitem3d-v15/image-to-3d"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/hitem3d-v15/multi-image-to-3d",
+    "label": "RH hitem3d-v15/multi-image-to-3d",
+    "category": "RunningHub/HiTem3D",
+    "outputType": "3d",
+    "searchText": "rh hitem3d-v15/multi-image-to-3d hitem3d-v15/multi-image-to-3d hitem3d-v15/multi-image-to-3d runninghub/hitem3d 3d hitem3d-v15/multi-image-to-3d"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/hitem3d-v2/image-to-3d",
+    "label": "RH hitem3d-v2/image-to-3d",
+    "category": "RunningHub/HiTem3D",
+    "outputType": "3d",
+    "searchText": "rh hitem3d-v2/image-to-3d hitem3d-v2/image-to-3d hitem3d-v2/image-to-3d runninghub/hitem3d 3d hitem3d-v2/image-to-3d"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/hitem3d-v2/multi-image-to-3d",
+    "label": "RH hitem3d-v2/multi-image-to-3d",
+    "category": "RunningHub/HiTem3D",
+    "outputType": "3d",
+    "searchText": "rh hitem3d-v2/multi-image-to-3d hitem3d-v2/multi-image-to-3d hitem3d-v2/multi-image-to-3d runninghub/hitem3d 3d hitem3d-v2/multi-image-to-3d"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/hitem3d-v21/image-to-3d",
+    "label": "RH hitem3d-v21/image-to-3d",
+    "category": "RunningHub/HiTem3D",
+    "outputType": "3d",
+    "searchText": "rh hitem3d-v21/image-to-3d hitem3d-v21/image-to-3d hitem3d-v21/image-to-3d runninghub/hitem3d 3d hitem3d-v21/image-to-3d"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/hitem3d-v21/multi-image-to-3d",
+    "label": "RH hitem3d-v21/multi-image-to-3d",
+    "category": "RunningHub/HiTem3D",
+    "outputType": "3d",
+    "searchText": "rh hitem3d-v21/multi-image-to-3d hitem3d-v21/multi-image-to-3d hitem3d-v21/multi-image-to-3d runninghub/hitem3d 3d hitem3d-v21/multi-image-to-3d"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/hunyuan3d-v3.1/image-to-3d",
+    "label": "RH 混元图生3D模型v3.1",
+    "category": "RunningHub/Hunyuan3D",
+    "outputType": "3d",
+    "searchText": "rh 混元图生3d模型v3.1 混元图生3d模型v3.1 hunyuan3d-v3.1/image-to-3d runninghub/hunyuan3d 3d hunyuan3d-v3.1/image-to-3d"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/hunyuan3d-v3.1/text-to-3d",
+    "label": "RH 混元文生3D模型v3.1",
+    "category": "RunningHub/Hunyuan3D",
+    "outputType": "3d",
+    "searchText": "rh 混元文生3d模型v3.1 混元文生3d模型v3.1 hunyuan3d-v3.1/text-to-3d runninghub/hunyuan3d 3d hunyuan3d-v3.1/text-to-3d"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/image-enhance/hypir-balance",
+    "label": "RH HYPIR-BALANCE",
+    "category": "RunningHub/Image Enhance",
+    "outputType": "image",
+    "searchText": "rh hypir-balance hypir-balance hypir-balance runninghub/image enhance image image-enhance/hypir-balance"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/image-enhance/hypir-ultra",
+    "label": "RH HYPIR-ULTRA",
+    "category": "RunningHub/Image Enhance",
+    "outputType": "image",
+    "searchText": "rh hypir-ultra hypir-ultra hypir-ultra runninghub/image enhance image image-enhance/hypir-ultra"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/kling-elements",
+    "label": "RH kling-elements",
+    "category": "RunningHub/Kling",
+    "outputType": "string",
+    "searchText": "rh kling-elements kling-elements kling-elements runninghub/kling string kling-elements"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/kling-elements-advanced",
+    "label": "RH 可灵 o3 创建主体",
+    "category": "RunningHub/Kling",
+    "outputType": "video",
+    "searchText": "rh 可灵 o3 创建主体 可灵 o3 创建主体 kling-o3/element runninghub/kling video kling-elements-advanced"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/kling-lip-sync/identify-face",
+    "label": "RH 可灵对口型-人脸识别",
+    "category": "RunningHub/Kling",
+    "outputType": "string",
+    "searchText": "rh 可灵对口型-人脸识别 可灵对口型-人脸识别 kling-lip-sync/identify-face runninghub/kling string kling-lip-sync/identify-face"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/kling-lip-sync/lip-sync-video",
+    "label": "RH 可灵对口型-视频生成",
+    "category": "RunningHub/Kling",
+    "outputType": "video",
+    "searchText": "rh 可灵对口型-视频生成 可灵对口型-视频生成 kling-lip-sync/lip-sync-video runninghub/kling video kling-lip-sync/lip-sync-video"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/kling-lip-sync/tts",
+    "label": "RH 可灵对口型-语音合成",
+    "category": "RunningHub/Kling",
+    "outputType": "string",
+    "searchText": "rh 可灵对口型-语音合成 可灵对口型-语音合成 kling-lip-sync/tts runninghub/kling string kling-lip-sync/tts"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/kling-v2-ai-avatar-pro/image-audio-to-video",
+    "label": "RH Kling V2 Pro 数字人口播视频",
+    "category": "RunningHub/Kling",
+    "outputType": "video",
+    "searchText": "rh kling v2 pro 数字人口播视频 kling v2 pro 数字人口播视频 kling-v2-ai-avatar-pro/image-audio-to-video runninghub/kling video kling-v2-ai-avatar-pro/image-audio-to-video"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/kling-v2-ai-avatar-standard/image-audio-to-video",
+    "label": "RH Kling V2 Std 数字人口播视频",
+    "category": "RunningHub/Kling",
+    "outputType": "video",
+    "searchText": "rh kling v2 std 数字人口播视频 kling v2 std 数字人口播视频 kling-v2-ai-avatar-standard/image-audio-to-video runninghub/kling video kling-v2-ai-avatar-standard/image-audio-to-video"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/kling-v2.5-turbo-pro/image-to-video",
+    "label": "RH 可灵图生视频2.5-turbo-pro",
+    "category": "RunningHub/Kling",
+    "outputType": "video",
+    "searchText": "rh 可灵图生视频2.5-turbo-pro 可灵图生视频2.5-turbo-pro kling-v2.5-turbo-pro/image-to-video runninghub/kling video kling-v2.5-turbo-pro/image-to-video"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/kling-v2.5-turbo-pro/text-to-video",
+    "label": "RH 可灵文生视频2.5-turbo-pro",
+    "category": "RunningHub/Kling",
+    "outputType": "video",
+    "searchText": "rh 可灵文生视频2.5-turbo-pro 可灵文生视频2.5-turbo-pro kling-v2.5-turbo-pro/text-to-video runninghub/kling video kling-v2.5-turbo-pro/text-to-video"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/kling-v2.5-turbo-std/image-to-video",
+    "label": "RH 可灵图生视频2.5-turbo-std",
+    "category": "RunningHub/Kling",
+    "outputType": "video",
+    "searchText": "rh 可灵图生视频2.5-turbo-std 可灵图生视频2.5-turbo-std kling-v2.5-turbo-std/image-to-video runninghub/kling video kling-v2.5-turbo-std/image-to-video"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/kling-v2.5-turbo-std/text-to-video",
+    "label": "RH 可灵文生视频2.5-turbo-std",
+    "category": "RunningHub/Kling",
+    "outputType": "video",
+    "searchText": "rh 可灵文生视频2.5-turbo-std 可灵文生视频2.5-turbo-std kling-v2.5-turbo-std/text-to-video runninghub/kling video kling-v2.5-turbo-std/text-to-video"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/kling-v2.6-pro/image-to-video",
+    "label": "RH 可灵图生视频2.6-pro",
+    "category": "RunningHub/Kling",
+    "outputType": "video",
+    "searchText": "rh 可灵图生视频2.6-pro 可灵图生视频2.6-pro kling-v2.6-pro-image-to-video runninghub/kling video kling-v2.6-pro/image-to-video"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/kling-v2.6-pro/motion-control",
+    "label": "RH kling-v2.6-pro-动作控制",
+    "category": "RunningHub/Kling",
+    "outputType": "video",
+    "searchText": "rh kling-v2.6-pro-动作控制 kling-v2.6-pro-动作控制 kling-v2.6-pro-motion-control runninghub/kling video kling-v2.6-pro/motion-control"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/kling-v2.6-pro/text-to-video",
+    "label": "RH 可灵文生视频2.6-pro",
+    "category": "RunningHub/Kling",
+    "outputType": "video",
+    "searchText": "rh 可灵文生视频2.6-pro 可灵文生视频2.6-pro kling-v2.6-pro-text-to-video runninghub/kling video kling-v2.6-pro/text-to-video"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/kling-v2.6-std/image-to-video",
+    "label": "RH 可灵图生视频2.6-标准版",
+    "category": "RunningHub/Kling",
+    "outputType": "video",
+    "searchText": "rh 可灵图生视频2.6-标准版 可灵图生视频2.6-标准版 kling-v2.6-std-image-to-video runninghub/kling video kling-v2.6-std/image-to-video"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/kling-v2.6-std/motion-control",
+    "label": "RH kling-v2.6-std-动作控制",
+    "category": "RunningHub/Kling",
+    "outputType": "video",
+    "searchText": "rh kling-v2.6-std-动作控制 kling-v2.6-std-动作控制 kling-v2.6-std-motion-control runninghub/kling video kling-v2.6-std/motion-control"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/kling-v2.6-std/text-to-video",
+    "label": "RH 可灵文生视频2.6-标准版",
+    "category": "RunningHub/Kling",
+    "outputType": "video",
+    "searchText": "rh 可灵文生视频2.6-标准版 可灵文生视频2.6-标准版 kling-v2.6-std-text-to-video runninghub/kling video kling-v2.6-std/text-to-video"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/kling-v3-4k/image-to-video",
+    "label": "RH 可灵图生视频v3-4k",
+    "category": "RunningHub/Kling",
+    "outputType": "video",
+    "searchText": "rh 可灵图生视频v3-4k 可灵图生视频v3-4k kling-v3.0-4k-image-to-video runninghub/kling video kling-v3-4k/image-to-video"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/kling-v3-4k/text-to-video",
+    "label": "RH 可灵文生视频v3-4k",
+    "category": "RunningHub/Kling",
+    "outputType": "video",
+    "searchText": "rh 可灵文生视频v3-4k 可灵文生视频v3-4k kling-v3-4k-text-to-video runninghub/kling video kling-v3-4k/text-to-video"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/kling-v3-turbo-pro/image-to-video",
+    "label": "RH 可灵图生视频v3-turbo-pro",
+    "category": "RunningHub/Kling",
+    "outputType": "video",
+    "searchText": "rh 可灵图生视频v3-turbo-pro 可灵图生视频v3-turbo-pro kling-v3-turbo-pro-image-to-video runninghub/kling video kling-v3-turbo-pro/image-to-video"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/kling-v3-turbo-pro/text-to-video",
+    "label": "RH 可灵文生视频v3-turbo-pro",
+    "category": "RunningHub/Kling",
+    "outputType": "video",
+    "searchText": "rh 可灵文生视频v3-turbo-pro 可灵文生视频v3-turbo-pro kling-v3-turbo-pro-text-to-video runninghub/kling video kling-v3-turbo-pro/text-to-video"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/kling-v3-turbo-std/image-to-video",
+    "label": "RH 可灵图生视频v3-turbo-std",
+    "category": "RunningHub/Kling",
+    "outputType": "video",
+    "searchText": "rh 可灵图生视频v3-turbo-std 可灵图生视频v3-turbo-std kling-v3-turbo-std-image-to-video runninghub/kling video kling-v3-turbo-std/image-to-video"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/kling-v3-turbo-std/text-to-video",
+    "label": "RH 可灵文生视频v3-turbo-std",
+    "category": "RunningHub/Kling",
+    "outputType": "video",
+    "searchText": "rh 可灵文生视频v3-turbo-std 可灵文生视频v3-turbo-std kling-v3-turbo-std-text-to-video runninghub/kling video kling-v3-turbo-std/text-to-video"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/kling-v3.0-4k/motion-control",
+    "label": "RH 可灵动作控制V3.0-4k",
+    "category": "RunningHub/Kling",
+    "outputType": "video",
+    "searchText": "rh 可灵动作控制v3.0-4k 可灵动作控制v3.0-4k kling-v3.0-4k-motion-control runninghub/kling video kling-v3.0-4k/motion-control"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/kling-v3.0-pro/image-to-video",
+    "label": "RH 可灵图生视频3.0-pro",
+    "category": "RunningHub/Kling",
+    "outputType": "video",
+    "searchText": "rh 可灵图生视频3.0-pro 可灵图生视频3.0-pro kling-v3.0-pro-image-to-video runninghub/kling video kling-v3.0-pro/image-to-video"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/kling-v3.0-pro/motion-control",
+    "label": "RH 可灵动作控制V3.0-pro",
+    "category": "RunningHub/Kling",
+    "outputType": "video",
+    "searchText": "rh 可灵动作控制v3.0-pro 可灵动作控制v3.0-pro kling-v3.0-pro-motion-control runninghub/kling video kling-v3.0-pro/motion-control"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/kling-v3.0-pro/text-to-video",
+    "label": "RH 可灵文生视频3.0-pro",
+    "category": "RunningHub/Kling",
+    "outputType": "video",
+    "searchText": "rh 可灵文生视频3.0-pro 可灵文生视频3.0-pro kling-v3.0-pro-text-to-video runninghub/kling video kling-v3.0-pro/text-to-video"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/kling-v3.0-std/image-to-video",
+    "label": "RH 可灵图生视频3.0-std",
+    "category": "RunningHub/Kling",
+    "outputType": "video",
+    "searchText": "rh 可灵图生视频3.0-std 可灵图生视频3.0-std kling-v3.0-std-image-to-video runninghub/kling video kling-v3.0-std/image-to-video"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/kling-v3.0-std/motion-control",
+    "label": "RH 可灵动作控制V3.0-std",
+    "category": "RunningHub/Kling",
+    "outputType": "video",
+    "searchText": "rh 可灵动作控制v3.0-std 可灵动作控制v3.0-std kling-v3.0-std-motion-control runninghub/kling video kling-v3.0-std/motion-control"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/kling-v3.0-std/text-to-video",
+    "label": "RH 可灵文生视频3.0-std",
+    "category": "RunningHub/Kling",
+    "outputType": "video",
+    "searchText": "rh 可灵文生视频3.0-std 可灵文生视频3.0-std kling-v3.0-std-text-to-video runninghub/kling video kling-v3.0-std/text-to-video"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/kling-video-o1-std/edit-video",
+    "label": "RH 可灵视频编辑o1",
+    "category": "RunningHub/Kling",
+    "outputType": "video",
+    "searchText": "rh 可灵视频编辑o1 可灵视频编辑o1 kling-video-o1-std/edit-video runninghub/kling video kling-video-o1-std/edit-video"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/kling-video-o1-std/refrence-to-video",
+    "label": "RH 可灵参考生视频o1",
+    "category": "RunningHub/Kling",
+    "outputType": "video",
+    "searchText": "rh 可灵参考生视频o1 可灵参考生视频o1 kling-video-o1-std/refrence-to-video runninghub/kling video kling-video-o1-std/refrence-to-video"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/kling-video-o1/image-to-video",
+    "label": "RH 可灵图生视频o1",
+    "category": "RunningHub/Kling",
+    "outputType": "video",
+    "searchText": "rh 可灵图生视频o1 可灵图生视频o1 kling-video-o1/image-to-video runninghub/kling video kling-video-o1/image-to-video"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/kling-video-o1/start-to-end",
+    "label": "RH 可灵首尾帧生视频o1",
+    "category": "RunningHub/Kling",
+    "outputType": "video",
+    "searchText": "rh 可灵首尾帧生视频o1 可灵首尾帧生视频o1 kling-video-o1/start-to-end runninghub/kling video kling-video-o1/start-to-end"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/kling-video-o1/text-to-video",
+    "label": "RH 可灵文生视频o1",
+    "category": "RunningHub/Kling",
+    "outputType": "video",
+    "searchText": "rh 可灵文生视频o1 可灵文生视频o1 kling-video-o1/text-to-video runninghub/kling video kling-video-o1/text-to-video"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/kling-video-o3-4k/image-to-video",
+    "label": "RH 可灵图生视频o3-4k",
+    "category": "RunningHub/Kling",
+    "outputType": "video",
+    "searchText": "rh 可灵图生视频o3-4k 可灵图生视频o3-4k kling-video-o3-4k-image-to-video runninghub/kling video kling-video-o3-4k/image-to-video"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/kling-video-o3-4k/reference-to-video",
+    "label": "RH 可灵参考生视频o3-4k",
+    "category": "RunningHub/Kling",
+    "outputType": "video",
+    "searchText": "rh 可灵参考生视频o3-4k 可灵参考生视频o3-4k kling-video-o3-4k-reference-to-video runninghub/kling video kling-video-o3-4k/reference-to-video"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/kling-video-o3-4k/text-to-video",
+    "label": "RH 可灵文生视频o3-4k",
+    "category": "RunningHub/Kling",
+    "outputType": "video",
+    "searchText": "rh 可灵文生视频o3-4k 可灵文生视频o3-4k kling-video-o3-4k-text-to-video runninghub/kling video kling-video-o3-4k/text-to-video"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/kling-video-o3-pro/image-to-video",
+    "label": "RH 可灵图生视频o3-pro",
+    "category": "RunningHub/Kling",
+    "outputType": "video",
+    "searchText": "rh 可灵图生视频o3-pro 可灵图生视频o3-pro kling-video-o3-pro-image-to-video runninghub/kling video kling-video-o3-pro/image-to-video"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/kling-video-o3-pro/reference-to-video",
+    "label": "RH kling-video-o3-pro/reference-to-video",
+    "category": "RunningHub/Kling",
+    "outputType": "video",
+    "searchText": "rh kling-video-o3-pro/reference-to-video kling-video-o3-pro/reference-to-video kling-video-o3-pro/reference-to-video runninghub/kling video kling-video-o3-pro/reference-to-video"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/kling-video-o3-pro/text-to-video",
+    "label": "RH 可灵文生视频o3-pro",
+    "category": "RunningHub/Kling",
+    "outputType": "video",
+    "searchText": "rh 可灵文生视频o3-pro 可灵文生视频o3-pro kling-video-o3-pro-text-to-video runninghub/kling video kling-video-o3-pro/text-to-video"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/kling-video-o3-pro/video-edit",
+    "label": "RH kling-video-o3-pro/video-edit",
+    "category": "RunningHub/Kling",
+    "outputType": "video",
+    "searchText": "rh kling-video-o3-pro/video-edit kling-video-o3-pro/video-edit kling-video-o3-pro/video-edit runninghub/kling video kling-video-o3-pro/video-edit"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/kling-video-o3-std/image-to-video",
+    "label": "RH 可灵图生视频o3-std",
+    "category": "RunningHub/Kling",
+    "outputType": "video",
+    "searchText": "rh 可灵图生视频o3-std 可灵图生视频o3-std kling-video-o3-std-image-to-video runninghub/kling video kling-video-o3-std/image-to-video"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/kling-video-o3-std/reference-to-video",
+    "label": "RH kling-video-o3-std/reference-to-video",
+    "category": "RunningHub/Kling",
+    "outputType": "video",
+    "searchText": "rh kling-video-o3-std/reference-to-video kling-video-o3-std/reference-to-video kling-video-o3-std/reference-to-video runninghub/kling video kling-video-o3-std/reference-to-video"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/kling-video-o3-std/text-to-video",
+    "label": "RH 可灵文生视频o3-std",
+    "category": "RunningHub/Kling",
+    "outputType": "video",
+    "searchText": "rh 可灵文生视频o3-std 可灵文生视频o3-std kling-video-o3-std-text-to-video runninghub/kling video kling-video-o3-std/text-to-video"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/kling-video-o3-std/video-edit",
+    "label": "RH kling-video-o3-std/video-edit",
+    "category": "RunningHub/Kling",
+    "outputType": "video",
+    "searchText": "rh kling-video-o3-std/video-edit kling-video-o3-std/video-edit kling-video-o3-std/video-edit runninghub/kling video kling-video-o3-std/video-edit"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/luma/uni-1-max/image-edit",
+    "label": "RH Luma uni-1-max 图像编辑",
+    "category": "RunningHub/Luma",
+    "outputType": "image",
+    "searchText": "rh luma uni-1-max 图像编辑 luma uni-1-max 图像编辑 luma uni-1-max image edit runninghub/luma image luma/uni-1-max/image-edit"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/luma/uni-1-max/image-to-image",
+    "label": "RH Luma uni-1-max 图生图",
+    "category": "RunningHub/Luma",
+    "outputType": "image",
+    "searchText": "rh luma uni-1-max 图生图 luma uni-1-max 图生图 luma uni-1-max image to image runninghub/luma image luma/uni-1-max/image-to-image"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/luma/uni-1-max/text-to-image",
+    "label": "RH Luma uni-1-max 文生图",
+    "category": "RunningHub/Luma",
+    "outputType": "image",
+    "searchText": "rh luma uni-1-max 文生图 luma uni-1-max 文生图 luma uni-1-max text to image runninghub/luma image luma/uni-1-max/text-to-image"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/luma/uni-1/image-edit",
+    "label": "RH Luma uni-1 图像编辑",
+    "category": "RunningHub/Luma",
+    "outputType": "image",
+    "searchText": "rh luma uni-1 图像编辑 luma uni-1 图像编辑 luma uni-1 image edit runninghub/luma image luma/uni-1/image-edit"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/luma/uni-1/image-to-image",
+    "label": "RH Luma uni-1 图生图",
+    "category": "RunningHub/Luma",
+    "outputType": "image",
+    "searchText": "rh luma uni-1 图生图 luma uni-1 图生图 luma uni-1 image to image runninghub/luma image luma/uni-1/image-to-image"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/luma/uni-1/text-to-image",
+    "label": "RH Luma uni-1 文生图",
+    "category": "RunningHub/Luma",
+    "outputType": "image",
+    "searchText": "rh luma uni-1 文生图 luma uni-1 文生图 luma uni-1 text to image runninghub/luma image luma/uni-1/text-to-image"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/marble-1.0/image-to-world",
+    "label": "RH marble-1.0 单图生3D世界",
+    "category": "RunningHub/Marble",
+    "outputType": "image",
+    "searchText": "rh marble-1.0 单图生3d世界 marble-1.0 单图生3d世界 marble-1.0/image-to-world runninghub/marble image marble-1.0/image-to-world"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/marble-1.0/multi-image-to-world",
+    "label": "RH marble-1.0 多图生3D世界",
+    "category": "RunningHub/Marble",
+    "outputType": "image",
+    "searchText": "rh marble-1.0 多图生3d世界 marble-1.0 多图生3d世界 marble-1.0/multi-image-to-world runninghub/marble image marble-1.0/multi-image-to-world"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/marble-1.0/text-to-world",
+    "label": "RH marble-1.0 文生3D世界",
+    "category": "RunningHub/Marble",
+    "outputType": "string",
+    "searchText": "rh marble-1.0 文生3d世界 marble-1.0 文生3d世界 marble-1.0/text-to-world runninghub/marble string marble-1.0/text-to-world"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/marble-1.0/video-to-world",
+    "label": "RH marble-1.0 视频生3D世界",
+    "category": "RunningHub/Marble",
+    "outputType": "video",
+    "searchText": "rh marble-1.0 视频生3d世界 marble-1.0 视频生3d世界 marble-1.0/video-to-world runninghub/marble video marble-1.0/video-to-world"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/marble-1.1-plus/image-to-world",
+    "label": "RH marble-1.1-plus 单图生3D世界",
+    "category": "RunningHub/Marble",
+    "outputType": "image",
+    "searchText": "rh marble-1.1-plus 单图生3d世界 marble-1.1-plus 单图生3d世界 marble-1.1-plus/image-to-world runninghub/marble image marble-1.1-plus/image-to-world"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/marble-1.1-plus/multi-image-to-world",
+    "label": "RH marble-1.1-plus 多图生3D世界",
+    "category": "RunningHub/Marble",
+    "outputType": "image",
+    "searchText": "rh marble-1.1-plus 多图生3d世界 marble-1.1-plus 多图生3d世界 marble-1.1-plus/multi-image-to-world runninghub/marble image marble-1.1-plus/multi-image-to-world"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/marble-1.1-plus/text-to-world",
+    "label": "RH marble-1.1-plus 文生3D世界",
+    "category": "RunningHub/Marble",
+    "outputType": "string",
+    "searchText": "rh marble-1.1-plus 文生3d世界 marble-1.1-plus 文生3d世界 marble-1.1-plus/text-to-world runninghub/marble string marble-1.1-plus/text-to-world"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/marble-1.1-plus/video-to-world",
+    "label": "RH marble-1.1-plus 视频生3D世界",
+    "category": "RunningHub/Marble",
+    "outputType": "video",
+    "searchText": "rh marble-1.1-plus 视频生3d世界 marble-1.1-plus 视频生3d世界 marble-1.1-plus/video-to-world runninghub/marble video marble-1.1-plus/video-to-world"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/marble-1.1/image-to-world",
+    "label": "RH marble-1.1 单图生3D世界",
+    "category": "RunningHub/Marble",
+    "outputType": "image",
+    "searchText": "rh marble-1.1 单图生3d世界 marble-1.1 单图生3d世界 marble-1.1/image-to-world runninghub/marble image marble-1.1/image-to-world"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/marble-1.1/multi-image-to-world",
+    "label": "RH marble-1.1 多图生3D世界",
+    "category": "RunningHub/Marble",
+    "outputType": "image",
+    "searchText": "rh marble-1.1 多图生3d世界 marble-1.1 多图生3d世界 marble-1.1/multi-image-to-world runninghub/marble image marble-1.1/multi-image-to-world"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/marble-1.1/text-to-world",
+    "label": "RH marble-1.1 文生3D世界",
+    "category": "RunningHub/Marble",
+    "outputType": "string",
+    "searchText": "rh marble-1.1 文生3d世界 marble-1.1 文生3d世界 marble-1.1/text-to-world runninghub/marble string marble-1.1/text-to-world"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/marble-1.1/video-to-world",
+    "label": "RH marble-1.1 视频生3D世界",
+    "category": "RunningHub/Marble",
+    "outputType": "video",
+    "searchText": "rh marble-1.1 视频生3d世界 marble-1.1 视频生3d世界 marble-1.1/video-to-world runninghub/marble video marble-1.1/video-to-world"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/marble/upload-media-asset",
+    "label": "RH Marble 上传媒体资源",
+    "category": "RunningHub/Marble",
+    "outputType": "string",
+    "searchText": "rh marble 上传媒体资源 marble 上传媒体资源 marble/upload-media-asset runninghub/marble string marble/upload-media-asset"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/meshy6/image-to-3d",
+    "label": "RH Meshy 6 图生 3D",
+    "category": "RunningHub/Meshy",
+    "outputType": "3d",
+    "searchText": "rh meshy 6 图生 3d meshy 6 图生 3d meshy6/image-to-3d runninghub/meshy 3d meshy6/image-to-3d"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/meshy6/text-to-3d",
+    "label": "RH Meshy 6 文生 3D",
+    "category": "RunningHub/Meshy",
+    "outputType": "3d",
+    "searchText": "rh meshy 6 文生 3d meshy 6 文生 3d meshy6/text-to-3d runninghub/meshy 3d meshy6/text-to-3d"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/minimax/hailuo-02/fast",
+    "label": "RH 海螺-02-fast",
+    "category": "RunningHub/MiniMax",
+    "outputType": "video",
+    "searchText": "rh 海螺-02-fast 海螺-02-fast hailuo-02-fast runninghub/minimax video minimax/hailuo-02/fast"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/minimax/hailuo-02/i2v-pro",
+    "label": "RH 海螺-02-图生视频-pro",
+    "category": "RunningHub/MiniMax",
+    "outputType": "video",
+    "searchText": "rh 海螺-02-图生视频-pro 海螺-02-图生视频-pro hailuo-02-i2v-pro runninghub/minimax video minimax/hailuo-02/i2v-pro"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/minimax/hailuo-02/i2v-standard",
+    "label": "RH 海螺-02-图生视频-标准",
+    "category": "RunningHub/MiniMax",
+    "outputType": "video",
+    "searchText": "rh 海螺-02-图生视频-标准 海螺-02-图生视频-标准 hailuo-02-i2v-standard runninghub/minimax video minimax/hailuo-02/i2v-standard"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/minimax/hailuo-02/pro",
+    "label": "RH 海螺-02-pro",
+    "category": "RunningHub/MiniMax",
+    "outputType": "video",
+    "searchText": "rh 海螺-02-pro 海螺-02-pro hailuo-02-pro runninghub/minimax video minimax/hailuo-02/pro"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/minimax/hailuo-02/standard",
+    "label": "RH 海螺-02-标准",
+    "category": "RunningHub/MiniMax",
+    "outputType": "video",
+    "searchText": "rh 海螺-02-标准 海螺-02-标准 hailuo-02-standard runninghub/minimax video minimax/hailuo-02/standard"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/minimax/hailuo-02/t2v-pro",
+    "label": "RH 海螺-02-文生视频-pro",
+    "category": "RunningHub/MiniMax",
+    "outputType": "video",
+    "searchText": "rh 海螺-02-文生视频-pro 海螺-02-文生视频-pro hailuo-02-t2v-pro runninghub/minimax video minimax/hailuo-02/t2v-pro"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/minimax/hailuo-02/t2v-standard",
+    "label": "RH 海螺-02-文生视频-标准",
+    "category": "RunningHub/MiniMax",
+    "outputType": "video",
+    "searchText": "rh 海螺-02-文生视频-标准 海螺-02-文生视频-标准 hailuo-02-t2v-standard runninghub/minimax video minimax/hailuo-02/t2v-standard"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/minimax/hailuo-2.3-fast-pro/image-to-video",
+    "label": "RH 海螺-2.3-fast-pro-图生视频",
+    "category": "RunningHub/MiniMax",
+    "outputType": "video",
+    "searchText": "rh 海螺-2.3-fast-pro-图生视频 海螺-2.3-fast-pro-图生视频 hailuo-2.3-fast-pro/image-to-video runninghub/minimax video minimax/hailuo-2.3-fast-pro/image-to-video"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/minimax/hailuo-2.3-fast/image-to-video",
+    "label": "RH 海螺-2.3-fast-图生视频",
+    "category": "RunningHub/MiniMax",
+    "outputType": "video",
+    "searchText": "rh 海螺-2.3-fast-图生视频 海螺-2.3-fast-图生视频 hailuo-2.3-fast/image-to-video runninghub/minimax video minimax/hailuo-2.3-fast/image-to-video"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/minimax/hailuo-2.3/i2v-standard",
+    "label": "RH 海螺-2.3-图生视频-标准",
+    "category": "RunningHub/MiniMax",
+    "outputType": "video",
+    "searchText": "rh 海螺-2.3-图生视频-标准 海螺-2.3-图生视频-标准 hailuo-2.3/i2v-standard runninghub/minimax video minimax/hailuo-2.3/i2v-standard"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/minimax/hailuo-2.3/image-to-video-pro",
+    "label": "RH 海螺-2.3-图生视频-pro",
+    "category": "RunningHub/MiniMax",
+    "outputType": "video",
+    "searchText": "rh 海螺-2.3-图生视频-pro 海螺-2.3-图生视频-pro hailuo-2.3/i2v-pro runninghub/minimax video minimax/hailuo-2.3/image-to-video-pro"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/minimax/hailuo-2.3/t2v-pro",
+    "label": "RH 海螺-2.3-文生视频-pro",
+    "category": "RunningHub/MiniMax",
+    "outputType": "video",
+    "searchText": "rh 海螺-2.3-文生视频-pro 海螺-2.3-文生视频-pro hailuo-2.3-t2v-pro runninghub/minimax video minimax/hailuo-2.3/t2v-pro"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/minimax/hailuo-2.3/t2v-standard",
+    "label": "RH 海螺-2.3-文生视频-标准",
+    "category": "RunningHub/MiniMax",
+    "outputType": "video",
+    "searchText": "rh 海螺-2.3-文生视频-标准 海螺-2.3-文生视频-标准 hailuo-2.3-t2v-standard runninghub/minimax video minimax/hailuo-2.3/t2v-standard"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/minimax/hailuo-h3/image-to-video",
+    "label": "RH MiniMax-H3 图生视频（首尾帧）",
+    "category": "RunningHub/MiniMax",
+    "outputType": "video",
+    "searchText": "rh minimax-h3 图生视频（首尾帧） minimax-h3 图生视频（首尾帧） minimax-h3 image-to-video (first/last frame) runninghub/minimax video minimax/hailuo-h3/image-to-video"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/minimax/hailuo-h3/multimodal-to-video",
+    "label": "RH MiniMax-H3 多模态参考生视频",
+    "category": "RunningHub/MiniMax",
+    "outputType": "video",
+    "searchText": "rh minimax-h3 多模态参考生视频 minimax-h3 多模态参考生视频 minimax-h3 multimodal reference-to-video runninghub/minimax video minimax/hailuo-h3/multimodal-to-video"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/minimax/hailuo-h3/text-to-video",
+    "label": "RH MiniMax-H3 文生视频",
+    "category": "RunningHub/MiniMax",
+    "outputType": "video",
+    "searchText": "rh minimax-h3 文生视频 minimax-h3 文生视频 minimax-h3 text-to-video runninghub/minimax video minimax/hailuo-h3/text-to-video"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/minimax/music-2.6",
+    "label": "RH MiniMax Music 2.6",
+    "category": "RunningHub/MiniMax",
+    "outputType": "audio",
+    "searchText": "rh minimax music 2.6 minimax music 2.6 minimax/music-2.6 runninghub/minimax audio minimax/music-2.6"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/minimax/music-cover",
+    "label": "RH MiniMax Music 翻唱",
+    "category": "RunningHub/MiniMax",
+    "outputType": "audio",
+    "searchText": "rh minimax music 翻唱 minimax music 翻唱 minimax/music-cover runninghub/minimax audio minimax/music-cover"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/minimax/music-cover-preprocess",
+    "label": "RH MiniMax Music 翻唱前处理",
+    "category": "RunningHub/MiniMax",
+    "outputType": "audio",
+    "searchText": "rh minimax music 翻唱前处理 minimax music 翻唱前处理 minimax/music-cover-preprocess runninghub/minimax audio minimax/music-cover-preprocess"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/minimax/voice-design",
+    "label": "RH minimax-音色设计",
+    "category": "RunningHub/MiniMax",
+    "outputType": "audio",
+    "searchText": "rh minimax-音色设计 minimax-音色设计 minimax/voice-design runninghub/minimax audio minimax/voice-design"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/mureka-ai/describe-song",
+    "label": "RH mureka-ai 歌曲理解",
+    "category": "RunningHub/Mureka",
+    "outputType": "string",
+    "searchText": "rh mureka-ai 歌曲理解 mureka-ai 歌曲理解 mureka-ai/describe-song runninghub/mureka string mureka-ai/describe-song"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/mureka-ai/extend-lyrics",
+    "label": "RH mureka-ai 歌词延长",
+    "category": "RunningHub/Mureka",
+    "outputType": "string",
+    "searchText": "rh mureka-ai 歌词延长 mureka-ai 歌词延长 mureka-ai/extend-lyrics runninghub/mureka string mureka-ai/extend-lyrics"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/mureka-ai/files-upload",
+    "label": "RH Mureka 文件上传",
+    "category": "RunningHub/Mureka",
+    "outputType": "string",
+    "searchText": "rh mureka 文件上传 mureka 文件上传 mureka-ai/files-upload runninghub/mureka string mureka-ai/files-upload"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/mureka-ai/generate-lyrics",
+    "label": "RH Mureka 歌词生成",
+    "category": "RunningHub/Mureka",
+    "outputType": "string",
+    "searchText": "rh mureka 歌词生成 mureka 歌词生成 mureka-ai/generate-lyrics runninghub/mureka string mureka-ai/generate-lyrics"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/mureka-ai/mureka-o2/generate-song",
+    "label": "RH Mureka-o2 歌曲生成",
+    "category": "RunningHub/Mureka",
+    "outputType": "string",
+    "searchText": "rh mureka-o2 歌曲生成 mureka-o2 歌曲生成 mureka-o2/generate-song runninghub/mureka string mureka-ai/mureka-o2/generate-song"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/mureka-ai/mureka-v7.6/extend-song",
+    "label": "RH mureka-v7.6 短歌延长",
+    "category": "RunningHub/Mureka",
+    "outputType": "string",
+    "searchText": "rh mureka-v7.6 短歌延长 mureka-v7.6 短歌延长 mureka-v7.6/extend-song runninghub/mureka string mureka-ai/mureka-v7.6/extend-song"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/mureka-ai/mureka-v7.6/generate-bgm",
+    "label": "RH Mureka-v7.6 伴奏生成",
+    "category": "RunningHub/Mureka",
+    "outputType": "string",
+    "searchText": "rh mureka-v7.6 伴奏生成 mureka-v7.6 伴奏生成 mureka-v7.6/generate-bgm runninghub/mureka string mureka-ai/mureka-v7.6/generate-bgm"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/mureka-ai/mureka-v7.6/generate-song",
+    "label": "RH Mureka-v7.6 歌曲生成",
+    "category": "RunningHub/Mureka",
+    "outputType": "string",
+    "searchText": "rh mureka-v7.6 歌曲生成 mureka-v7.6 歌曲生成 mureka-v7.6/generate-song runninghub/mureka string mureka-ai/mureka-v7.6/generate-song"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/mureka-ai/mureka-v8/extend-song",
+    "label": "RH Mureka-v8 短歌延长",
+    "category": "RunningHub/Mureka",
+    "outputType": "string",
+    "searchText": "rh mureka-v8 短歌延长 mureka-v8 短歌延长 mureka-v8/extend-song runninghub/mureka string mureka-ai/mureka-v8/extend-song"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/mureka-ai/mureka-v8/generate-bgm",
+    "label": "RH Mureka-v8 伴奏生成",
+    "category": "RunningHub/Mureka",
+    "outputType": "string",
+    "searchText": "rh mureka-v8 伴奏生成 mureka-v8 伴奏生成 mureka-v8/generate-bgm runninghub/mureka string mureka-ai/mureka-v8/generate-bgm"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/mureka-ai/mureka-v8/generate-song",
+    "label": "RH Mureka-v8 歌曲生成",
+    "category": "RunningHub/Mureka",
+    "outputType": "string",
+    "searchText": "rh mureka-v8 歌曲生成 mureka-v8 歌曲生成 mureka-v8/generate-song runninghub/mureka string mureka-ai/mureka-v8/generate-song"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/mureka-ai/mureka-v9/generate-bgm",
+    "label": "RH Mureka-v9 伴奏生成",
+    "category": "RunningHub/Mureka",
+    "outputType": "string",
+    "searchText": "rh mureka-v9 伴奏生成 mureka-v9 伴奏生成 mureka-v9/generate-bgm runninghub/mureka string mureka-ai/mureka-v9/generate-bgm"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/mureka-ai/mureka-v9/generate-song",
+    "label": "RH Mureka-v9 歌曲生成",
+    "category": "RunningHub/Mureka",
+    "outputType": "string",
+    "searchText": "rh mureka-v9 歌曲生成 mureka-v9 歌曲生成 mureka-v9/generate-song runninghub/mureka string mureka-ai/mureka-v9/generate-song"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/mureka-ai/recognize-song",
+    "label": "RH mureka-ai 歌曲识别",
+    "category": "RunningHub/Mureka",
+    "outputType": "string",
+    "searchText": "rh mureka-ai 歌曲识别 mureka-ai 歌曲识别 mureka-ai/recognize-song runninghub/mureka string mureka-ai/recognize-song"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/mureka-ai/stem-song",
+    "label": "RH mureka-ai 音轨分离",
+    "category": "RunningHub/Mureka",
+    "outputType": "string",
+    "searchText": "rh mureka-ai 音轨分离 mureka-ai 音轨分离 mureka-ai/stem-song runninghub/mureka string mureka-ai/stem-song"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/mureka-ai/vocal-clone",
+    "label": "RH Mureka 人声克隆",
+    "category": "RunningHub/Mureka",
+    "outputType": "string",
+    "searchText": "rh mureka 人声克隆 mureka 人声克隆 mureka-ai/vocal-clone runninghub/mureka string mureka-ai/vocal-clone"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/mureka-o2/instrumental-generate",
+    "label": "RH Mureka mureka-o2 伴奏生成-暂不可用",
+    "category": "RunningHub/Mureka",
+    "outputType": "string",
+    "searchText": "rh mureka mureka-o2 伴奏生成-暂不可用 mureka mureka-o2 伴奏生成-暂不可用 mureka-o2/instrumental-generate runninghub/mureka string mureka-o2/instrumental-generate"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/pixverse-c1/image-to-video",
+    "label": "RH PixVerse C1 图生视频",
+    "category": "RunningHub/PixVerse",
+    "outputType": "video",
+    "searchText": "rh pixverse c1 图生视频 pixverse c1 图生视频 pixverse-c1/image-to-video runninghub/pixverse video pixverse-c1/image-to-video"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/pixverse-c1/reference-to-video",
+    "label": "RH PixVerse C1 参考生视频",
+    "category": "RunningHub/PixVerse",
+    "outputType": "video",
+    "searchText": "rh pixverse c1 参考生视频 pixverse c1 参考生视频 pixverse-c1/reference-to-video runninghub/pixverse video pixverse-c1/reference-to-video"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/pixverse-c1/text-to-video",
+    "label": "RH PixVerse C1 文生视频",
+    "category": "RunningHub/PixVerse",
+    "outputType": "video",
+    "searchText": "rh pixverse c1 文生视频 pixverse c1 文生视频 pixverse-c1/text-to-video runninghub/pixverse video pixverse-c1/text-to-video"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/pixverse-c1/transition",
+    "label": "RH PixVerse C1 转场",
+    "category": "RunningHub/PixVerse",
+    "outputType": "video",
+    "searchText": "rh pixverse c1 转场 pixverse c1 转场 pixverse-c1/transition runninghub/pixverse video pixverse-c1/transition"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/pixverse-v5.5-effects",
+    "label": "RH PixVerse V5.5 特效",
+    "category": "RunningHub/PixVerse",
+    "outputType": "video",
+    "searchText": "rh pixverse v5.5 特效 pixverse v5.5 特效 pixverse-v5.5-effects runninghub/pixverse video pixverse-v5.5-effects"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/pixverse-v5.5-transition",
+    "label": "RH PixVerse V5.5 转场",
+    "category": "RunningHub/PixVerse",
+    "outputType": "video",
+    "searchText": "rh pixverse v5.5 转场 pixverse v5.5 转场 pixverse-v5.5-transition runninghub/pixverse video pixverse-v5.5-transition"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/pixverse-v5.5/image-to-video",
+    "label": "RH PixVerse V5.5 图生视频",
+    "category": "RunningHub/PixVerse",
+    "outputType": "video",
+    "searchText": "rh pixverse v5.5 图生视频 pixverse v5.5 图生视频 pixverse-v5.5/image-to-video runninghub/pixverse video pixverse-v5.5/image-to-video"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/pixverse-v5.5/text-to-video",
+    "label": "RH PixVerse V5.5 文生视频",
+    "category": "RunningHub/PixVerse",
+    "outputType": "video",
+    "searchText": "rh pixverse v5.5 文生视频 pixverse v5.5 文生视频 pixverse-v5.5/text-to-video runninghub/pixverse video pixverse-v5.5/text-to-video"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/pixverse-v5.6/image-to-video",
+    "label": "RH PixVerse V5.6 图生视频",
+    "category": "RunningHub/PixVerse",
+    "outputType": "video",
+    "searchText": "rh pixverse v5.6 图生视频 pixverse v5.6 图生视频 pixverse-v5.6/image-to-video runninghub/pixverse video pixverse-v5.6/image-to-video"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/pixverse-v5.6/text-to-video",
+    "label": "RH PixVerse V5.6 文生视频",
+    "category": "RunningHub/PixVerse",
+    "outputType": "video",
+    "searchText": "rh pixverse v5.6 文生视频 pixverse v5.6 文生视频 pixverse-v5.6/text-to-video runninghub/pixverse video pixverse-v5.6/text-to-video"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/pixverse-v6/effects",
+    "label": "RH PixVerse V6 特效",
+    "category": "RunningHub/PixVerse",
+    "outputType": "video",
+    "searchText": "rh pixverse v6 特效 pixverse v6 特效 pixverse-v6/effects runninghub/pixverse video pixverse-v6/effects"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/pixverse-v6/extend",
+    "label": "RH PixVerse V6 视频续写",
+    "category": "RunningHub/PixVerse",
+    "outputType": "string",
+    "searchText": "rh pixverse v6 视频续写 pixverse v6 视频续写 pixverse-v6/extend runninghub/pixverse string pixverse-v6/extend"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/pixverse-v6/image-to-video",
+    "label": "RH PixVerse V6 图生视频",
+    "category": "RunningHub/PixVerse",
+    "outputType": "video",
+    "searchText": "rh pixverse v6 图生视频 pixverse v6 图生视频 pixverse-v6/image-to-video runninghub/pixverse video pixverse-v6/image-to-video"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/pixverse-v6/text-to-video",
+    "label": "RH PixVerse V6 文生视频",
+    "category": "RunningHub/PixVerse",
+    "outputType": "video",
+    "searchText": "rh pixverse v6 文生视频 pixverse v6 文生视频 pixverse-v6/text-to-video runninghub/pixverse video pixverse-v6/text-to-video"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/pixverse-v6/transition",
+    "label": "RH PixVerse V6 转场",
+    "category": "RunningHub/PixVerse",
+    "outputType": "video",
+    "searchText": "rh pixverse v6 转场 pixverse v6 转场 pixverse-v6/transition runninghub/pixverse video pixverse-v6/transition"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/rhart-audio/suno-v4.5/custom",
+    "label": "RH suno-custom-v4.5",
+    "category": "RunningHub/RHArt Audio",
+    "outputType": "audio",
+    "searchText": "rh suno-custom-v4.5 suno-custom-v4.5 suno-custom-v4.5 runninghub/rhart audio audio rhart-audio/suno-v4.5/custom"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/rhart-audio/suno-v4.5/single",
+    "label": "RH suno-single-v4.5",
+    "category": "RunningHub/RHArt Audio",
+    "outputType": "audio",
+    "searchText": "rh suno-single-v4.5 suno-single-v4.5 suno-single-v4.5 runninghub/rhart audio audio rhart-audio/suno-v4.5/single"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/rhart-audio/suno-v5.5/custom",
+    "label": "RH suno-custom-v5.5",
+    "category": "RunningHub/RHArt Audio",
+    "outputType": "audio",
+    "searchText": "rh suno-custom-v5.5 suno-custom-v5.5 suno-custom-v5.5 runninghub/rhart audio audio rhart-audio/suno-v5.5/custom"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/rhart-audio/suno-v5.5/single",
+    "label": "RH suno-single-v5.5",
+    "category": "RunningHub/RHArt Audio",
+    "outputType": "audio",
+    "searchText": "rh suno-single-v5.5 suno-single-v5.5 suno-single-v5.5 runninghub/rhart audio audio rhart-audio/suno-v5.5/single"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/rhart-audio/suno-v5/custom",
+    "label": "RH suno-custom-v5",
+    "category": "RunningHub/RHArt Audio",
+    "outputType": "audio",
+    "searchText": "rh suno-custom-v5 suno-custom-v5 suno-custom-v5 runninghub/rhart audio audio rhart-audio/suno-v5/custom"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/rhart-audio/suno-v5/single",
+    "label": "RH suno-single-v5",
+    "category": "RunningHub/RHArt Audio",
+    "outputType": "audio",
+    "searchText": "rh suno-single-v5 suno-single-v5 suno-single-v5 runninghub/rhart audio audio rhart-audio/suno-v5/single"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/rhart-audio/suno/lyrics",
+    "label": "RH suno-歌词生成",
+    "category": "RunningHub/RHArt Audio",
+    "outputType": "audio",
+    "searchText": "rh suno-歌词生成 suno-歌词生成 suno-lyrics runninghub/rhart audio audio rhart-audio/suno/lyrics"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/rhart-audio/text-to-audio/music-2.5",
+    "label": "RH minimax/music-2.5",
+    "category": "RunningHub/Audio",
+    "outputType": "audio",
+    "searchText": "rh minimax/music-2.5 minimax/music-2.5 minimax/music-2.5 runninghub/audio audio rhart-audio/text-to-audio/music-2.5"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/rhart-audio/text-to-audio/speech-02-hd",
+    "label": "RH minimax/speech-02-hd",
+    "category": "RunningHub/Audio",
+    "outputType": "audio",
+    "searchText": "rh minimax/speech-02-hd minimax/speech-02-hd minimax/speech-02-hd runninghub/audio audio rhart-audio/text-to-audio/speech-02-hd"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/rhart-audio/text-to-audio/speech-02-turbo",
+    "label": "RH minimax/speech-02-turbo",
+    "category": "RunningHub/Audio",
+    "outputType": "audio",
+    "searchText": "rh minimax/speech-02-turbo minimax/speech-02-turbo minimax/speech-02-turbo runninghub/audio audio rhart-audio/text-to-audio/speech-02-turbo"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/rhart-audio/text-to-audio/speech-2.6-hd",
+    "label": "RH minimax/speech-2.6-hd",
+    "category": "RunningHub/Audio",
+    "outputType": "audio",
+    "searchText": "rh minimax/speech-2.6-hd minimax/speech-2.6-hd minimax/speech-2.6-hd runninghub/audio audio rhart-audio/text-to-audio/speech-2.6-hd"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/rhart-audio/text-to-audio/speech-2.6-turbo",
+    "label": "RH minimax/speech-2.6-turbo",
+    "category": "RunningHub/Audio",
+    "outputType": "audio",
+    "searchText": "rh minimax/speech-2.6-turbo minimax/speech-2.6-turbo minimax/speech-2.6-turbo runninghub/audio audio rhart-audio/text-to-audio/speech-2.6-turbo"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/rhart-audio/text-to-audio/speech-2.8-hd",
+    "label": "RH minimax/speech-2.8-hd",
+    "category": "RunningHub/Audio",
+    "outputType": "audio",
+    "searchText": "rh minimax/speech-2.8-hd minimax/speech-2.8-hd minimax/speech-2.8-hd runninghub/audio audio rhart-audio/text-to-audio/speech-2.8-hd"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/rhart-audio/text-to-audio/speech-2.8-turbo",
+    "label": "RH minimax/speech-2.8-turbo",
+    "category": "RunningHub/Audio",
+    "outputType": "audio",
+    "searchText": "rh minimax/speech-2.8-turbo minimax/speech-2.8-turbo minimax/speech-2.8-turbo runninghub/audio audio rhart-audio/text-to-audio/speech-2.8-turbo"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/rhart-audio/text-to-audio/voice-clone",
+    "label": "RH minimax/voice-clone",
+    "category": "RunningHub/Audio",
+    "outputType": "audio",
+    "searchText": "rh minimax/voice-clone minimax/voice-clone minimax/voice-clone runninghub/audio audio rhart-audio/text-to-audio/voice-clone"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/rhart-image-g-1.5-official/image-to-image",
+    "label": "RH 全能图片G-1.5-图生图-官方稳定版",
+    "category": "RunningHub/RHArt Image",
+    "outputType": "image",
+    "searchText": "rh 全能图片g-1.5-图生图-官方稳定版 全能图片g-1.5-图生图-官方稳定版 gpt-image-1.5/image-to-image-official-stable runninghub/rhart image image rhart-image-g-1.5-official/image-to-image"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/rhart-image-g-1.5-official/text-to-image",
+    "label": "RH 全能图片G-1.5-文生图-官方稳定版",
+    "category": "RunningHub/RHArt Image",
+    "outputType": "image",
+    "searchText": "rh 全能图片g-1.5-文生图-官方稳定版 全能图片g-1.5-文生图-官方稳定版 gpt-image-1.5/text-to-image-official-stable runninghub/rhart image image rhart-image-g-1.5-official/text-to-image"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/rhart-image-g-1.5/edit-[Deprecated]",
+    "label": "RH 全能图片G-1.5-图生图-低价渠道版-(已下架) 可用全能图片G-2 模型代替",
+    "category": "RunningHub/RHArt Image",
+    "outputType": "image",
+    "searchText": "rh 全能图片g-1.5-图生图-低价渠道版-(已下架) 可用全能图片g-2 模型代替 全能图片g-1.5-图生图-低价渠道版-(已下架) 可用全能图片g-2 模型代替 gpt-image-1.5/edit-channel-low-price-[deprecated] please use gpt-image-2 instead runninghub/rhart image image rhart-image-g-1.5/edit-[deprecated]"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/rhart-image-g-1.5/text-to-image-[Deprecated]",
+    "label": "RH 全能图片G-1.5-文生图-低价渠道版-(已下架) 可用全能图片G-2 模型代替",
+    "category": "RunningHub/RHArt Image",
+    "outputType": "image",
+    "searchText": "rh 全能图片g-1.5-文生图-低价渠道版-(已下架) 可用全能图片g-2 模型代替 全能图片g-1.5-文生图-低价渠道版-(已下架) 可用全能图片g-2 模型代替 gpt-image-1.5/text-to-image-channel-low-price-[deprecated] please use gpt-image-2 instead runninghub/rhart image image rhart-image-g-1.5/text-to-image-[deprecated]"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/rhart-image-g-2-official/image-to-image",
+    "label": "RH 全能图片G-2-图生图-官方稳定版",
+    "category": "RunningHub/RHArt Image",
+    "outputType": "image",
+    "searchText": "rh 全能图片g-2-图生图-官方稳定版 全能图片g-2-图生图-官方稳定版 gpt-image-2/image-to-image-official-stable runninghub/rhart image image rhart-image-g-2-official/image-to-image"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/rhart-image-g-2-official/text-to-image",
+    "label": "RH 全能图片G-2-文生图-官方稳定版",
+    "category": "RunningHub/RHArt Image",
+    "outputType": "image",
+    "searchText": "rh 全能图片g-2-文生图-官方稳定版 全能图片g-2-文生图-官方稳定版 gpt-image-2/text-to-image-official-stable runninghub/rhart image image rhart-image-g-2-official/text-to-image"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/rhart-image-g-2/image-to-image",
+    "label": "RH 全能图片G-2.0-图生图-低价渠道版",
+    "category": "RunningHub/RHArt Image",
+    "outputType": "image",
+    "searchText": "rh 全能图片g-2.0-图生图-低价渠道版 全能图片g-2.0-图生图-低价渠道版 gpt-image-2.0/edit-channel-low-price runninghub/rhart image image rhart-image-g-2/image-to-image"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/rhart-image-g-2/text-to-image",
+    "label": "RH 全能图片G-2.0-文生图-低价渠道版",
+    "category": "RunningHub/RHArt Image",
+    "outputType": "image",
+    "searchText": "rh 全能图片g-2.0-文生图-低价渠道版 全能图片g-2.0-文生图-低价渠道版 gpt-image-2.0/text-to-image-channel-low-price runninghub/rhart image image rhart-image-g-2/text-to-image"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/rhart-image-g-3/image-to-image",
+    "label": "RH 全能图片X-3-图生图",
+    "category": "RunningHub/RHArt Image",
+    "outputType": "image",
+    "searchText": "rh 全能图片x-3-图生图 全能图片x-3-图生图 grok-3-image-to-image runninghub/rhart image image rhart-image-g-3/image-to-image"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/rhart-image-g-3/text-to-image",
+    "label": "RH 全能图片X-3-文生图",
+    "category": "RunningHub/RHArt Image",
+    "outputType": "image",
+    "searchText": "rh 全能图片x-3-文生图 全能图片x-3-文生图 grok-3-image-text-to-image runninghub/rhart image image rhart-image-g-3/text-to-image"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/rhart-image-g-4/image-to-image",
+    "label": "RH 全能图片X-4-图生图",
+    "category": "RunningHub/RHArt Image",
+    "outputType": "image",
+    "searchText": "rh 全能图片x-4-图生图 全能图片x-4-图生图 grok-4-image-image-to-image runninghub/rhart image image rhart-image-g-4/image-to-image"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/rhart-image-g-4/text-to-image",
+    "label": "RH 全能图片X-4-文生图",
+    "category": "RunningHub/RHArt Image",
+    "outputType": "image",
+    "searchText": "rh 全能图片x-4-文生图 全能图片x-4-文生图 grok-4-image-text-to-image runninghub/rhart image image rhart-image-g-4/text-to-image"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/rhart-image-g/image-to-image",
+    "label": "RH 全能图片X-图生图-低价渠道版",
+    "category": "RunningHub/RHArt Image",
+    "outputType": "image",
+    "searchText": "rh 全能图片x-图生图-低价渠道版 全能图片x-图生图-低价渠道版 grok-image/image-to-image/channel-low-price runninghub/rhart image image rhart-image-g/image-to-image"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/rhart-image-g/text-to-image",
+    "label": "RH 全能图片X-文生图-低价渠道版",
+    "category": "RunningHub/RHArt Image",
+    "outputType": "image",
+    "searchText": "rh 全能图片x-文生图-低价渠道版 全能图片x-文生图-低价渠道版 grok-image/text-to-image/channel-low-price runninghub/rhart image image rhart-image-g/text-to-image"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/rhart-image-n-g31-flash-lite-official/image-to-image",
+    "label": "RH 全能图片V2-lite-图生图-官方稳定版",
+    "category": "RunningHub/RHArt Image",
+    "outputType": "image",
+    "searchText": "rh 全能图片v2-lite-图生图-官方稳定版 全能图片v2-lite-图生图-官方稳定版 nano-banana2-gemini31flash-lite/image-to-image-official-stable runninghub/rhart image image rhart-image-n-g31-flash-lite-official/image-to-image"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/rhart-image-n-g31-flash-lite-official/text-to-image",
+    "label": "RH 全能图片V2-lite-文生图-官方稳定版",
+    "category": "RunningHub/RHArt Image",
+    "outputType": "image",
+    "searchText": "rh 全能图片v2-lite-文生图-官方稳定版 全能图片v2-lite-文生图-官方稳定版 nano-banana2-gemini31flash-lite/text-to-image-official-stable runninghub/rhart image image rhart-image-n-g31-flash-lite-official/text-to-image"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/rhart-image-n-g31-flash-lite/image-to-image",
+    "label": "RH 全能图片V2-lite-图生图-低价渠道版",
+    "category": "RunningHub/RHArt Image",
+    "outputType": "image",
+    "searchText": "rh 全能图片v2-lite-图生图-低价渠道版 全能图片v2-lite-图生图-低价渠道版 nano-banana2-gemini31flash-lite/image-to-image-channel-low-price runninghub/rhart image image rhart-image-n-g31-flash-lite/image-to-image"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/rhart-image-n-g31-flash-lite/text-to-image",
+    "label": "RH 全能图片V2-lite-文生图-低价渠道版",
+    "category": "RunningHub/RHArt Image",
+    "outputType": "image",
+    "searchText": "rh 全能图片v2-lite-文生图-低价渠道版 全能图片v2-lite-文生图-低价渠道版 nano-banana2-gemini31flash-lite/text-to-image-channel-low-price runninghub/rhart image image rhart-image-n-g31-flash-lite/text-to-image"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/rhart-image-n-g31-flash-official/image-to-image",
+    "label": "RH 全能图片V2-图生图-官方稳定版",
+    "category": "RunningHub/RHArt Image",
+    "outputType": "image",
+    "searchText": "rh 全能图片v2-图生图-官方稳定版 全能图片v2-图生图-官方稳定版 nano-banana2-gemini31flash/image-to-image-official-stable runninghub/rhart image image rhart-image-n-g31-flash-official/image-to-image"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/rhart-image-n-g31-flash-official/text-to-image",
+    "label": "RH 全能图片V2-文生图-官方稳定版",
+    "category": "RunningHub/RHArt Image",
+    "outputType": "image",
+    "searchText": "rh 全能图片v2-文生图-官方稳定版 全能图片v2-文生图-官方稳定版 nano-banana2-gemini31flash/text-to-image-official-stable runninghub/rhart image image rhart-image-n-g31-flash-official/text-to-image"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/rhart-image-n-g31-flash/image-to-image",
+    "label": "RH 全能图片V2-图生图-低价渠道版",
+    "category": "RunningHub/RHArt Image",
+    "outputType": "image",
+    "searchText": "rh 全能图片v2-图生图-低价渠道版 全能图片v2-图生图-低价渠道版 nano-banana2-gemini31flash/image-to-image-channel-low-price runninghub/rhart image image rhart-image-n-g31-flash/image-to-image"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/rhart-image-n-g31-flash/text-to-image",
+    "label": "RH 全能图片V2-文生图-低价渠道版",
+    "category": "RunningHub/RHArt Image",
+    "outputType": "image",
+    "searchText": "rh 全能图片v2-文生图-低价渠道版 全能图片v2-文生图-低价渠道版 nano-banana2-gemini31flash/text-to-image-channel-low-price runninghub/rhart image image rhart-image-n-g31-flash/text-to-image"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/rhart-image-n-pro-official/edit",
+    "label": "RH 全能图片PRO-图生图-官方稳定版",
+    "category": "RunningHub/RHArt Image",
+    "outputType": "image",
+    "searchText": "rh 全能图片pro-图生图-官方稳定版 全能图片pro-图生图-官方稳定版 nano-banana-pro/edit-official-stable runninghub/rhart image image rhart-image-n-pro-official/edit"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/rhart-image-n-pro-official/edit-ultra",
+    "label": "RH 全能图片PRO-图生图Ultra-官方稳定版",
+    "category": "RunningHub/RHArt Image",
+    "outputType": "image",
+    "searchText": "rh 全能图片pro-图生图ultra-官方稳定版 全能图片pro-图生图ultra-官方稳定版 nano-banana-pro/edit-ultra-official-stable runninghub/rhart image image rhart-image-n-pro-official/edit-ultra"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/rhart-image-n-pro-official/text-to-image",
+    "label": "RH 全能图片PRO-文生图-官方稳定版",
+    "category": "RunningHub/RHArt Image",
+    "outputType": "image",
+    "searchText": "rh 全能图片pro-文生图-官方稳定版 全能图片pro-文生图-官方稳定版 nano-banana-pro/text-to-image-official-stable runninghub/rhart image image rhart-image-n-pro-official/text-to-image"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/rhart-image-n-pro-official/text-to-image-ultra",
+    "label": "RH 全能图片PRO-文生图Ultra-官方稳定版",
+    "category": "RunningHub/RHArt Image",
+    "outputType": "image",
+    "searchText": "rh 全能图片pro-文生图ultra-官方稳定版 全能图片pro-文生图ultra-官方稳定版 nano-banana-pro/text-to-image-ultra-official-stable runninghub/rhart image image rhart-image-n-pro-official/text-to-image-ultra"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/rhart-image-n-pro/edit",
+    "label": "RH 全能图片PRO-图生图-低价渠道版",
+    "category": "RunningHub/RHArt Image",
+    "outputType": "image",
+    "searchText": "rh 全能图片pro-图生图-低价渠道版 全能图片pro-图生图-低价渠道版 nano-banana-pro/edit-channel-low-price runninghub/rhart image image rhart-image-n-pro/edit"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/rhart-image-n-pro/text-to-image",
+    "label": "RH 全能图片PRO-文生图-低价渠道版",
+    "category": "RunningHub/RHArt Image",
+    "outputType": "image",
+    "searchText": "rh 全能图片pro-文生图-低价渠道版 全能图片pro-文生图-低价渠道版 nano-banana-pro/text-to-image-channel-low-price runninghub/rhart image image rhart-image-n-pro/text-to-image"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/rhart-image-v1-official/edit",
+    "label": "RH 全能图片V1-图生图-官方稳定版",
+    "category": "RunningHub/RHArt Image",
+    "outputType": "image",
+    "searchText": "rh 全能图片v1-图生图-官方稳定版 全能图片v1-图生图-官方稳定版 nano-banana/edit-official-stable runninghub/rhart image image rhart-image-v1-official/edit"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/rhart-image-v1-official/text-to-image",
+    "label": "RH 全能图片V1-文生图-官方稳定版",
+    "category": "RunningHub/RHArt Image",
+    "outputType": "image",
+    "searchText": "rh 全能图片v1-文生图-官方稳定版 全能图片v1-文生图-官方稳定版 nano-banana/text-to-image-official-stable runninghub/rhart image image rhart-image-v1-official/text-to-image"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/rhart-image-v1/edit",
+    "label": "RH 全能图片V1-图生图-低价渠道版",
+    "category": "RunningHub/RHArt Image",
+    "outputType": "image",
+    "searchText": "rh 全能图片v1-图生图-低价渠道版 全能图片v1-图生图-低价渠道版 nano-banana/edit-channel-low-price runninghub/rhart image image rhart-image-v1/edit"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/rhart-image-v1/text-to-image",
+    "label": "RH 全能图片V1-文生图-低价渠道版",
+    "category": "RunningHub/RHArt Image",
+    "outputType": "image",
+    "searchText": "rh 全能图片v1-文生图-低价渠道版 全能图片v1-文生图-低价渠道版 nano-banana/text-to-image-channel-low-price runninghub/rhart image image rhart-image-v1/text-to-image"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/rhart-image-x-official/edit",
+    "label": "RH 全能图片X-图片编辑-官方稳定版",
+    "category": "RunningHub/RHArt Image",
+    "outputType": "image",
+    "searchText": "rh 全能图片x-图片编辑-官方稳定版 全能图片x-图片编辑-官方稳定版 xai/grok-imagine-image/edit-official-stable runninghub/rhart image image rhart-image-x-official/edit"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/rhart-image-x-official/text-to-image",
+    "label": "RH 全能图片X-文生图片-官方稳定版",
+    "category": "RunningHub/RHArt Image",
+    "outputType": "image",
+    "searchText": "rh 全能图片x-文生图片-官方稳定版 全能图片x-文生图片-官方稳定版 xai/grok-imagine-image/text-to-image-official-stable runninghub/rhart image image rhart-image-x-official/text-to-image"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/rhart-image/f-dev",
+    "label": "RH f-dev",
+    "category": "RunningHub/RHArt Image",
+    "outputType": "image",
+    "searchText": "rh f-dev f-dev f-dev runninghub/rhart image image rhart-image/f-dev"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/rhart-image/f-dev-lora",
+    "label": "RH f-dev-lora",
+    "category": "RunningHub/RHArt Image",
+    "outputType": "image",
+    "searchText": "rh f-dev-lora f-dev-lora f-dev-lora runninghub/rhart image image rhart-image/f-dev-lora"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/rhart-imagine-image-quality/edit",
+    "label": "RH 全能图片X-高质量图片编辑-官方稳定版",
+    "category": "RunningHub/RHArt Image",
+    "outputType": "image",
+    "searchText": "rh 全能图片x-高质量图片编辑-官方稳定版 全能图片x-高质量图片编辑-官方稳定版 xai/rhart-imagine-image-quality/edit-official-stable runninghub/rhart image image rhart-imagine-image-quality/edit"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/rhart-imagine-image-quality/text-to-image",
+    "label": "RH 全能图片X-高质量文生图-官方稳定版",
+    "category": "RunningHub/RHArt Image",
+    "outputType": "image",
+    "searchText": "rh 全能图片x-高质量文生图-官方稳定版 全能图片x-高质量文生图-官方稳定版 xai/rhart-imagine-image-quality/text-to-image-official-stable runninghub/rhart image image rhart-imagine-image-quality/text-to-image"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/rhart-text-g-25-flash-cv/image-to-text",
+    "label": "RH rhart-text-g-25-flash-cv/image-to-text",
+    "category": "RunningHub/RHArt Text",
+    "outputType": "string",
+    "searchText": "rh rhart-text-g-25-flash-cv/image-to-text rhart-text-g-25-flash-cv/image-to-text rhart-text-g-25-flash-cv/image-to-text  runninghub/rhart text string rhart-text-g-25-flash-cv/image-to-text"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/rhart-text-g-25-flash/image-to-text",
+    "label": "RH rhart-text-g-25-flash/image-to-text",
+    "category": "RunningHub/RHArt Text",
+    "outputType": "string",
+    "searchText": "rh rhart-text-g-25-flash/image-to-text rhart-text-g-25-flash/image-to-text rhart-text-g-25-flash/image-to-text runninghub/rhart text string rhart-text-g-25-flash/image-to-text"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/rhart-text-g-25-flash/text-to-text",
+    "label": "RH rhart-text-g-25-flash/text-to-text",
+    "category": "RunningHub/RHArt Text",
+    "outputType": "string",
+    "searchText": "rh rhart-text-g-25-flash/text-to-text rhart-text-g-25-flash/text-to-text rhart-text-g-25-flash/text-to-text runninghub/rhart text string rhart-text-g-25-flash/text-to-text"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/rhart-text-g-25-flash/video-to-text",
+    "label": "RH rhart-text-g-25-flash/video-to-text",
+    "category": "RunningHub/RHArt Text",
+    "outputType": "string",
+    "searchText": "rh rhart-text-g-25-flash/video-to-text rhart-text-g-25-flash/video-to-text rhart-text-g-25-flash/video-to-text runninghub/rhart text string rhart-text-g-25-flash/video-to-text"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/rhart-text-g-25-pro-cv/image-to-text",
+    "label": "RH rhart-text-g-25-pro-cv/image-to-text",
+    "category": "RunningHub/RHArt Text",
+    "outputType": "string",
+    "searchText": "rh rhart-text-g-25-pro-cv/image-to-text rhart-text-g-25-pro-cv/image-to-text rhart-text-g-25-pro-cv/image-to-text runninghub/rhart text string rhart-text-g-25-pro-cv/image-to-text"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/rhart-text-g-25-pro/image-to-text",
+    "label": "RH rhart-text-g-25-pro/image-to-text",
+    "category": "RunningHub/RHArt Text",
+    "outputType": "string",
+    "searchText": "rh rhart-text-g-25-pro/image-to-text rhart-text-g-25-pro/image-to-text rhart-text-g-25-pro/image-to-text runninghub/rhart text string rhart-text-g-25-pro/image-to-text"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/rhart-text-g-25-pro/text-to-text",
+    "label": "RH rhart-text-g-25-pro/text-to-text",
+    "category": "RunningHub/RHArt Text",
+    "outputType": "string",
+    "searchText": "rh rhart-text-g-25-pro/text-to-text rhart-text-g-25-pro/text-to-text rhart-text-g-25-pro/text-to-text runninghub/rhart text string rhart-text-g-25-pro/text-to-text"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/rhart-text-g-25-pro/video-to-text",
+    "label": "RH rhart-text-g-25-pro/video-to-text",
+    "category": "RunningHub/RHArt Text",
+    "outputType": "string",
+    "searchText": "rh rhart-text-g-25-pro/video-to-text rhart-text-g-25-pro/video-to-text rhart-text-g-25-pro/video-to-text runninghub/rhart text string rhart-text-g-25-pro/video-to-text"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/rhart-text-g-3-flash-preview-cv/image-to-text",
+    "label": "RH rhart-text-g-3-flash-preview-cv/image-to-text",
+    "category": "RunningHub/RHArt Text",
+    "outputType": "string",
+    "searchText": "rh rhart-text-g-3-flash-preview-cv/image-to-text rhart-text-g-3-flash-preview-cv/image-to-text rhart-text-g-3-flash-preview-cv/image-to-text runninghub/rhart text string rhart-text-g-3-flash-preview-cv/image-to-text"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/rhart-text-g-3-flash-preview/image-to-text",
+    "label": "RH rhart-text-g-3-flash-preview/image-to-text",
+    "category": "RunningHub/RHArt Text",
+    "outputType": "string",
+    "searchText": "rh rhart-text-g-3-flash-preview/image-to-text rhart-text-g-3-flash-preview/image-to-text rhart-text-g-3-flash-preview/image-to-text runninghub/rhart text string rhart-text-g-3-flash-preview/image-to-text"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/rhart-text-g-3-flash-preview/text-to-text",
+    "label": "RH rhart-text-g-3-flash-preview/text-to-text",
+    "category": "RunningHub/RHArt Text",
+    "outputType": "string",
+    "searchText": "rh rhart-text-g-3-flash-preview/text-to-text rhart-text-g-3-flash-preview/text-to-text rhart-text-g-3-flash-preview/text-to-text runninghub/rhart text string rhart-text-g-3-flash-preview/text-to-text"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/rhart-text-g-3-flash-preview/video-to-text",
+    "label": "RH rhart-text-g-3-flash-preview/video-to-text",
+    "category": "RunningHub/RHArt Text",
+    "outputType": "string",
+    "searchText": "rh rhart-text-g-3-flash-preview/video-to-text rhart-text-g-3-flash-preview/video-to-text rhart-text-g-3-flash-preview/video-to-text runninghub/rhart text string rhart-text-g-3-flash-preview/video-to-text"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/rhart-text-g-3-pro-preview-cv/image-to-text",
+    "label": "RH rhart-text-g-3-pro-preview-cv/image-to-text",
+    "category": "RunningHub/RHArt Text",
+    "outputType": "string",
+    "searchText": "rh rhart-text-g-3-pro-preview-cv/image-to-text rhart-text-g-3-pro-preview-cv/image-to-text rhart-text-g-3-pro-preview-cv/image-to-text runninghub/rhart text string rhart-text-g-3-pro-preview-cv/image-to-text"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/rhart-text-g-3-pro-preview/image-to-text",
+    "label": "RH rhart-text-g-3-pro-preview/image-to-text",
+    "category": "RunningHub/RHArt Text",
+    "outputType": "string",
+    "searchText": "rh rhart-text-g-3-pro-preview/image-to-text rhart-text-g-3-pro-preview/image-to-text rhart-text-g-3-pro-preview/image-to-text runninghub/rhart text string rhart-text-g-3-pro-preview/image-to-text"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/rhart-text-g-3-pro-preview/text-to-text",
+    "label": "RH rhart-text-g-3-pro-preview/text-to-text",
+    "category": "RunningHub/RHArt Text",
+    "outputType": "string",
+    "searchText": "rh rhart-text-g-3-pro-preview/text-to-text rhart-text-g-3-pro-preview/text-to-text rhart-text-g-3-pro-preview/text-to-text runninghub/rhart text string rhart-text-g-3-pro-preview/text-to-text"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/rhart-text-g-3-pro-preview/video-to-text",
+    "label": "RH rhart-text-g-3-pro-preview/video-to-text",
+    "category": "RunningHub/RHArt Text",
+    "outputType": "string",
+    "searchText": "rh rhart-text-g-3-pro-preview/video-to-text rhart-text-g-3-pro-preview/video-to-text rhart-text-g-3-pro-preview/video-to-text runninghub/rhart text string rhart-text-g-3-pro-preview/video-to-text"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/rhart-text-qwen-27b/chat",
+    "label": "RH rhart-text-qwen-27b/chat",
+    "category": "RunningHub/RHArt Text",
+    "outputType": "string",
+    "searchText": "rh rhart-text-qwen-27b/chat rhart-text-qwen-27b/chat rhart-text-qwen-27b/chat runninghub/rhart text string rhart-text-qwen-27b/chat"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/rhart-video-g-official/edit-video",
+    "label": "RH 全能视频X-编辑视频-官方稳定版",
+    "category": "RunningHub/RHArt Video G",
+    "outputType": "video",
+    "searchText": "rh 全能视频x-编辑视频-官方稳定版 全能视频x-编辑视频-官方稳定版 xai/grok-imagine/edit-video-official-stable runninghub/rhart video g video rhart-video-g-official/edit-video"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/rhart-video-g-official/image-to-video",
+    "label": "RH 全能视频X-图生视频-官方稳定版",
+    "category": "RunningHub/RHArt Video G",
+    "outputType": "video",
+    "searchText": "rh 全能视频x-图生视频-官方稳定版 全能视频x-图生视频-官方稳定版 xai/grok-imagine/image-to-video-official-stable runninghub/rhart video g video rhart-video-g-official/image-to-video"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/rhart-video-g-official/image-to-video-v1.5",
+    "label": "RH 全能视频X-图生视频-官方稳定版-v1.5",
+    "category": "RunningHub/RHArt Video G",
+    "outputType": "video",
+    "searchText": "rh 全能视频x-图生视频-官方稳定版-v1.5 全能视频x-图生视频-官方稳定版-v1.5 xai/grok-imagine-video-v1.5/image-to-video-official-stable runninghub/rhart video g video rhart-video-g-official/image-to-video-v1.5"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/rhart-video-g-official/reference-to-video",
+    "label": "RH 全能视频X-多图参考生视频-官方稳定版",
+    "category": "RunningHub/RHArt Video G",
+    "outputType": "video",
+    "searchText": "rh 全能视频x-多图参考生视频-官方稳定版 全能视频x-多图参考生视频-官方稳定版 xai/grok-imagine-video/reference-to-video-official-stable runninghub/rhart video g video rhart-video-g-official/reference-to-video"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/rhart-video-g-official/text-to-video",
+    "label": "RH 全能视频X-文生视频-官方稳定版",
+    "category": "RunningHub/RHArt Video G",
+    "outputType": "video",
+    "searchText": "rh 全能视频x-文生视频-官方稳定版 全能视频x-文生视频-官方稳定版 xai/grok-imagine/text-to-video-official-stable runninghub/rhart video g video rhart-video-g-official/text-to-video"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/rhart-video-g-official/video-extend",
+    "label": "RH 全能视频X-视频续写-官方稳定版",
+    "category": "RunningHub/RHArt Video G",
+    "outputType": "video",
+    "searchText": "rh 全能视频x-视频续写-官方稳定版 全能视频x-视频续写-官方稳定版 xai/grok-imagine-video/video-extend-official-stable runninghub/rhart video g video rhart-video-g-official/video-extend"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/rhart-video-g/image-to-video",
+    "label": "RH 全能视频X-图生视频-低价渠道版-v1.5",
+    "category": "RunningHub/RHArt Video",
+    "outputType": "video",
+    "searchText": "rh 全能视频x-图生视频-低价渠道版-v1.5 全能视频x-图生视频-低价渠道版-v1.5 xai/grok-imagine/image-to-video-channel-low-price-v1.5 runninghub/rhart video video rhart-video-g/image-to-video"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/rhart-video-g/text-to-video",
+    "label": "RH 全能视频X-文生视频-低价渠道版-v1.5",
+    "category": "RunningHub/RHArt Video",
+    "outputType": "video",
+    "searchText": "rh 全能视频x-文生视频-低价渠道版-v1.5 全能视频x-文生视频-低价渠道版-v1.5 xai/grok-imagine/text-to-video-channel-low-price-v1.5 runninghub/rhart video video rhart-video-g/text-to-video"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/rhart-video-r/gen4-aleph-official/video-to-video",
+    "label": "RH 全能视频R-gen4-aleph/视频编辑-官方稳定版",
+    "category": "RunningHub/RHArt Video",
+    "outputType": "video",
+    "searchText": "rh 全能视频r-gen4-aleph/视频编辑-官方稳定版 全能视频r-gen4-aleph/视频编辑-官方稳定版 runwayml/gen4-aleph/video-to-video-official-stable runninghub/rhart video video rhart-video-r/gen4-aleph-official/video-to-video"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/rhart-video-r/gen4-turbo-official/image-to-video",
+    "label": "RH 全能视频R/gen4-turbo/图生视频-官方稳定版",
+    "category": "RunningHub/RHArt Video",
+    "outputType": "video",
+    "searchText": "rh 全能视频r/gen4-turbo/图生视频-官方稳定版 全能视频r/gen4-turbo/图生视频-官方稳定版 runwayml/gen4-turbo/image-to-video-official-stable runninghub/rhart video video rhart-video-r/gen4-turbo-official/image-to-video"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/rhart-video-r/gen4-turbo/image-to-video",
+    "label": "RH 全能视频R/gen4-turbo/图生视频-低价渠道版",
+    "category": "RunningHub/RHArt Video",
+    "outputType": "video",
+    "searchText": "rh 全能视频r/gen4-turbo/图生视频-低价渠道版 全能视频r/gen4-turbo/图生视频-低价渠道版 runwayml/gen4-turbo/image-to-video-channel-low-price runninghub/rhart video video rhart-video-r/gen4-turbo/image-to-video"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/rhart-video-s-official/image-to-video",
+    "label": "RH 全能视频S-图生视频-官方稳定版",
+    "category": "RunningHub/RHArt Video",
+    "outputType": "video",
+    "searchText": "rh 全能视频s-图生视频-官方稳定版 全能视频s-图生视频-官方稳定版 sora-2/image-to-video-official-stable runninghub/rhart video video rhart-video-s-official/image-to-video"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/rhart-video-s-official/image-to-video-pro",
+    "label": "RH 全能视频S-图生视频-pro-官方稳定版",
+    "category": "RunningHub/RHArt Video",
+    "outputType": "video",
+    "searchText": "rh 全能视频s-图生视频-pro-官方稳定版 全能视频s-图生视频-pro-官方稳定版 sora-2/image-to-video-pro-official-stable runninghub/rhart video video rhart-video-s-official/image-to-video-pro"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/rhart-video-s-official/image-to-video-realistic",
+    "label": "RH 全能视频S-图生视频-支持真人-官方稳定版",
+    "category": "RunningHub/RHArt Video",
+    "outputType": "video",
+    "searchText": "rh 全能视频s-图生视频-支持真人-官方稳定版 全能视频s-图生视频-支持真人-官方稳定版 sora-2/image-to-video-realistic-official-stable runninghub/rhart video video rhart-video-s-official/image-to-video-realistic"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/rhart-video-s-official/sora-upload-character",
+    "label": "RH 全能视频S-角色上传-官方稳定版",
+    "category": "RunningHub/RHArt Video",
+    "outputType": "video",
+    "searchText": "rh 全能视频s-角色上传-官方稳定版 全能视频s-角色上传-官方稳定版 sora-upload-character-official runninghub/rhart video video rhart-video-s-official/sora-upload-character"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/rhart-video-s-official/text-to-video",
+    "label": "RH 全能视频S-文生视频-官方稳定版",
+    "category": "RunningHub/RHArt Video",
+    "outputType": "video",
+    "searchText": "rh 全能视频s-文生视频-官方稳定版 全能视频s-文生视频-官方稳定版 sora-2/text-to-video-official-stable runninghub/rhart video video rhart-video-s-official/text-to-video"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/rhart-video-s-official/text-to-video-pro",
+    "label": "RH 全能视频S-文生视频-pro-官方稳定版",
+    "category": "RunningHub/RHArt Video",
+    "outputType": "video",
+    "searchText": "rh 全能视频s-文生视频-pro-官方稳定版 全能视频s-文生视频-pro-官方稳定版 sora-2/text-to-video-pro-official-stable runninghub/rhart video video rhart-video-s-official/text-to-video-pro"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/rhart-video-s/image-to-video",
+    "label": "RH 全能视频S-图生视频-低价渠道版",
+    "category": "RunningHub/RHArt Video",
+    "outputType": "video",
+    "searchText": "rh 全能视频s-图生视频-低价渠道版 全能视频s-图生视频-低价渠道版 sora-2/image-to-video-channel-low-price runninghub/rhart video video rhart-video-s/image-to-video"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/rhart-video-s/image-to-video-asyn",
+    "label": "RH 全能视频S-图生视频（异步）-低价渠道版",
+    "category": "RunningHub/RHArt Video",
+    "outputType": "video",
+    "searchText": "rh 全能视频s-图生视频（异步）-低价渠道版 全能视频s-图生视频（异步）-低价渠道版 sora-2/image-to-video-asyn-channel-low-price runninghub/rhart video video rhart-video-s/image-to-video-asyn"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/rhart-video-s/image-to-video-pro-deprecated",
+    "label": "RH 全能视频S-图生视频-pro-低价渠道版-已下架",
+    "category": "RunningHub/RHArt Video",
+    "outputType": "video",
+    "searchText": "rh 全能视频s-图生视频-pro-低价渠道版-已下架 全能视频s-图生视频-pro-低价渠道版-已下架 sora-2/image-to-video-pro-channel-low-price runninghub/rhart video video rhart-video-s/image-to-video-pro-deprecated"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/rhart-video-s/sora-upload-character",
+    "label": "RH 全能视频S-角色上传-低价渠道版",
+    "category": "RunningHub/RHArt Video",
+    "outputType": "string",
+    "searchText": "rh 全能视频s-角色上传-低价渠道版 全能视频s-角色上传-低价渠道版 sora-upload-character-channel-low-price runninghub/rhart video string rhart-video-s/sora-upload-character"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/rhart-video-s/text-to-video",
+    "label": "RH 全能视频S-文生视频-低价渠道版",
+    "category": "RunningHub/RHArt Video",
+    "outputType": "video",
+    "searchText": "rh 全能视频s-文生视频-低价渠道版 全能视频s-文生视频-低价渠道版 sora-2/text-to-video-channel-low-price runninghub/rhart video video rhart-video-s/text-to-video"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/rhart-video-s/text-to-video-pro-deprecated",
+    "label": "RH 全能视频S-文生视频-pro-低价渠道版-已下架",
+    "category": "RunningHub/RHArt Video",
+    "outputType": "video",
+    "searchText": "rh 全能视频s-文生视频-pro-低价渠道版-已下架 全能视频s-文生视频-pro-低价渠道版-已下架 sora-2/text-to-video-pro-channel-low-price runninghub/rhart video video rhart-video-s/text-to-video-pro-deprecated"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/rhart-video-v3.1-fast-official/image-to-video",
+    "label": "RH 全能视频V3.1-fast-图生视频-官方稳定版",
+    "category": "RunningHub/RHArt Video",
+    "outputType": "video",
+    "searchText": "rh 全能视频v3.1-fast-图生视频-官方稳定版 全能视频v3.1-fast-图生视频-官方稳定版 google/veo3.1-fast/image-to-video-official-stable runninghub/rhart video video rhart-video-v3.1-fast-official/image-to-video"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/rhart-video-v3.1-fast-official/reference-to-video",
+    "label": "RH 全能视频V3.1-fast-参考生视频-官方稳定版",
+    "category": "RunningHub/RHArt Video",
+    "outputType": "video",
+    "searchText": "rh 全能视频v3.1-fast-参考生视频-官方稳定版 全能视频v3.1-fast-参考生视频-官方稳定版 google/veo3.1-fast/reference-to-video-official-stable runninghub/rhart video video rhart-video-v3.1-fast-official/reference-to-video"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/rhart-video-v3.1-fast-official/text-to-video",
+    "label": "RH 全能视频V3.1-fast-文生视频-官方稳定版",
+    "category": "RunningHub/RHArt Video",
+    "outputType": "video",
+    "searchText": "rh 全能视频v3.1-fast-文生视频-官方稳定版 全能视频v3.1-fast-文生视频-官方稳定版 google/veo3.1-fast/text-to-video-official-stable runninghub/rhart video video rhart-video-v3.1-fast-official/text-to-video"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/rhart-video-v3.1-fast-official/video-extend",
+    "label": "RH 全能视频V3.1-fast-视频扩展-官方稳定版",
+    "category": "RunningHub/RHArt Video",
+    "outputType": "video",
+    "searchText": "rh 全能视频v3.1-fast-视频扩展-官方稳定版 全能视频v3.1-fast-视频扩展-官方稳定版 google/veo3.1-fast/video-extend-official-stable runninghub/rhart video video rhart-video-v3.1-fast-official/video-extend"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/rhart-video-v3.1-fast/image-to-video",
+    "label": "RH 全能视频V3.1-fast-图生视频-低价渠道版",
+    "category": "RunningHub/RHArt Video",
+    "outputType": "video",
+    "searchText": "rh 全能视频v3.1-fast-图生视频-低价渠道版 全能视频v3.1-fast-图生视频-低价渠道版 google/veo3.1-fast/image-to-video-channel-low-price runninghub/rhart video video rhart-video-v3.1-fast/image-to-video"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/rhart-video-v3.1-fast/start-end-to-video",
+    "label": "RH 全能视频V3.1-fast-首尾帧生视频-低价渠道版",
+    "category": "RunningHub/RHArt Video",
+    "outputType": "video",
+    "searchText": "rh 全能视频v3.1-fast-首尾帧生视频-低价渠道版 全能视频v3.1-fast-首尾帧生视频-低价渠道版 google/veo3.1-fast/start-end-to-video-channel-low-price runninghub/rhart video video rhart-video-v3.1-fast/start-end-to-video"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/rhart-video-v3.1-fast/text-to-video",
+    "label": "RH 全能视频V3.1-fast-文生视频-低价渠道版",
+    "category": "RunningHub/RHArt Video",
+    "outputType": "video",
+    "searchText": "rh 全能视频v3.1-fast-文生视频-低价渠道版 全能视频v3.1-fast-文生视频-低价渠道版 google/veo3.1-fast/text-to-video-channel-low-price runninghub/rhart video video rhart-video-v3.1-fast/text-to-video"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/rhart-video-v3.1-lite-official/image-to-video",
+    "label": "RH 全能视频V3.1-Lite图生视频-官方稳定版",
+    "category": "RunningHub/RHArt Video",
+    "outputType": "video",
+    "searchText": "rh 全能视频v3.1-lite图生视频-官方稳定版 全能视频v3.1-lite图生视频-官方稳定版 google/veo3.1-lite/image-to-video-official-stable runninghub/rhart video video rhart-video-v3.1-lite-official/image-to-video"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/rhart-video-v3.1-lite-official/start-end-to-video",
+    "label": "RH 全能视频V3.1-Lite首尾帧生视频-官方稳定版",
+    "category": "RunningHub/RHArt Video",
+    "outputType": "video",
+    "searchText": "rh 全能视频v3.1-lite首尾帧生视频-官方稳定版 全能视频v3.1-lite首尾帧生视频-官方稳定版 google/veo3.1-lite/start-end-to-video-official-stable runninghub/rhart video video rhart-video-v3.1-lite-official/start-end-to-video"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/rhart-video-v3.1-lite-official/text-to-video",
+    "label": "RH 全能视频V3.1-Lite文生视频-官方稳定版",
+    "category": "RunningHub/RHArt Video",
+    "outputType": "video",
+    "searchText": "rh 全能视频v3.1-lite文生视频-官方稳定版 全能视频v3.1-lite文生视频-官方稳定版 google/veo3.1-lite/text-to-video-official-stable runninghub/rhart video video rhart-video-v3.1-lite-official/text-to-video"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/rhart-video-v3.1-lite/image-to-video",
+    "label": "RH 全能视频V3.1-lite-图生视频-低价渠道版",
+    "category": "RunningHub/RHArt Video",
+    "outputType": "video",
+    "searchText": "rh 全能视频v3.1-lite-图生视频-低价渠道版 全能视频v3.1-lite-图生视频-低价渠道版 google/veo3.1-lite/image-to-video-channel-low-price runninghub/rhart video video rhart-video-v3.1-lite/image-to-video"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/rhart-video-v3.1-lite/text-to-video",
+    "label": "RH 全能视频V3.1-lite-文生视频-低价渠道版",
+    "category": "RunningHub/RHArt Video",
+    "outputType": "video",
+    "searchText": "rh 全能视频v3.1-lite-文生视频-低价渠道版 全能视频v3.1-lite-文生视频-低价渠道版 google/veo3.1-lite/text-to-video-channel-low-price runninghub/rhart video video rhart-video-v3.1-lite/text-to-video"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/rhart-video-v3.1-pro-official/image-to-video",
+    "label": "RH 全能视频V3.1-pro-图生视频-官方稳定版",
+    "category": "RunningHub/RHArt Video",
+    "outputType": "video",
+    "searchText": "rh 全能视频v3.1-pro-图生视频-官方稳定版 全能视频v3.1-pro-图生视频-官方稳定版 google/veo3.1-pro/image-to-video-official-stable runninghub/rhart video video rhart-video-v3.1-pro-official/image-to-video"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/rhart-video-v3.1-pro-official/reference-to-video",
+    "label": "RH 全能视频V3.1-pro-参考生视频-官方稳定版",
+    "category": "RunningHub/RHArt Video",
+    "outputType": "video",
+    "searchText": "rh 全能视频v3.1-pro-参考生视频-官方稳定版 全能视频v3.1-pro-参考生视频-官方稳定版 google/veo3.1-pro/reference-to-video-official-stable runninghub/rhart video video rhart-video-v3.1-pro-official/reference-to-video"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/rhart-video-v3.1-pro-official/text-to-video",
+    "label": "RH 全能视频V3.1-pro-文生视频-官方稳定版",
+    "category": "RunningHub/RHArt Video",
+    "outputType": "video",
+    "searchText": "rh 全能视频v3.1-pro-文生视频-官方稳定版 全能视频v3.1-pro-文生视频-官方稳定版 google/veo3.1-pro/text-to-video-official-stable runninghub/rhart video video rhart-video-v3.1-pro-official/text-to-video"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/rhart-video-v3.1-pro-official/video-extend",
+    "label": "RH 全能视频V3.1-pro-视频扩展-官方稳定版",
+    "category": "RunningHub/RHArt Video",
+    "outputType": "video",
+    "searchText": "rh 全能视频v3.1-pro-视频扩展-官方稳定版 全能视频v3.1-pro-视频扩展-官方稳定版 google/veo3.1-pro/video-extend-official-stable runninghub/rhart video video rhart-video-v3.1-pro-official/video-extend"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/rhart-video-v3.1-pro/image-to-video",
+    "label": "RH 全能视频V3.1-pro-图生视频-低价渠道版",
+    "category": "RunningHub/RHArt Video",
+    "outputType": "video",
+    "searchText": "rh 全能视频v3.1-pro-图生视频-低价渠道版 全能视频v3.1-pro-图生视频-低价渠道版 google/veo3.1-pro/image-to-video-channel-low-price runninghub/rhart video video rhart-video-v3.1-pro/image-to-video"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/rhart-video-v3.1-pro/start-end-to-video",
+    "label": "RH 全能视频V3.1-pro-首尾帧生视频-低价渠道版",
+    "category": "RunningHub/RHArt Video",
+    "outputType": "video",
+    "searchText": "rh 全能视频v3.1-pro-首尾帧生视频-低价渠道版 全能视频v3.1-pro-首尾帧生视频-低价渠道版 google/veo3.1-pro/start-end-to-video-channel-low-price runninghub/rhart video video rhart-video-v3.1-pro/start-end-to-video"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/rhart-video-v3.1-pro/text-to-video",
+    "label": "RH 全能视频V3.1-pro-文生视频-低价渠道版",
+    "category": "RunningHub/RHArt Video",
+    "outputType": "video",
+    "searchText": "rh 全能视频v3.1-pro-文生视频-低价渠道版 全能视频v3.1-pro-文生视频-低价渠道版 google/veo3.1-pro/text-to-video-channel-low-price runninghub/rhart video video rhart-video-v3.1-pro/text-to-video"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/rhart-video/ltx-2/text-to-video-lora",
+    "label": "RH ltx-2-19b/text-to-video-lora",
+    "category": "RunningHub/RHArt Video",
+    "outputType": "video",
+    "searchText": "rh ltx-2-19b/text-to-video-lora ltx-2-19b/text-to-video-lora ltx-2-19b/text-to-video-lora runninghub/rhart video video rhart-video/ltx-2/text-to-video-lora"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/rhart-video/sparkvideo-2.0-fast/image-to-video",
+    "label": "RH Seedance2.0-Fast/图生视频",
+    "category": "RunningHub/Seedance",
+    "outputType": "video",
+    "searchText": "rh seedance2.0-fast/图生视频 seedance2.0-fast/图生视频 seedance2.0 fast image to video runninghub/seedance video rhart-video/sparkvideo-2.0-fast/image-to-video"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/rhart-video/sparkvideo-2.0-fast/multimodal-video",
+    "label": "RH Seedance2.0-Fast/全能参考视频",
+    "category": "RunningHub/Seedance",
+    "outputType": "video",
+    "searchText": "rh seedance2.0-fast/全能参考视频 seedance2.0-fast/全能参考视频 seedance2.0 fast multimodal video runninghub/seedance video rhart-video/sparkvideo-2.0-fast/multimodal-video"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/rhart-video/sparkvideo-2.0-fast/text-to-video",
+    "label": "RH Seedance2.0-Fast/文生视频",
+    "category": "RunningHub/Seedance",
+    "outputType": "video",
+    "searchText": "rh seedance2.0-fast/文生视频 seedance2.0-fast/文生视频 seedance2.0 fast text to video runninghub/seedance video rhart-video/sparkvideo-2.0-fast/text-to-video"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/rhart-video/sparkvideo-2.0-mini/image-to-video",
+    "label": "RH seedance2.0-Mini/图生视频",
+    "category": "RunningHub/Seedance",
+    "outputType": "video",
+    "searchText": "rh seedance2.0-mini/图生视频 seedance2.0-mini/图生视频 seedance-2.0-mini/image-to-video runninghub/seedance video rhart-video/sparkvideo-2.0-mini/image-to-video"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/rhart-video/sparkvideo-2.0-mini/multimodal-video",
+    "label": "RH seedance2.0-Mini/多模态视频",
+    "category": "RunningHub/Seedance",
+    "outputType": "video",
+    "searchText": "rh seedance2.0-mini/多模态视频 seedance2.0-mini/多模态视频 seedance-2.0-mini/multimodal-video runninghub/seedance video rhart-video/sparkvideo-2.0-mini/multimodal-video"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/rhart-video/sparkvideo-2.0-mini/text-to-video",
+    "label": "RH seedance2.0-Mini/文生视频",
+    "category": "RunningHub/Seedance",
+    "outputType": "video",
+    "searchText": "rh seedance2.0-mini/文生视频 seedance2.0-mini/文生视频 seedance-2.0-mini/text-to-video runninghub/seedance video rhart-video/sparkvideo-2.0-mini/text-to-video"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/rhart-video/sparkvideo-2.0/image-to-video",
+    "label": "RH Seedance2.0/图生视频",
+    "category": "RunningHub/Seedance",
+    "outputType": "video",
+    "searchText": "rh seedance2.0/图生视频 seedance2.0/图生视频 seedance2.0 image to video runninghub/seedance video rhart-video/sparkvideo-2.0/image-to-video"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/rhart-video/sparkvideo-2.0/multimodal-video",
+    "label": "RH Seedance2.0/全能参考视频",
+    "category": "RunningHub/Seedance",
+    "outputType": "video",
+    "searchText": "rh seedance2.0/全能参考视频 seedance2.0/全能参考视频 seedance2.0 multimodal video runninghub/seedance video rhart-video/sparkvideo-2.0/multimodal-video"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/rhart-video/sparkvideo-2.0/multimodal-video-star",
+    "label": "RH 周星驰版权IP视频生成 (Seedance 2.0)",
+    "category": "RunningHub/RHArt Video",
+    "outputType": "video",
+    "searchText": "rh 周星驰版权ip视频生成 (seedance 2.0) 周星驰版权ip视频生成 (seedance 2.0) stephen chow ip video gen(seedance 2.0) runninghub/rhart video video rhart-video/sparkvideo-2.0/multimodal-video-star"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/rhart-video/sparkvideo-2.0/multimodal-video-star-fast",
+    "label": "RH 周星驰版权IP视频生成-极速版 (Seedance 2.0 Fast)",
+    "category": "RunningHub/RHArt Video",
+    "outputType": "video",
+    "searchText": "rh 周星驰版权ip视频生成-极速版 (seedance 2.0 fast) 周星驰版权ip视频生成-极速版 (seedance 2.0 fast) stephen chow ip video gen-fast (seedance 2.0 fast) runninghub/rhart video video rhart-video/sparkvideo-2.0/multimodal-video-star-fast"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/rhart-video/sparkvideo-2.0/text-to-video",
+    "label": "RH Seedance2.0/文生视频",
+    "category": "RunningHub/Seedance",
+    "outputType": "video",
+    "searchText": "rh seedance2.0/文生视频 seedance2.0/文生视频 seedance2.0 text to video runninghub/seedance video rhart-video/sparkvideo-2.0/text-to-video"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/rhart-video/video-fps-increaser",
+    "label": "RH RH视频帧率增强",
+    "category": "RunningHub/RHArt Video",
+    "outputType": "video",
+    "searchText": "rh rh视频帧率增强 rh视频帧率增强 rh-video-fps-increaser runninghub/rhart video video rhart-video/video-fps-increaser"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/rhart-video/video-upscaler",
+    "label": "RH RH视频超分",
+    "category": "RunningHub/RHArt Video",
+    "outputType": "video",
+    "searchText": "rh rh视频超分 rh视频超分 rh-video-upscaler runninghub/rhart video video rhart-video/video-upscaler"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/seedance-v1-lite/reference-to-video",
+    "label": "RH seedance-v1-lite-reference-to-video",
+    "category": "RunningHub/Seedance",
+    "outputType": "video",
+    "searchText": "rh seedance-v1-lite-reference-to-video seedance-v1-lite-reference-to-video seedance-v1-lite-reference-to-video runninghub/seedance video seedance-v1-lite/reference-to-video"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/seedance-v1.5-pro/image-to-video",
+    "label": "RH seedance-v1.5-pro-image-to-video",
+    "category": "RunningHub/Seedance",
+    "outputType": "video",
+    "searchText": "rh seedance-v1.5-pro-image-to-video seedance-v1.5-pro-image-to-video seedance-v1.5-pro-image-to-video runninghub/seedance video seedance-v1.5-pro/image-to-video"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/seedance-v1.5-pro/image-to-video-fast",
+    "label": "RH seedance-v1.5-pro-image-to-video-fast",
+    "category": "RunningHub/Seedance",
+    "outputType": "video",
+    "searchText": "rh seedance-v1.5-pro-image-to-video-fast seedance-v1.5-pro-image-to-video-fast seedance-v1.5-pro-image-to-video-fast runninghub/seedance video seedance-v1.5-pro/image-to-video-fast"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/seedance-v1.5-pro/text-to-video",
+    "label": "RH seedance-v1.5-pro-text-to-video",
+    "category": "RunningHub/Seedance",
+    "outputType": "video",
+    "searchText": "rh seedance-v1.5-pro-text-to-video seedance-v1.5-pro-text-to-video seedance-v1.5-pro-text-to-video runninghub/seedance video seedance-v1.5-pro/text-to-video"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/seedance-v1.5-pro/text-to-video-fast",
+    "label": "RH seedance-v1.5-pro-text-to-video-fast",
+    "category": "RunningHub/Seedance",
+    "outputType": "video",
+    "searchText": "rh seedance-v1.5-pro-text-to-video-fast seedance-v1.5-pro-text-to-video-fast seedance-v1.5-pro-text-to-video-fast runninghub/seedance video seedance-v1.5-pro/text-to-video-fast"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/seedream-v4.5/image-to-image",
+    "label": "RH seedream-v4.5-图生图",
+    "category": "RunningHub/Seedream",
+    "outputType": "image",
+    "searchText": "rh seedream-v4.5-图生图 seedream-v4.5-图生图 seedream-v4.5/image-to-image runninghub/seedream image seedream-v4.5/image-to-image"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/seedream-v4.5/text-to-image",
+    "label": "RH seedream-v4.5-文生图",
+    "category": "RunningHub/Seedream",
+    "outputType": "image",
+    "searchText": "rh seedream-v4.5-文生图 seedream-v4.5-文生图 seedream-v4.5/text-to-image runninghub/seedream image seedream-v4.5/text-to-image"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/seedream-v4/image-to-image",
+    "label": "RH seedream-v4-图生图",
+    "category": "RunningHub/Seedream",
+    "outputType": "image",
+    "searchText": "rh seedream-v4-图生图 seedream-v4-图生图 seedream-v4/image-to-image runninghub/seedream image seedream-v4/image-to-image"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/seedream-v4/text-to-image",
+    "label": "RH seedream-v4-文生图",
+    "category": "RunningHub/Seedream",
+    "outputType": "image",
+    "searchText": "rh seedream-v4-文生图 seedream-v4-文生图 seedream-v4/text-to-image runninghub/seedream image seedream-v4/text-to-image"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/seedream-v5-lite/image-to-image",
+    "label": "RH seedream-v5-lite-图生图",
+    "category": "RunningHub/Seedream",
+    "outputType": "image",
+    "searchText": "rh seedream-v5-lite-图生图 seedream-v5-lite-图生图 seedream-v5-lite/image-to-image runninghub/seedream image seedream-v5-lite/image-to-image"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/seedream-v5-lite/text-to-image",
+    "label": "RH seedream-v5-lite-文生图",
+    "category": "RunningHub/Seedream",
+    "outputType": "image",
+    "searchText": "rh seedream-v5-lite-文生图 seedream-v5-lite-文生图 seedream-v5-lite/text-to-image runninghub/seedream image seedream-v5-lite/text-to-image"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/seedream-v5-pro/image-to-image",
+    "label": "RH seedream-v5-pro-图生图",
+    "category": "RunningHub/Seedream",
+    "outputType": "image",
+    "searchText": "rh seedream-v5-pro-图生图 seedream-v5-pro-图生图 seedream-v5-pro/image-to-image runninghub/seedream image seedream-v5-pro/image-to-image"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/seedream-v5-pro/text-to-image",
+    "label": "RH seedream-v5-pro-文生图",
+    "category": "RunningHub/Seedream",
+    "outputType": "image",
+    "searchText": "rh seedream-v5-pro-文生图 seedream-v5-pro-文生图 seedream-v5-pro/text-to-image runninghub/seedream image seedream-v5-pro/text-to-image"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/skyreels-v3/reference-to-video",
+    "label": "RH SkyReels V3 参考图生视频",
+    "category": "RunningHub/SkyReels",
+    "outputType": "video",
+    "searchText": "rh skyreels v3 参考图生视频 skyreels v3 参考图生视频 skyreels-v3/reference-to-video runninghub/skyreels video skyreels-v3/reference-to-video"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/skyreels-v3/shot-switching-video-extension",
+    "label": "RH SkyReels V3 视频续写（镜头切换）",
+    "category": "RunningHub/SkyReels",
+    "outputType": "video",
+    "searchText": "rh skyreels v3 视频续写（镜头切换） skyreels v3 视频续写（镜头切换） skyreels-v3/shot-switching-video-extension runninghub/skyreels video skyreels-v3/shot-switching-video-extension"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/skyreels-v3/single-shot-video-extension",
+    "label": "RH SkyReels V3 视频续写（单镜头）",
+    "category": "RunningHub/SkyReels",
+    "outputType": "video",
+    "searchText": "rh skyreels v3 视频续写（单镜头） skyreels v3 视频续写（单镜头） skyreels-v3/single-shot-video-extension runninghub/skyreels video skyreels-v3/single-shot-video-extension"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/skyreels-v3/video-restyling",
+    "label": "RH SkyReels V3 视频风格化",
+    "category": "RunningHub/SkyReels",
+    "outputType": "video",
+    "searchText": "rh skyreels v3 视频风格化 skyreels v3 视频风格化 skyreels-v3/video-restyling runninghub/skyreels video skyreels-v3/video-restyling"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/skyreels-v4/image-to-video-fast",
+    "label": "RH SkyReels V4 图生视频-fast",
+    "category": "RunningHub/SkyReels",
+    "outputType": "video",
+    "searchText": "rh skyreels v4 图生视频-fast skyreels v4 图生视频-fast skyreels-v4/image-to-video-fast runninghub/skyreels video skyreels-v4/image-to-video-fast"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/skyreels-v4/image-to-video-std",
+    "label": "RH SkyReels V4 图生视频-std",
+    "category": "RunningHub/SkyReels",
+    "outputType": "video",
+    "searchText": "rh skyreels v4 图生视频-std skyreels v4 图生视频-std skyreels-v4/image-to-video-std runninghub/skyreels video skyreels-v4/image-to-video-std"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/skyreels-v4/omni-reference-fast",
+    "label": "RH SkyReels V4 Omni 参考视频-fast",
+    "category": "RunningHub/SkyReels",
+    "outputType": "video",
+    "searchText": "rh skyreels v4 omni 参考视频-fast skyreels v4 omni 参考视频-fast skyreels-v4/omni-reference-fast runninghub/skyreels video skyreels-v4/omni-reference-fast"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/skyreels-v4/omni-reference-std",
+    "label": "RH SkyReels V4 Omni 参考视频-std",
+    "category": "RunningHub/SkyReels",
+    "outputType": "video",
+    "searchText": "rh skyreels v4 omni 参考视频-std skyreels v4 omni 参考视频-std skyreels-v4/omni-reference-std runninghub/skyreels video skyreels-v4/omni-reference-std"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/skyreels-v4/text-to-video-fast",
+    "label": "RH SkyReels V4 文生视频-fast",
+    "category": "RunningHub/SkyReels",
+    "outputType": "video",
+    "searchText": "rh skyreels v4 文生视频-fast skyreels v4 文生视频-fast skyreels-v4/text-to-video-fast runninghub/skyreels video skyreels-v4/text-to-video-fast"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/skyreels-v4/text-to-video-std",
+    "label": "RH SkyReels V4 文生视频-std",
+    "category": "RunningHub/SkyReels",
+    "outputType": "video",
+    "searchText": "rh skyreels v4 文生视频-std skyreels v4 文生视频-std skyreels-v4/text-to-video-std runninghub/skyreels video skyreels-v4/text-to-video-std"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/topazlabs/image-gigapixel-art-and-cgi",
+    "label": "RH topazlabs图像放大Art and CGI",
+    "category": "RunningHub/TopazLabs",
+    "outputType": "image",
+    "searchText": "rh topazlabs图像放大art and cgi topazlabs图像放大art and cgi topazlabs-image-gigapixel-art-and-cgi runninghub/topazlabs image topazlabs/image-gigapixel-art-and-cgi"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/topazlabs/image-gigapixel-high-fidelity-2",
+    "label": "RH topazlabs图像放大High Fidelity v2",
+    "category": "RunningHub/TopazLabs",
+    "outputType": "image",
+    "searchText": "rh topazlabs图像放大high fidelity v2 topazlabs图像放大high fidelity v2 topazlabs-image-gigapixel-high-fidelity-2 runninghub/topazlabs image topazlabs/image-gigapixel-high-fidelity-2"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/topazlabs/image-gigapixel-low-resolution-2",
+    "label": "RH topazlabs图像放大Low Resolution v2",
+    "category": "RunningHub/TopazLabs",
+    "outputType": "image",
+    "searchText": "rh topazlabs图像放大low resolution v2 topazlabs图像放大low resolution v2 topazlabs-image-gigapixel-low-resolution-2 runninghub/topazlabs image topazlabs/image-gigapixel-low-resolution-2"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/topazlabs/image-gigapixel-standard-2",
+    "label": "RH topazlabs图像放大Standard v2",
+    "category": "RunningHub/TopazLabs",
+    "outputType": "image",
+    "searchText": "rh topazlabs图像放大standard v2 topazlabs图像放大standard v2 topazlabs-image-gigapixel-standard-2 runninghub/topazlabs image topazlabs/image-gigapixel-standard-2"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/topazlabs/image-gigapixel-text-and-shapes",
+    "label": "RH topazlabs图像放大Text and Shapes",
+    "category": "RunningHub/TopazLabs",
+    "outputType": "image",
+    "searchText": "rh topazlabs图像放大text and shapes topazlabs图像放大text and shapes topazlabs-image-gigapixel-text-and-shapes runninghub/topazlabs image topazlabs/image-gigapixel-text-and-shapes"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/topazlabs/image-upscale-cgi",
+    "label": "RH topazlabs图像放大CGI",
+    "category": "RunningHub/TopazLabs",
+    "outputType": "image",
+    "searchText": "rh topazlabs图像放大cgi topazlabs图像放大cgi topazlabs-image-upscale-cgi runninghub/topazlabs image topazlabs/image-upscale-cgi"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/topazlabs/image-upscale-detail-faces",
+    "label": "RH topazlabs图像放大Detail Faces",
+    "category": "RunningHub/TopazLabs",
+    "outputType": "image",
+    "searchText": "rh topazlabs图像放大detail faces topazlabs图像放大detail faces topazlabs-image-upscale-detail-faces runninghub/topazlabs image topazlabs/image-upscale-detail-faces"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/topazlabs/image-upscale-high-fidelity-v2",
+    "label": "RH topazlabs图像放大High Fidelity V2",
+    "category": "RunningHub/TopazLabs",
+    "outputType": "image",
+    "searchText": "rh topazlabs图像放大high fidelity v2 topazlabs图像放大high fidelity v2 topazlabs-image-upscale-high fidelity v2 runninghub/topazlabs image topazlabs/image-upscale-high-fidelity-v2"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/topazlabs/image-upscale-high-fidelity-v3",
+    "label": "RH topazlabs图像放大High Fidelity V3",
+    "category": "RunningHub/TopazLabs",
+    "outputType": "image",
+    "searchText": "rh topazlabs图像放大high fidelity v3 topazlabs图像放大high fidelity v3 topazlabs-image-upscale-high-fidelity-v3 runninghub/topazlabs image topazlabs/image-upscale-high-fidelity-v3"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/topazlabs/image-upscale-standard-v2",
+    "label": "RH topazlabs图像放大StandardV2",
+    "category": "RunningHub/TopazLabs",
+    "outputType": "image",
+    "searchText": "rh topazlabs图像放大standardv2 topazlabs图像放大standardv2 topazlabs-image-upscale-standard-v2 runninghub/topazlabs image topazlabs/image-upscale-standard-v2"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/topazlabs/image-upscale-text-refine",
+    "label": "RH topazlabs图像放大Text Refine",
+    "category": "RunningHub/TopazLabs",
+    "outputType": "image",
+    "searchText": "rh topazlabs图像放大text refine topazlabs图像放大text refine topazlabs-image-upscale-text refine runninghub/topazlabs image topazlabs/image-upscale-text-refine"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/topazlabs/image-upscale-transparent",
+    "label": "RH topazlabs图像放大Transparent",
+    "category": "RunningHub/TopazLabs",
+    "outputType": "image",
+    "searchText": "rh topazlabs图像放大transparent topazlabs图像放大transparent topazlabs-image-upscale-transparent runninghub/topazlabs image topazlabs/image-upscale-transparent"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/topazlabs/image-upscale/low-resolution-v2",
+    "label": "RH topazlabs图像放大Low Resolution V2",
+    "category": "RunningHub/TopazLabs",
+    "outputType": "image",
+    "searchText": "rh topazlabs图像放大low resolution v2 topazlabs图像放大low resolution v2 topazlabs-image-upscale low resolution v2 runninghub/topazlabs image topazlabs/image-upscale/low-resolution-v2"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/topazlabs/video-astra",
+    "label": "RH topazlabs视频放大Astra",
+    "category": "RunningHub/TopazLabs",
+    "outputType": "video",
+    "searchText": "rh topazlabs视频放大astra topazlabs视频放大astra topazlabs-video-astra runninghub/topazlabs video topazlabs/video-astra"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/topazlabs/video-denoise",
+    "label": "RH topazlabs视频降噪Denoise",
+    "category": "RunningHub/TopazLabs",
+    "outputType": "video",
+    "searchText": "rh topazlabs视频降噪denoise topazlabs视频降噪denoise topazlabs-video-denoise runninghub/topazlabs video topazlabs/video-denoise"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/topazlabs/video-frame-interpolation",
+    "label": "RH topazlabs视频补帧Frame Interpolation",
+    "category": "RunningHub/TopazLabs",
+    "outputType": "video",
+    "searchText": "rh topazlabs视频补帧frame interpolation topazlabs视频补帧frame interpolation topazlabs-video-frame-interpolation runninghub/topazlabs video topazlabs/video-frame-interpolation"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/topazlabs/video-proteus",
+    "label": "RH topazlabs视频增强Proteus",
+    "category": "RunningHub/TopazLabs",
+    "outputType": "video",
+    "searchText": "rh topazlabs视频增强proteus topazlabs视频增强proteus topazlabs-video-proteus runninghub/topazlabs video topazlabs/video-proteus"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/topazlabs/video-starlight",
+    "label": "RH topazlabs视频增强Starlight",
+    "category": "RunningHub/TopazLabs",
+    "outputType": "video",
+    "searchText": "rh topazlabs视频增强starlight topazlabs视频增强starlight topazlabs-video-starlight runninghub/topazlabs video topazlabs/video-starlight"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/topazlabs/video-upscale",
+    "label": "RH topazlabs视频放大",
+    "category": "RunningHub/TopazLabs",
+    "outputType": "video",
+    "searchText": "rh topazlabs视频放大 topazlabs视频放大 topazlabs-video-upscale runninghub/topazlabs video topazlabs/video-upscale"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/vidu/image-to-video-q2-pro",
+    "label": "RH Vidu-图生视频-q2-pro",
+    "category": "RunningHub/Vidu",
+    "outputType": "video",
+    "searchText": "rh vidu-图生视频-q2-pro vidu-图生视频-q2-pro vidu-image-to-video-q2-pro runninghub/vidu video vidu/image-to-video-q2-pro"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/vidu/image-to-video-q2-pro-fast",
+    "label": "RH Vidu-图生视频-q2-pro-fast",
+    "category": "RunningHub/Vidu",
+    "outputType": "video",
+    "searchText": "rh vidu-图生视频-q2-pro-fast vidu-图生视频-q2-pro-fast vidu-image-to-video-q2-pro-fast runninghub/vidu video vidu/image-to-video-q2-pro-fast"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/vidu/image-to-video-q2-turbo",
+    "label": "RH Vidu-图生视频-q2-turbo",
+    "category": "RunningHub/Vidu",
+    "outputType": "video",
+    "searchText": "rh vidu-图生视频-q2-turbo vidu-图生视频-q2-turbo vidu-image-to-video-q2-turbo runninghub/vidu video vidu/image-to-video-q2-turbo"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/vidu/image-to-video-q3-pro",
+    "label": "RH Vidu-图生视频-q3-pro",
+    "category": "RunningHub/Vidu",
+    "outputType": "video",
+    "searchText": "rh vidu-图生视频-q3-pro vidu-图生视频-q3-pro vidu-image-to-video-q3-pro runninghub/vidu video vidu/image-to-video-q3-pro"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/vidu/image-to-video-q3-pro-fast",
+    "label": "RH Vidu-图生视频-q3-pro-fast",
+    "category": "RunningHub/Vidu",
+    "outputType": "video",
+    "searchText": "rh vidu-图生视频-q3-pro-fast vidu-图生视频-q3-pro-fast vidu-image-to-video-q3-pro-fast runninghub/vidu video vidu/image-to-video-q3-pro-fast"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/vidu/image-to-video-q3-turbo",
+    "label": "RH Vidu-图生视频-q3-turbo",
+    "category": "RunningHub/Vidu",
+    "outputType": "video",
+    "searchText": "rh vidu-图生视频-q3-turbo vidu-图生视频-q3-turbo vidu-image-to-video-q3-turbo runninghub/vidu video vidu/image-to-video-q3-turbo"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/vidu/reference-to-video-q2",
+    "label": "RH Vidu-参考生视频-q2",
+    "category": "RunningHub/Vidu",
+    "outputType": "video",
+    "searchText": "rh vidu-参考生视频-q2 vidu-参考生视频-q2 vidu-reference-to-video-q2 runninghub/vidu video vidu/reference-to-video-q2"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/vidu/reference-to-video-q2-pro",
+    "label": "RH Vidu-参考生视频-q2-pro",
+    "category": "RunningHub/Vidu",
+    "outputType": "video",
+    "searchText": "rh vidu-参考生视频-q2-pro vidu-参考生视频-q2-pro vidu-reference-to-video-q2-pro runninghub/vidu video vidu/reference-to-video-q2-pro"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/vidu/reference-to-video-q3",
+    "label": "RH Vidu-参考生视频-q3",
+    "category": "RunningHub/Vidu",
+    "outputType": "video",
+    "searchText": "rh vidu-参考生视频-q3 vidu-参考生视频-q3 vidu-reference-to-video-q3 runninghub/vidu video vidu/reference-to-video-q3"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/vidu/reference-to-video-q3-ad",
+    "label": "RH Vidu-参考生视频-q3-ad",
+    "category": "RunningHub/Vidu",
+    "outputType": "video",
+    "searchText": "rh vidu-参考生视频-q3-ad vidu-参考生视频-q3-ad vidu-reference-to-video-q3-ad runninghub/vidu video vidu/reference-to-video-q3-ad"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/vidu/reference-to-video-q3-drama",
+    "label": "RH Vidu-参考生视频-q3-drama",
+    "category": "RunningHub/Vidu",
+    "outputType": "video",
+    "searchText": "rh vidu-参考生视频-q3-drama vidu-参考生视频-q3-drama vidu-reference-to-video-q3-drama runninghub/vidu video vidu/reference-to-video-q3-drama"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/vidu/reference-to-video-q3-mix",
+    "label": "RH Vidu-参考生视频-q3-mix",
+    "category": "RunningHub/Vidu",
+    "outputType": "video",
+    "searchText": "rh vidu-参考生视频-q3-mix vidu-参考生视频-q3-mix vidu-reference-to-video-q3-mix runninghub/vidu video vidu/reference-to-video-q3-mix"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/vidu/short-play-q3-ad",
+    "label": "RH Vidu Q3 Ad 短剧成片",
+    "category": "RunningHub/Vidu",
+    "outputType": "string",
+    "searchText": "rh vidu q3 ad 短剧成片 vidu q3 ad 短剧成片 vidu/short-play-q3-ad runninghub/vidu string vidu/short-play-q3-ad"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/vidu/short-play-q3-drama",
+    "label": "RH Vidu Q3 Drama 短剧成片",
+    "category": "RunningHub/Vidu",
+    "outputType": "string",
+    "searchText": "rh vidu q3 drama 短剧成片 vidu q3 drama 短剧成片 vidu/short-play-q3-drama runninghub/vidu string vidu/short-play-q3-drama"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/vidu/start-end-to-video-q2-pro",
+    "label": "RH Vidu-首尾帧生视频-q2-pro",
+    "category": "RunningHub/Vidu",
+    "outputType": "video",
+    "searchText": "rh vidu-首尾帧生视频-q2-pro vidu-首尾帧生视频-q2-pro vidu-start-end-to-video-q2-pro runninghub/vidu video vidu/start-end-to-video-q2-pro"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/vidu/start-end-to-video-q2-pro-fast",
+    "label": "RH Vidu-首尾帧生视频-q2-pro-fast",
+    "category": "RunningHub/Vidu",
+    "outputType": "video",
+    "searchText": "rh vidu-首尾帧生视频-q2-pro-fast vidu-首尾帧生视频-q2-pro-fast vidu-start-end-to-video-q2-pro-fast runninghub/vidu video vidu/start-end-to-video-q2-pro-fast"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/vidu/start-end-to-video-q2-turbo",
+    "label": "RH Vidu-首尾帧生视频-q2-turbo",
+    "category": "RunningHub/Vidu",
+    "outputType": "video",
+    "searchText": "rh vidu-首尾帧生视频-q2-turbo vidu-首尾帧生视频-q2-turbo vidu-start-end-to-video-q2-turbo runninghub/vidu video vidu/start-end-to-video-q2-turbo"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/vidu/start-end-to-video-q3-pro",
+    "label": "RH Vidu-首尾帧生视频-q3-pro",
+    "category": "RunningHub/Vidu",
+    "outputType": "video",
+    "searchText": "rh vidu-首尾帧生视频-q3-pro vidu-首尾帧生视频-q3-pro vidu-start-end-to-video-q3-pro runninghub/vidu video vidu/start-end-to-video-q3-pro"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/vidu/start-end-to-video-q3-pro-fast",
+    "label": "RH Vidu-首尾帧生视频-q3-pro-fast",
+    "category": "RunningHub/Vidu",
+    "outputType": "video",
+    "searchText": "rh vidu-首尾帧生视频-q3-pro-fast vidu-首尾帧生视频-q3-pro-fast vidu-start-end-to-video-q3-pro-fast runninghub/vidu video vidu/start-end-to-video-q3-pro-fast"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/vidu/start-end-to-video-q3-turbo",
+    "label": "RH Vidu-首尾帧生视频-q3-turbo",
+    "category": "RunningHub/Vidu",
+    "outputType": "video",
+    "searchText": "rh vidu-首尾帧生视频-q3-turbo vidu-首尾帧生视频-q3-turbo vidu-start-end-to-video-q3-turbo runninghub/vidu video vidu/start-end-to-video-q3-turbo"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/vidu/text-to-video",
+    "label": "RH Vidu-文生视频-q2",
+    "category": "RunningHub/Vidu",
+    "outputType": "video",
+    "searchText": "rh vidu-文生视频-q2 vidu-文生视频-q2 vidu-text-to-video-q2 runninghub/vidu video vidu/text-to-video"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/vidu/text-to-video-q3-pro",
+    "label": "RH Vidu-文生视频-q3-pro",
+    "category": "RunningHub/Vidu",
+    "outputType": "video",
+    "searchText": "rh vidu-文生视频-q3-pro vidu-文生视频-q3-pro vidu-text-to-video-q3-pro runninghub/vidu video vidu/text-to-video-q3-pro"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/vidu/text-to-video-q3-pro-fast",
+    "label": "RH Vidu-文生视频-q3-pro-fast",
+    "category": "RunningHub/Vidu",
+    "outputType": "video",
+    "searchText": "rh vidu-文生视频-q3-pro-fast vidu-文生视频-q3-pro-fast vidu-text-to-video-q3-pro-fast runninghub/vidu video vidu/text-to-video-q3-pro-fast"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/vidu/text-to-video-q3-turbo",
+    "label": "RH Vidu-文生视频-q3-turbo",
+    "category": "RunningHub/Vidu",
+    "outputType": "video",
+    "searchText": "rh vidu-文生视频-q3-turbo vidu-文生视频-q3-turbo vidu-text-to-video-q3-turbo runninghub/vidu video vidu/text-to-video-q3-turbo"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/volc-drama/serial-video-translate",
+    "label": "RH 火山短剧-多集视频翻译",
+    "category": "RunningHub/Seedance",
+    "outputType": "video",
+    "searchText": "rh 火山短剧-多集视频翻译 火山短剧-多集视频翻译 volc-drama/serial-video-translate runninghub/seedance video volc-drama/serial-video-translate"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/volc-drama/video-translate",
+    "label": "RH 火山短剧-视频翻译",
+    "category": "RunningHub/Seedance",
+    "outputType": "video",
+    "searchText": "rh 火山短剧-视频翻译 火山短剧-视频翻译 volc-drama/video-translate runninghub/seedance video volc-drama/video-translate"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/volc-subtitle-erase-pro/video",
+    "label": "RH 火山字幕擦除-视频字幕擦除（精细化版）",
+    "category": "RunningHub/Seedance",
+    "outputType": "video",
+    "searchText": "rh 火山字幕擦除-视频字幕擦除（精细化版） 火山字幕擦除-视频字幕擦除（精细化版） volc-subtitle-erase/video(refined version) runninghub/seedance video volc-subtitle-erase-pro/video"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/volc-subtitle-erase/video",
+    "label": "RH 火山字幕擦除-视频字幕擦除（标准版）",
+    "category": "RunningHub/Seedance",
+    "outputType": "video",
+    "searchText": "rh 火山字幕擦除-视频字幕擦除（标准版） 火山字幕擦除-视频字幕擦除（标准版） volc-subtitle-erase/video(standard version)  runninghub/seedance video volc-subtitle-erase/video"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/youchuan/image-to-video",
+    "label": "RH 悠船图生视频",
+    "category": "RunningHub/Youchuan",
+    "outputType": "video",
+    "searchText": "rh 悠船图生视频 悠船图生视频 midjourney-image-to-video runninghub/youchuan video youchuan/image-to-video"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/youchuan/text-to-image-niji6",
+    "label": "RH 悠船文生图-niji6",
+    "category": "RunningHub/Youchuan",
+    "outputType": "image",
+    "searchText": "rh 悠船文生图-niji6 悠船文生图-niji6 midjourney-text-to-image-niji6 runninghub/youchuan image youchuan/text-to-image-niji6"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/youchuan/text-to-image-niji7",
+    "label": "RH 悠船文生图-niji7",
+    "category": "RunningHub/Youchuan",
+    "outputType": "image",
+    "searchText": "rh 悠船文生图-niji7 悠船文生图-niji7 midjourney-text-to-image-niji7 runninghub/youchuan image youchuan/text-to-image-niji7"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/youchuan/text-to-image-v6",
+    "label": "RH 悠船文生图-v6",
+    "category": "RunningHub/Youchuan",
+    "outputType": "image",
+    "searchText": "rh 悠船文生图-v6 悠船文生图-v6 midjourney-text-to-image-v6 runninghub/youchuan image youchuan/text-to-image-v6"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/youchuan/text-to-image-v61",
+    "label": "RH 悠船文生图-v61",
+    "category": "RunningHub/Youchuan",
+    "outputType": "image",
+    "searchText": "rh 悠船文生图-v61 悠船文生图-v61 midjourney-text-to-image-v61 runninghub/youchuan image youchuan/text-to-image-v61"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/youchuan/text-to-image-v7",
+    "label": "RH 悠船文生图-v7",
+    "category": "RunningHub/Youchuan",
+    "outputType": "image",
+    "searchText": "rh 悠船文生图-v7 悠船文生图-v7 midjourney-text-to-image-v7 runninghub/youchuan image youchuan/text-to-image-v7"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/youchuan/text-to-image-v81",
+    "label": "RH 悠船文生图-v8.1",
+    "category": "RunningHub/Midjourney",
+    "outputType": "image",
+    "searchText": "rh 悠船文生图-v8.1 悠船文生图-v8.1 midjourney-text-to-image-v8.1 runninghub/midjourney image youchuan/text-to-image-v81"
+  },
+  {
+    "providerId": "runninghub",
+    "locator": "runninghub://api/youchuan/text-to-image-v82",
+    "label": "RH 悠船文生图-v8.2预览版",
+    "category": "RunningHub/Midjourney",
+    "outputType": "image",
+    "searchText": "rh 悠船文生图-v8.2预览版 悠船文生图-v8.2预览版 midjourney-text-to-image-v8.2-preview runninghub/midjourney image youchuan/text-to-image-v82"
+  }
+]

@@ -82,7 +82,7 @@ export async function createRunninghubTask(
         {
           url: runUrl,
           status: response.status,
-          payload: requestPayload,
+          payload: redactApiKey(requestPayload),
         },
         null,
         2
@@ -97,7 +97,7 @@ export async function createRunninghubTask(
       JSON.stringify(
         {
           url: runUrl,
-          payload: requestPayload,
+          payload: redactApiKey(requestPayload),
           response: result,
         },
         null,
@@ -141,7 +141,7 @@ export async function checkRunninghubStatus(
     JSON.stringify(
       {
         url: statusUrl,
-        payload: statusPayload,
+        payload: redactApiKey(statusPayload),
       },
       null,
       2
@@ -159,7 +159,7 @@ export async function checkRunninghubStatus(
         {
           url: statusUrl,
           status: response.status,
-          payload: statusPayload,
+          payload: redactApiKey(statusPayload),
         },
         null,
         2
@@ -174,7 +174,7 @@ export async function checkRunninghubStatus(
       JSON.stringify(
         {
           url: statusUrl,
-          payload: statusPayload,
+          payload: redactApiKey(statusPayload),
           response: payload,
         },
         null,
@@ -257,6 +257,13 @@ export async function cancelRunninghubTask(
   if (payload?.code !== 0) {
     throw createRunningHubError('cancel', payload);
   }
+}
+
+function redactApiKey<T extends Record<string, unknown>>(payload: T): T {
+  return {
+    ...payload,
+    ...('apiKey' in payload ? { apiKey: '[REDACTED]' } : {}),
+  };
 }
 
 export type { RunningHubConfig } from './helpers.ts';

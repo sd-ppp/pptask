@@ -1,0 +1,786 @@
+{
+  "provider": "kie",
+  "transactionId": "85d9a163-a394-4f62-9ae7-1213c124bea9",
+  "sourceUrls": [
+    "https://docs.kie.ai/llms.txt",
+    "https://docs.kie.ai/market/seedream/seedream.md",
+    "https://docs.kie.ai/market/seedream/seedream-v4-text-to-image.md",
+    "https://docs.kie.ai/market/seedream/seedream-v4-edit.md",
+    "https://docs.kie.ai/market/seedream/4-5-text-to-image.md",
+    "https://docs.kie.ai/market/seedream/4-5-edit.md",
+    "https://docs.kie.ai/market/seedream/5-lite-text-to-image.md",
+    "https://docs.kie.ai/market/seedream-5-lite-image-to-image.md",
+    "https://docs.kie.ai/market/seedream/5-pro-text-to-image.md",
+    "https://docs.kie.ai/market/seedream/5-pro-image-to-image.md",
+    "https://docs.kie.ai/market/z-image/z-image.md",
+    "https://docs.kie.ai/market/google/imagen4-fast.md",
+    "https://docs.kie.ai/market/google/imagen4-ultra.md",
+    "https://docs.kie.ai/market/google/imagen4.md",
+    "https://docs.kie.ai/market/google/nano-banana-edit.md",
+    "https://docs.kie.ai/market/google/nano-banana.md",
+    "https://docs.kie.ai/market/google/pro-image-to-image.md",
+    "https://docs.kie.ai/market/google/nanobanana2.md",
+    "https://docs.kie.ai/market/google/nano-banana-2-lite.md",
+    "https://docs.kie.ai/market/flux2/pro-image-to-image.md",
+    "https://docs.kie.ai/market/flux2/pro-text-to-image.md",
+    "https://docs.kie.ai/market/flux2/flex-image-to-image.md",
+    "https://docs.kie.ai/market/flux2/flex-text-to-image.md",
+    "https://docs.kie.ai/market/grok-imagine/text-to-image.md",
+    "https://docs.kie.ai/market/grok-imagine/image-to-image.md",
+    "https://docs.kie.ai/market/gpt-image/1-5-text-to-image.md",
+    "https://docs.kie.ai/market/gpt-image/1-5-image-to-image.md",
+    "https://docs.kie.ai/market/gpt/gpt-image-2-text-to-image.md",
+    "https://docs.kie.ai/market/gpt/gpt-image-2-image-to-image.md",
+    "https://docs.kie.ai/market/topaz/image-upscale.md",
+    "https://docs.kie.ai/market/recraft/remove-background.md",
+    "https://docs.kie.ai/market/recraft/crisp-upscale.md",
+    "https://docs.kie.ai/market/ideogram/character-edit.md",
+    "https://docs.kie.ai/market/ideogram/character-remix.md",
+    "https://docs.kie.ai/market/ideogram/character.md",
+    "https://docs.kie.ai/market/ideogram/v3-text-to-image.md",
+    "https://docs.kie.ai/market/ideogram/v3-edit.md",
+    "https://docs.kie.ai/market/ideogram/v3-remix.md",
+    "https://docs.kie.ai/market/qwen/text-to-image.md",
+    "https://docs.kie.ai/market/qwen/image-to-image.md",
+    "https://docs.kie.ai/market/qwen/image-edit.md",
+    "https://docs.kie.ai/market/qwen2/image-edit.md",
+    "https://docs.kie.ai/market/qwen2/text-to-image.md",
+    "https://docs.kie.ai/market/wan/2-7-image.md",
+    "https://docs.kie.ai/market/wan/2-7-image-pro.md",
+    "https://docs.kie.ai/market/grok-imagine/text-to-video.md",
+    "https://docs.kie.ai/market/grok-imagine/image-to-video.md",
+    "https://docs.kie.ai/market/grok-imagine/upscale.md",
+    "https://docs.kie.ai/market/grok-imagine/extend.md",
+    "https://docs.kie.ai/market/grok-imagine/1-5-preview.md",
+    "https://docs.kie.ai/market/kling/text-to-video.md",
+    "https://docs.kie.ai/market/kling/image-to-video.md",
+    "https://docs.kie.ai/market/kling/v25-turbo-image-to-video-pro.md",
+    "https://docs.kie.ai/market/kling/v25-turbo-text-to-video-pro.md",
+    "https://docs.kie.ai/market/kling/ai-avatar-standard.md",
+    "https://docs.kie.ai/market/kling/ai-avatar-pro.md",
+    "https://docs.kie.ai/market/kling/v2-1-master-image-to-video.md",
+    "https://docs.kie.ai/market/kling/v2-1-master-text-to-video.md",
+    "https://docs.kie.ai/market/kling/v2-1-pro.md",
+    "https://docs.kie.ai/market/kling/v2-1-standard.md",
+    "https://docs.kie.ai/market/kling/motion-control.md",
+    "https://docs.kie.ai/market/kling/motion-control-v3.md",
+    "https://docs.kie.ai/market/kling/kling-3-0.md",
+    "https://docs.kie.ai/market/kling/v3-turbo-text-to-video.md",
+    "https://docs.kie.ai/market/kling/v3-turbo-image-to-video.md",
+    "https://docs.kie.ai/market/bytedance/seedance-2.md",
+    "https://docs.kie.ai/market/bytedance/seedance-2-fast.md",
+    "https://docs.kie.ai/market/bytedance/seedance-2-mini.md",
+    "https://docs.kie.ai/market/bytedance/seedance-1-5-pro.md",
+    "https://docs.kie.ai/market/bytedance/v1-pro-fast-image-to-video.md",
+    "https://docs.kie.ai/market/bytedance/v1-pro-image-to-video.md",
+    "https://docs.kie.ai/market/bytedance/v1-pro-text-to-video.md",
+    "https://docs.kie.ai/market/bytedance/v1-lite-image-to-video.md",
+    "https://docs.kie.ai/market/bytedance/v1-lite-text-to-video.md",
+    "https://docs.kie.ai/market/hailuo/2-3-image-to-video-pro.md",
+    "https://docs.kie.ai/market/hailuo/2-3-image-to-video-standard.md",
+    "https://docs.kie.ai/market/hailuo/02-text-to-video-pro.md",
+    "https://docs.kie.ai/market/hailuo/02-image-to-video-pro.md",
+    "https://docs.kie.ai/market/hailuo/02-text-to-video-standard.md",
+    "https://docs.kie.ai/market/hailuo/02-image-to-video-standard.md",
+    "https://docs.kie.ai/market/wan/2-2-a14b-image-to-video-turbo.md",
+    "https://docs.kie.ai/market/wan/2-2-a14b-speech-to-video-turbo.md",
+    "https://docs.kie.ai/market/wan/2-2-a14b-text-to-video-turbo.md",
+    "https://docs.kie.ai/market/wan/2-2-animate-move.md",
+    "https://docs.kie.ai/market/wan/2-2-animate-replace.md",
+    "https://docs.kie.ai/market/wan/2-6-image-to-video.md",
+    "https://docs.kie.ai/market/wan/2-6-text-to-video.md",
+    "https://docs.kie.ai/market/wan/2-6-video-to-video.md",
+    "https://docs.kie.ai/market/wan/2-6-flash-image-to-video.md",
+    "https://docs.kie.ai/market/wan/2-6-flash-video-to-video.md",
+    "https://docs.kie.ai/market/wan/2-5-image-to-video.md",
+    "https://docs.kie.ai/market/wan/2-5-text-to-video.md",
+    "https://docs.kie.ai/market/wan/2-7-text-to-video.md",
+    "https://docs.kie.ai/market/wan/2-7-image-to-video.md",
+    "https://docs.kie.ai/market/wan/2-7-videoedit.md",
+    "https://docs.kie.ai/market/wan/2-7-r2v.md",
+    "https://docs.kie.ai/market/topaz/video-upscale.md",
+    "https://docs.kie.ai/market/infinitalk/from-audio.md",
+    "https://docs.kie.ai/market/pixverse/text-to-video.md",
+    "https://docs.kie.ai/market/pixverse/image-to-video.md",
+    "https://docs.kie.ai/market/pixverse/transition.md",
+    "https://docs.kie.ai/market/pixverse/extend.md",
+    "https://docs.kie.ai/market/pixverse/reference-to-video.md",
+    "https://docs.kie.ai/market/minimax-h3/text-to-video.md",
+    "https://docs.kie.ai/market/minimax-h3/image-to-video.md",
+    "https://docs.kie.ai/market/minimax-h3/reference-to-video.md",
+    "https://docs.kie.ai/market/happyhorse/text-to-video.md",
+    "https://docs.kie.ai/market/happyhorse/image-to-video.md",
+    "https://docs.kie.ai/market/happyhorse/reference-to-video.md",
+    "https://docs.kie.ai/market/happyhorse/video-edit.md",
+    "https://docs.kie.ai/market/happyhorse-1-1/image-to-video.md",
+    "https://docs.kie.ai/market/happyhorse-1-1/text-to-video.md",
+    "https://docs.kie.ai/market/happyhorse-1-1/reference-to-video.md",
+    "https://docs.kie.ai/market/gemini-omni-video.md",
+    "https://docs.kie.ai/market/gemini-omni-audio.md",
+    "https://docs.kie.ai/market/gemini-omni-character.md",
+    "https://docs.kie.ai/market/omnihuman-1-5.md",
+    "https://docs.kie.ai/market/omnihuman-1-5/human-identification.md",
+    "https://docs.kie.ai/market/omnihuman-1-5/subject-detection.md",
+    "https://docs.kie.ai/market/volcengine/video-to-video-lip-sync.md",
+    "https://docs.kie.ai/market/elevenlabs/audio-isolation.md",
+    "https://docs.kie.ai/market/elevenlabs/text-to-dialogue-v3.md",
+    "https://docs.kie.ai/market/elevenlabs/text-to-speech-multilingual-v2.md",
+    "https://docs.kie.ai/market/elevenlabs/text-to-speech-turbo-2-5.md",
+    "https://docs.kie.ai/market/google/gemini-3-1-flash-tts.md",
+    "https://docs.kie.ai/market/chat/gpt-5-2.md",
+    "https://docs.kie.ai/market/chat/gpt-5-4.md",
+    "https://docs.kie.ai/market/chat/gpt-5-5.md",
+    "https://docs.kie.ai/market/chat/gpt-5-6-luna.md",
+    "https://docs.kie.ai/market/chat/gpt-5-6-terra.md",
+    "https://docs.kie.ai/market/chat/gpt-5-6-sol.md",
+    "https://docs.kie.ai/market/claude/claude-opus-4-7.md",
+    "https://docs.kie.ai/market/claude/claude-opus-4-8.md",
+    "https://docs.kie.ai/market/claude/cluade-fable-5.md",
+    "https://docs.kie.ai/market/claude/cluade-sonnet-5.md",
+    "https://docs.kie.ai/market/claude/claude-haiku-4-5.md",
+    "https://docs.kie.ai/market/claude/claude-opus-4-5.md",
+    "https://docs.kie.ai/market/claude/claude-opus-4-6.md",
+    "https://docs.kie.ai/market/claude/claude-opus-5.md",
+    "https://docs.kie.ai/market/claude/claude-sonnet-4-5.md",
+    "https://docs.kie.ai/market/claude/claude-sonnet-4-6.md",
+    "https://docs.kie.ai/market/codex/gpt-codex.md",
+    "https://docs.kie.ai/market/gemini/gemini-2-5-pro.md",
+    "https://docs.kie.ai/market/gemini/gemini-3-pro.md",
+    "https://docs.kie.ai/market/gemini/gemini-3-1-pro.md",
+    "https://docs.kie.ai/market/gemini/gemini-2-5-flash.md",
+    "https://docs.kie.ai/market/gemini/gemini-3-flash.md",
+    "https://docs.kie.ai/market/gemini/gemini-3-5-flash.md",
+    "https://docs.kie.ai/market/gemini/gemini-3-5-flash-openai.md",
+    "https://docs.kie.ai/market/gemini/gemini-3-6-flash.md",
+    "https://docs.kie.ai/market/gemini/gemini-3-6-flash-openai.md",
+    "https://docs.kie.ai/market/gemini/gemini-3-flash-v1beta.md",
+    "https://docs.kie.ai/market/grok/grok-4-3.md",
+    "https://docs.kie.ai/market/grok/grok-4-5.md",
+    "https://docs.kie.ai/market/common/get-task-detail.md"
+  ],
+  "fileCount": 155,
+  "syncedAt": "2026-08-02T16:59:32.282Z",
+  "contentHash": "sha256:9bc3c4209c29aa6fcb711db02576b0d6833d65cf1323fc93c775515b07ddeafa",
+  "files": [
+    {
+      "path": "llms.txt",
+      "sha256": "28d0bbd00f86c2cea957414a3b3b2250c36c6de97ea32ec119cbd05628ce0d31"
+    },
+    {
+      "path": "market/bytedance/seedance-1-5-pro.md",
+      "sha256": "9bb3c2045435de83803f871979791621dc08859155a7b5ab96dfe292eae39d8c"
+    },
+    {
+      "path": "market/bytedance/seedance-2-fast.md",
+      "sha256": "d4b8daaa6b487f39abe7daa3602e478ff98978b946cebc42d0c6797a254838d2"
+    },
+    {
+      "path": "market/bytedance/seedance-2-mini.md",
+      "sha256": "cd6fedfe4984bd8a5e11fb6143c7f2488ffff9bca057a7e22cb9a9c18541e2ce"
+    },
+    {
+      "path": "market/bytedance/seedance-2.md",
+      "sha256": "b61ad76b99afe2ca5eeeea41cf50cfe13e98ab76732b2142af1372d97d734592"
+    },
+    {
+      "path": "market/bytedance/v1-lite-image-to-video.md",
+      "sha256": "014f63b648e61e5692e371003d4b047cc4d951108aad7884ae1b4074d317b6c7"
+    },
+    {
+      "path": "market/bytedance/v1-lite-text-to-video.md",
+      "sha256": "82967ae393e6b1508e38de8cc9db39e83e368b61c9b923baa2ca5a6aefce4c50"
+    },
+    {
+      "path": "market/bytedance/v1-pro-fast-image-to-video.md",
+      "sha256": "9511782f755de53ccf734a511db25368b42bf29b0fcbbab611917ccb90a96137"
+    },
+    {
+      "path": "market/bytedance/v1-pro-image-to-video.md",
+      "sha256": "f26482add7cfe35e661cda5125bdaecaa819d01d2ebfa36a1bcbed195c316948"
+    },
+    {
+      "path": "market/bytedance/v1-pro-text-to-video.md",
+      "sha256": "0774716423df3e9e1bfa82beeac9a2bc3ad0efe55548f536f460503abf576397"
+    },
+    {
+      "path": "market/chat/gpt-5-2.md",
+      "sha256": "5bc9cba76b8fc06605e2a9b63abeda337ee4700821980d2944eee997ecd3bb53"
+    },
+    {
+      "path": "market/chat/gpt-5-4.md",
+      "sha256": "7738f1814dfdfabfe5fb1aaf0e589ec9a66f4ec167537048aa927067ca503331"
+    },
+    {
+      "path": "market/chat/gpt-5-5.md",
+      "sha256": "dc8fae799896b7cabfd7f846ba22198720b3d449cf84aebe8dfdc78fb90a7849"
+    },
+    {
+      "path": "market/chat/gpt-5-6-luna.md",
+      "sha256": "a00fcb6d60db7b2b95e48fa6dbdd848d0c5aadc1e15e91aa90e421692a66ab45"
+    },
+    {
+      "path": "market/chat/gpt-5-6-sol.md",
+      "sha256": "3d40b6376276c222df133de294785054907104165665f4c8c03f1104c65034e7"
+    },
+    {
+      "path": "market/chat/gpt-5-6-terra.md",
+      "sha256": "5c531b0d3e85ca3bddd2d771afb01be61a680cd4f0ed2bc504b1a955034bc3e1"
+    },
+    {
+      "path": "market/claude/claude-haiku-4-5.md",
+      "sha256": "b2fb09dbc366f3783f2924655f12034dcfc530e187e2e1e39caad72361c03765"
+    },
+    {
+      "path": "market/claude/claude-opus-4-5.md",
+      "sha256": "0774716423df3e9e1bfa82beeac9a2bc3ad0efe55548f536f460503abf576397"
+    },
+    {
+      "path": "market/claude/claude-opus-4-6.md",
+      "sha256": "2a26ef602273eb846672620e95c3a4b44ddf65ff5d23d60fb11baaa99cc267bd"
+    },
+    {
+      "path": "market/claude/claude-opus-4-7.md",
+      "sha256": "85e4b8c2d2b5e3a47940ff5a47fe9394f116e279b780b722106269660cf80ef9"
+    },
+    {
+      "path": "market/claude/claude-opus-4-8.md",
+      "sha256": "9eb45141a1d6e243c222cad706fac4afd348ed65f87abc670bb35d3ce0154a69"
+    },
+    {
+      "path": "market/claude/claude-opus-5.md",
+      "sha256": "a206fcb01da4f0330ed96b60b293f4165f02b7685deb5404dc37199cffd5c426"
+    },
+    {
+      "path": "market/claude/claude-sonnet-4-5.md",
+      "sha256": "d734fe4071ce05e716b9f537a3b2e406e2169981dda471ec7ecd6bcfe2886201"
+    },
+    {
+      "path": "market/claude/claude-sonnet-4-6.md",
+      "sha256": "3fda7a5be7a54eba6558978cd2cf597276305cb87faa787597798c4c998d668b"
+    },
+    {
+      "path": "market/claude/cluade-fable-5.md",
+      "sha256": "371956ea4e782bf5ad3fe3b8cd8548e3cb9d1236fb588584412ed30ea422e0db"
+    },
+    {
+      "path": "market/claude/cluade-sonnet-5.md",
+      "sha256": "6e96531005db6bac637ad1b13b7ad63b8736786399dbe2b9911da80427ab9f93"
+    },
+    {
+      "path": "market/codex/gpt-codex.md",
+      "sha256": "62b9b0daf725683e0f2ca96240f38f9592d82a215c39416cf156cf5c7c52fe12"
+    },
+    {
+      "path": "market/common/get-task-detail.md",
+      "sha256": "1fe719350d91e1634d74a6e656dbf7f88b3db5fc3a8a101cf2c214f82c2cce82"
+    },
+    {
+      "path": "market/elevenlabs/audio-isolation.md",
+      "sha256": "3b0d412289f0c46190c0b5b660903c6f53a92c542b65ec8c16dec57c7dcaa92a"
+    },
+    {
+      "path": "market/elevenlabs/text-to-dialogue-v3.md",
+      "sha256": "af8459dffd80a4ec23a291c23f9959e82cd814b62829d37e568df05293431682"
+    },
+    {
+      "path": "market/elevenlabs/text-to-speech-multilingual-v2.md",
+      "sha256": "99292cead27b90ccc41fb8c75c9ba9e4441b379d4b7b9e1fdf64c90a33d142aa"
+    },
+    {
+      "path": "market/elevenlabs/text-to-speech-turbo-2-5.md",
+      "sha256": "18e23ee4f96b5e7a0fee83ec5e52c2182eff6fd4239c3d1f271658df3808805f"
+    },
+    {
+      "path": "market/flux2/flex-image-to-image.md",
+      "sha256": "72a712f8c0a92a3419e0c872560fb5239676fb2c833bd8fc2738bee3279f6cb8"
+    },
+    {
+      "path": "market/flux2/flex-text-to-image.md",
+      "sha256": "851dbc1cf8677cc517fec00e045dcf0e3fa5b42c81e5b98316029efba66df33d"
+    },
+    {
+      "path": "market/flux2/pro-image-to-image.md",
+      "sha256": "e723813f5ef26c217b041c63ddcb83c28eb5eaf945ace75520a7195c6fa4a06d"
+    },
+    {
+      "path": "market/flux2/pro-text-to-image.md",
+      "sha256": "25699831767f34eda2854d502a4d2e44c024ec96c3de8d9eb248281e1c7dd12f"
+    },
+    {
+      "path": "market/gemini-omni-audio.md",
+      "sha256": "b168d7b102a902c6704a4a0fe85da3777ebb681ed44b06851c117a5ecaa07d56"
+    },
+    {
+      "path": "market/gemini-omni-character.md",
+      "sha256": "898119a81fd3f380361d546a93efb3d52daee6a2e15bbb3a3b97bc00abd623f1"
+    },
+    {
+      "path": "market/gemini-omni-video.md",
+      "sha256": "c48397bff1c597d1885c4bfbf3a9714177c5079137b6b250a79fedbea11ff173"
+    },
+    {
+      "path": "market/gemini/gemini-2-5-flash.md",
+      "sha256": "e080b38953a205d7ea498cef49223a5b44170542e7380e9b15ec1ef683bfa97c"
+    },
+    {
+      "path": "market/gemini/gemini-2-5-pro.md",
+      "sha256": "81f6ffacb8e35bc5422ab237b1cdba6f509ba26d6d5310a900c0004cd57bf0e5"
+    },
+    {
+      "path": "market/gemini/gemini-3-1-pro.md",
+      "sha256": "3adf5cda5105df000fd0b3b50831b8ad27277712ec1f048bd2a41057a343d004"
+    },
+    {
+      "path": "market/gemini/gemini-3-5-flash-openai.md",
+      "sha256": "9273e0bbe739bbf125c583523551d8033b454182efbb9cbe3453c522eb2e7445"
+    },
+    {
+      "path": "market/gemini/gemini-3-5-flash.md",
+      "sha256": "9068e600eb5fbbd956d867a8b15e9ac3881a38efa2a36eb7cef8977575a00e42"
+    },
+    {
+      "path": "market/gemini/gemini-3-6-flash-openai.md",
+      "sha256": "6907afefc701499ba09c7266c222a8a181b65b463fa2c5201dd2887a28999863"
+    },
+    {
+      "path": "market/gemini/gemini-3-6-flash.md",
+      "sha256": "694ef6c8c8c8652ed2502473f838057b914763f83a2813df58ce192f95ea2334"
+    },
+    {
+      "path": "market/gemini/gemini-3-flash-v1beta.md",
+      "sha256": "ad994943d0a0b50ce47d2fb4f2a1324d3b28229eece81186157b3e4e640b79af"
+    },
+    {
+      "path": "market/gemini/gemini-3-flash.md",
+      "sha256": "9eed9e369cd754c9f92f3bc6bc62959666a4ccc96fec73ce6755f240c19ef536"
+    },
+    {
+      "path": "market/gemini/gemini-3-pro.md",
+      "sha256": "757bbe02a5bbb558fcb2a4f4ff550cf832cd48c1d915b3f55d476733432e11ab"
+    },
+    {
+      "path": "market/google/gemini-3-1-flash-tts.md",
+      "sha256": "87a6ff26335945affe8dd2c5c79ed9c0341d0dcbf574b9c3c3f56580878b874d"
+    },
+    {
+      "path": "market/google/imagen4-fast.md",
+      "sha256": "b037df529a223c192352cfb3cd3ee68091295c7e77a1407061d48c8b1d744763"
+    },
+    {
+      "path": "market/google/imagen4-ultra.md",
+      "sha256": "54b871f92041627ebd5d0d24545894ec114efa87c8e19ef7dc3be4cdf8b3998a"
+    },
+    {
+      "path": "market/google/imagen4.md",
+      "sha256": "dda968295f6314f7f6ee0bbbe38efba244ed3781d17ea71c27c402bb571a7de1"
+    },
+    {
+      "path": "market/google/nano-banana-2-lite.md",
+      "sha256": "e116e051cdf284b09c3b28968cc0e84a48f0a30a027698e3dbae2a6a6873d8a7"
+    },
+    {
+      "path": "market/google/nano-banana-edit.md",
+      "sha256": "3854918ab979ebef50a6037ca2f838c2dd4cacc5daa0971797f34c32c3109f14"
+    },
+    {
+      "path": "market/google/nano-banana.md",
+      "sha256": "6cfa5bcc67464fda1822fc484c868b4a57c613ce22d362bf14f94486175f79f9"
+    },
+    {
+      "path": "market/google/nanobanana2.md",
+      "sha256": "57676555e92643845a27882c944d85f5f791974408c3fbbfec2d1ac5eb08a7ee"
+    },
+    {
+      "path": "market/google/pro-image-to-image.md",
+      "sha256": "b223d9efce256d88dc33e998d138bc3ee9a859689e31799dd13b228274192a3b"
+    },
+    {
+      "path": "market/gpt-image/1-5-image-to-image.md",
+      "sha256": "03636e7da23ccf10347095131504087101d8dd1976ea4c5d62871bb9b0a4e7cb"
+    },
+    {
+      "path": "market/gpt-image/1-5-text-to-image.md",
+      "sha256": "a863023a1c1cc175dddaac079eef82ffccffb7415c75fd12b7c826218af4b3fa"
+    },
+    {
+      "path": "market/gpt/gpt-image-2-image-to-image.md",
+      "sha256": "33e8d87fe78c123ad80b34665211ef1c91432c34c9aff2a9c65ecd3b811a0eca"
+    },
+    {
+      "path": "market/gpt/gpt-image-2-text-to-image.md",
+      "sha256": "40420a1139b11164ea516d82bc72ac283bdca1e27bad4fa65ccf9c120be4cd34"
+    },
+    {
+      "path": "market/grok-imagine/1-5-preview.md",
+      "sha256": "b9db86fc4d6dc738944289ac9f2f1753fd368e0532053970b266563df3beb25e"
+    },
+    {
+      "path": "market/grok-imagine/extend.md",
+      "sha256": "6a495e8b4787c6e063da393a5455d119c478a295960e3361535f3fa631fbf1b4"
+    },
+    {
+      "path": "market/grok-imagine/image-to-image.md",
+      "sha256": "bc55a7d64195fc3137981ea8bf955ea5029df600f7f8b4c5503d03f69b6cccae"
+    },
+    {
+      "path": "market/grok-imagine/image-to-video.md",
+      "sha256": "501884185fce60c18473aba69ce7e9e5d93843f76baf53882703a8b6703d5648"
+    },
+    {
+      "path": "market/grok-imagine/text-to-image.md",
+      "sha256": "f6aa98302c8e5165c2b59c39a793318ce5e76f0fbdeca65700634592319425f2"
+    },
+    {
+      "path": "market/grok-imagine/text-to-video.md",
+      "sha256": "975fb8f9c8f4c1bdd394a7e8342b914f97b930901be9b2ee954b1ed667714099"
+    },
+    {
+      "path": "market/grok-imagine/upscale.md",
+      "sha256": "2d2e640573ddf630e59a1e112e472a90a5a3c779cbf4436e2a8ba75a8b4e1c9a"
+    },
+    {
+      "path": "market/grok/grok-4-3.md",
+      "sha256": "0493db4459b9d824de868a221a6437e44595424580227143814acf8f531936ca"
+    },
+    {
+      "path": "market/grok/grok-4-5.md",
+      "sha256": "0774716423df3e9e1bfa82beeac9a2bc3ad0efe55548f536f460503abf576397"
+    },
+    {
+      "path": "market/hailuo/02-image-to-video-pro.md",
+      "sha256": "abae2b82a21e91c2400037f8ea3f235fe50383c8777b2714f268ec968b652250"
+    },
+    {
+      "path": "market/hailuo/02-image-to-video-standard.md",
+      "sha256": "42720c92c23c595c080ed4d0736cc7b2e8335b5b1c8d0f72ee36763f55bac18f"
+    },
+    {
+      "path": "market/hailuo/02-text-to-video-pro.md",
+      "sha256": "0d4bd816765e673a34231174aca2ccffc4135d913a45e60858a19cc551bf77d8"
+    },
+    {
+      "path": "market/hailuo/02-text-to-video-standard.md",
+      "sha256": "0774716423df3e9e1bfa82beeac9a2bc3ad0efe55548f536f460503abf576397"
+    },
+    {
+      "path": "market/hailuo/2-3-image-to-video-pro.md",
+      "sha256": "a9685b09fb651b952dd93f3eeca668d57c77136acc8fa31ae969f2835d5ebfc7"
+    },
+    {
+      "path": "market/hailuo/2-3-image-to-video-standard.md",
+      "sha256": "5a76052fa60659a2fd4c7315b649a2adc3b8f138ac56e1a20879eb901b1d7ff2"
+    },
+    {
+      "path": "market/happyhorse-1-1/image-to-video.md",
+      "sha256": "e335c26f6aa0bd70756180713195f9d085c506c0c26ec2d3caad9878e473674f"
+    },
+    {
+      "path": "market/happyhorse-1-1/reference-to-video.md",
+      "sha256": "c1c24c5255417e1d1e88d6d8b5763edf37048036529b17cd5e4a27b4ade6e9d7"
+    },
+    {
+      "path": "market/happyhorse-1-1/text-to-video.md",
+      "sha256": "95b2af914728decfa6e93da284246a8f22ec9a00447d23308e9dc23167dcc0eb"
+    },
+    {
+      "path": "market/happyhorse/image-to-video.md",
+      "sha256": "e6e657656a36ee5befff4fa60e7a93385667148591b2f7950cb8c6652c25a170"
+    },
+    {
+      "path": "market/happyhorse/reference-to-video.md",
+      "sha256": "c645623c7e8c8407b48cc93eb5823a842157708ea247330a611352696cab9297"
+    },
+    {
+      "path": "market/happyhorse/text-to-video.md",
+      "sha256": "422c132da2ef812ae480fab0f2ebdcfb7e414f8c6b47076cdf7afadd99941a8c"
+    },
+    {
+      "path": "market/happyhorse/video-edit.md",
+      "sha256": "0dde955765fd447da4f082ac6a4cc007b31fca2312a4f0f13b4e5fdb78d758f5"
+    },
+    {
+      "path": "market/ideogram/character-edit.md",
+      "sha256": "0a1c042c31a0a8e003956a08730be5ec1b763474ae6d7a61519e28a2a8878523"
+    },
+    {
+      "path": "market/ideogram/character-remix.md",
+      "sha256": "31f844c5e967225c34c990b19748ba72dc748be33b7458fa149cc5eb76688dee"
+    },
+    {
+      "path": "market/ideogram/character.md",
+      "sha256": "a724aac382164ac59990113c44a9c9e568469df4580d2acbb18d3ce5373e261b"
+    },
+    {
+      "path": "market/ideogram/v3-edit.md",
+      "sha256": "1c2c071bce2ad58d83941f9ba25d7bf2239b29905803cc18a6323d9aa561bed5"
+    },
+    {
+      "path": "market/ideogram/v3-remix.md",
+      "sha256": "0ce84b058fa48f021f9fd45da05558206308bccff9b4dd5ff3365f56f4a9aeb3"
+    },
+    {
+      "path": "market/ideogram/v3-text-to-image.md",
+      "sha256": "01fffdaf4c5cdbd127e51fa440615115e5a656609e2e9bef7d5d9b86dfc732c5"
+    },
+    {
+      "path": "market/infinitalk/from-audio.md",
+      "sha256": "19eccc3ccf827942d6b10ebd6aa45bcb31a3e0fd83a08e4ea22be2f42c5e2dfc"
+    },
+    {
+      "path": "market/kling/ai-avatar-pro.md",
+      "sha256": "3e6b10d46f4a8d1e55ea75c7334178e4bc51e08dadad691cb2dcc2acee91d73d"
+    },
+    {
+      "path": "market/kling/ai-avatar-standard.md",
+      "sha256": "b914b251a69ee621d76f054a8a9233289f9b154da5f484d5bac6c541014625a2"
+    },
+    {
+      "path": "market/kling/image-to-video.md",
+      "sha256": "221f4e810524f671b44f8c9d391b145db80d158d4e1d0cc13a8beb88fad3d2ff"
+    },
+    {
+      "path": "market/kling/kling-3-0.md",
+      "sha256": "509e54801f2984deffa66998da4b79f12c9d8e0226f43dbf550f5d7a27e5a2f0"
+    },
+    {
+      "path": "market/kling/motion-control-v3.md",
+      "sha256": "11703af5504823fa69c12fa42dd5faf399b194e753c24fa8a49edbd4cd299440"
+    },
+    {
+      "path": "market/kling/motion-control.md",
+      "sha256": "3f01c8dd529cc35c93794cbc2587a63505ae0cbbdee763c1cc9e04fa33389d6d"
+    },
+    {
+      "path": "market/kling/text-to-video.md",
+      "sha256": "a72616ed2f082ed65cb9f71f63fa48a5761701a100ddd32834d2ed4c8e57e777"
+    },
+    {
+      "path": "market/kling/v2-1-master-image-to-video.md",
+      "sha256": "285ac4493b098597e31ba42deea44697cb61528228b3070b27edbe715a3a845d"
+    },
+    {
+      "path": "market/kling/v2-1-master-text-to-video.md",
+      "sha256": "752a6435a7650d4b8123a1fb4909c079c4e4a1be6ed2cd7f12350431e4686df1"
+    },
+    {
+      "path": "market/kling/v2-1-pro.md",
+      "sha256": "6b3b03b9c2a5c8756aef8bfd99b5124ecdd0a7cb44279fb6ec8f0c13ab6f1909"
+    },
+    {
+      "path": "market/kling/v2-1-standard.md",
+      "sha256": "a517137d8f8054fa441955485e6c1005807ee8a01ce249434cb9cacd4c1a311d"
+    },
+    {
+      "path": "market/kling/v25-turbo-image-to-video-pro.md",
+      "sha256": "3277590fe677545256dc8bec29dc2c9ca19c3104f28e898704c79fa86cb15df7"
+    },
+    {
+      "path": "market/kling/v25-turbo-text-to-video-pro.md",
+      "sha256": "a24cb8e0873d304eb47aa959b6fe8d304d1cc2a6f4a6a04f495d5aa9bac176fe"
+    },
+    {
+      "path": "market/kling/v3-turbo-image-to-video.md",
+      "sha256": "1c9f9ab8043070a23ab38c75360d26641f7649233d25a4f3090c03a8d0ca2a3e"
+    },
+    {
+      "path": "market/kling/v3-turbo-text-to-video.md",
+      "sha256": "92649ab9812d3868ac1255e7861bcaa5477594225a1b41fd18ca36e7084696d4"
+    },
+    {
+      "path": "market/minimax-h3/image-to-video.md",
+      "sha256": "414ec7658d464089770c98f39022965fff27380fa8f21f6786e6e0a94245879c"
+    },
+    {
+      "path": "market/minimax-h3/reference-to-video.md",
+      "sha256": "8779cb369a39330756ba570f368164514f65d8ca00ef46c883036c19734b1386"
+    },
+    {
+      "path": "market/minimax-h3/text-to-video.md",
+      "sha256": "bfbb5d9cffa430b22b036a4b221e5ad132e22a9461fcab4cbb596f6692c3f504"
+    },
+    {
+      "path": "market/omnihuman-1-5.md",
+      "sha256": "ab9070f5505b7b92e8a34a25956cc364e93334de9d414436fdb214cdcfa3a68f"
+    },
+    {
+      "path": "market/omnihuman-1-5/human-identification.md",
+      "sha256": "b910a001e535a8641c46d02ed4019454e851e35587e173e39b2c388560b53b1d"
+    },
+    {
+      "path": "market/omnihuman-1-5/subject-detection.md",
+      "sha256": "dd8ef40a2bc4e2c1f513b133e6c26fc7e19d013e867023177ad0d418dade5ea8"
+    },
+    {
+      "path": "market/pixverse/extend.md",
+      "sha256": "092639d6883e0220f54b89775e9439546ecf837b809a7f2e658c864797950cd2"
+    },
+    {
+      "path": "market/pixverse/image-to-video.md",
+      "sha256": "2042401ec6ccc94ff8ed592842b2cb557907dab0800667eeb0d57347bdf6432c"
+    },
+    {
+      "path": "market/pixverse/reference-to-video.md",
+      "sha256": "787e3d8cce37bb2679eef55671d3acf3b401716b9ca87f11070862fa4e9b0e7a"
+    },
+    {
+      "path": "market/pixverse/text-to-video.md",
+      "sha256": "0262298f7fb23c11aebd780891d39839a065de16daf43fb042bad3f36f6ec5e7"
+    },
+    {
+      "path": "market/pixverse/transition.md",
+      "sha256": "9b8d6898d05205e5ed28773892f128fdc07c3fce3ad208297349f7ef445d6808"
+    },
+    {
+      "path": "market/qwen/image-edit.md",
+      "sha256": "e7f62d6033c0e34f6aceb3b196fce59a9284075dcc019e9708ed6e31c1e828ea"
+    },
+    {
+      "path": "market/qwen/image-to-image.md",
+      "sha256": "1c271ad205c8d34c14966b85f5b212e51921df529c8a9f5161a92c6f180e6bba"
+    },
+    {
+      "path": "market/qwen/text-to-image.md",
+      "sha256": "759e044e4d09bf1a9b28ccd996d135b4f66b9651766f815027c5cb626d3e9cc1"
+    },
+    {
+      "path": "market/qwen2/image-edit.md",
+      "sha256": "669abb6a6fb2b41f99539e15e312c315318f10e7f2b88535130f83d03eaaf781"
+    },
+    {
+      "path": "market/qwen2/text-to-image.md",
+      "sha256": "f7f9bc18186f7eca06afc8e05f8c5de94b5d8ba0085fddee36283381ee128695"
+    },
+    {
+      "path": "market/recraft/crisp-upscale.md",
+      "sha256": "d0a1ccad211446524563198c539130f610a6c1824c69329c136c00742e634528"
+    },
+    {
+      "path": "market/recraft/remove-background.md",
+      "sha256": "e49b6488cf024f59fc14e41a8865e7fe0135423c4eacc34fa9ffad2905d995b8"
+    },
+    {
+      "path": "market/seedream-5-lite-image-to-image.md",
+      "sha256": "7d6da8a3a2701fdee823a0438705f5c7d15dcd4d41ac5c6d87ad6070d1c1d038"
+    },
+    {
+      "path": "market/seedream/4-5-edit.md",
+      "sha256": "2cf48f698442681379af88148fc0c27958f369d1dad401dea822a1a57e241b4e"
+    },
+    {
+      "path": "market/seedream/4-5-text-to-image.md",
+      "sha256": "035b32f0619893d8be35ed8610ad0c30cb6c7ce05a849a94cf1a923f0ae6f7cd"
+    },
+    {
+      "path": "market/seedream/5-lite-text-to-image.md",
+      "sha256": "157fd463ae0085227b47bd780c1cc26c35bd9f23a864f8221786797f50818096"
+    },
+    {
+      "path": "market/seedream/5-pro-image-to-image.md",
+      "sha256": "366e959d21c35fba6b561bc8f0dac37a21e08bf1f7f640cb186b2148566f053b"
+    },
+    {
+      "path": "market/seedream/5-pro-text-to-image.md",
+      "sha256": "9ed077536cf4f69d30fd97f8fdb9211be78f062d17a58280cfb1609411ae2e78"
+    },
+    {
+      "path": "market/seedream/seedream-v4-edit.md",
+      "sha256": "f7378aa6b9e9bf8e3829ab043f8843409d660385eb7a07bde0fa38f5207a2b0f"
+    },
+    {
+      "path": "market/seedream/seedream-v4-text-to-image.md",
+      "sha256": "6151724cd73f03c95a61e0cac486953ce80316e2728730b1ba131e5e0e45b161"
+    },
+    {
+      "path": "market/seedream/seedream.md",
+      "sha256": "4786302f7419b5783903cf835eea133241a17fa47822ce0f5f031469ac1c2b6c"
+    },
+    {
+      "path": "market/topaz/image-upscale.md",
+      "sha256": "b62f234c238c3b732a9fbc72ea0ef48b4807d96b1ba165ca1cff2f802ac97866"
+    },
+    {
+      "path": "market/topaz/video-upscale.md",
+      "sha256": "af5913ab87bf9449201d7b0c0046364698702e41accd76ffb1828618818ddc35"
+    },
+    {
+      "path": "market/volcengine/video-to-video-lip-sync.md",
+      "sha256": "c373f6e117bce35a84ef56377d92398e2bd07851ef0700a801808c80c534ab2f"
+    },
+    {
+      "path": "market/wan/2-2-a14b-image-to-video-turbo.md",
+      "sha256": "bb70709d7990486eba2e94bde4d01fe6316d71cd40f7c3763948e8408d989a32"
+    },
+    {
+      "path": "market/wan/2-2-a14b-speech-to-video-turbo.md",
+      "sha256": "c4c43ad92b389d1343923cb7a6e16bc11275b1467a1a65c041e539f29bf9d593"
+    },
+    {
+      "path": "market/wan/2-2-a14b-text-to-video-turbo.md",
+      "sha256": "f723d2e75f78df4522fdb11eef3ce43a0cf7358497621469f657a2b21940aa6c"
+    },
+    {
+      "path": "market/wan/2-2-animate-move.md",
+      "sha256": "c1e278abde9a76aed44deb18fe836529d97bbc59acbcbcf6be3d9089047ca792"
+    },
+    {
+      "path": "market/wan/2-2-animate-replace.md",
+      "sha256": "e194ecc139d18ca4f1b7562f14aace8e2f6c8f68dfcb1cc4a3f6641522c55314"
+    },
+    {
+      "path": "market/wan/2-5-image-to-video.md",
+      "sha256": "3637ceeb4524a9953fe5cb44342bcec49d9565efca1695ef6b8aed9040a86a28"
+    },
+    {
+      "path": "market/wan/2-5-text-to-video.md",
+      "sha256": "ec967ed38c9de10acf4ea4683860f9c4be6c6621c07629327a4b143ef066b1e4"
+    },
+    {
+      "path": "market/wan/2-6-flash-image-to-video.md",
+      "sha256": "84b56e72233e04f3871d932077a01fb2a82ef0bbca8f5cc75c0f34b4047fe69e"
+    },
+    {
+      "path": "market/wan/2-6-flash-video-to-video.md",
+      "sha256": "e2dc767be6f22010d4ca80405a2d5aee8eb8d126458974ca6f5f3198959b3260"
+    },
+    {
+      "path": "market/wan/2-6-image-to-video.md",
+      "sha256": "412d003b6ab629a6f8be2ec1e6224f2081f65eca8872e17bb5d136229ea33426"
+    },
+    {
+      "path": "market/wan/2-6-text-to-video.md",
+      "sha256": "da978fc0bc734e227ffa71d3502abf9d0bc66f89fbda1698909f95ef7f0701a5"
+    },
+    {
+      "path": "market/wan/2-6-video-to-video.md",
+      "sha256": "802a3b2900c5d049853a27657cab1cf154f32ac13c3a6fdb83fde6d9147a5227"
+    },
+    {
+      "path": "market/wan/2-7-image-pro.md",
+      "sha256": "af2473f0149e9a033736be23b35ed060aef26c15c8242db7a2ca54560145b7f3"
+    },
+    {
+      "path": "market/wan/2-7-image-to-video.md",
+      "sha256": "88fdb4a0c8201dd440ea4e311063a28e16bf8ef1000db25bfc8e7ba5680714e7"
+    },
+    {
+      "path": "market/wan/2-7-image.md",
+      "sha256": "8d1c13c0c9cd155968888fe1ba8053bcd5e11bc6b135876aae65037074ad0160"
+    },
+    {
+      "path": "market/wan/2-7-r2v.md",
+      "sha256": "436b078887a931784384b2b7e7a999d5e627fcc5c6a871ccb7aee3d3bf940ae9"
+    },
+    {
+      "path": "market/wan/2-7-text-to-video.md",
+      "sha256": "b6ae71e380c3c96adb39f5bf71d536967515d5ec2bbcad15af40e5be0277c3d6"
+    },
+    {
+      "path": "market/wan/2-7-videoedit.md",
+      "sha256": "f3d430128497a4e04464fc1f43efcf399822eed9cf7163b76535d3ad3000cf6f"
+    },
+    {
+      "path": "market/z-image/z-image.md",
+      "sha256": "19571441d4c0dc7b83768305fdfc75241b9ad6187cbb64954d2420cbab268b93"
+    }
+  ]
+}

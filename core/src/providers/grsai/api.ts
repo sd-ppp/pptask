@@ -39,37 +39,63 @@ async function parseResponse(response: Response, readFirstEventOnly: boolean = f
           if (done) break;
           
           buffer += decoder.decode(value, { stream: true });
+
+          const directJson = tryParseJson(buffer);
+          if (directJson !== undefined) {
+            reader.cancel();
+              return directJson;
+          }
           
           // Look for the first complete SSE event
           const lines = buffer.split('\n');
           for (const line of lines) {
-            if (line.startsWith('data: ')) {
-              const jsonStr = line.substring(6); // Remove "data: " prefix
+            if (line.startsWith('data:')) {
+              const jsonStr = line.substring(5).trimStart();
               // Close the reader to stop receiving further data
               reader.cancel();
               return JSON.parse(jsonStr);
             }
           }
         }
-        throw new Error('Grsai API returned invalid SSE format');
+        return parseSseOrJson(buffer);
       } finally {
         reader.releaseLock();
       }
     } else {
       // For non-streaming responses, read the entire response
       const text = await response.text();
-      const lines = text.split('\n').filter(line => line.startsWith('data: '));
-      if (lines.length > 0) {
-        const jsonStr = lines[0].substring(6); // Remove "data: " prefix
-        return JSON.parse(jsonStr);
-      } else {
-        throw new Error('Grsai API returned invalid SSE format');
-      }
+      return parseSseOrJson(text);
     }
   } else {
     // Standard JSON response
-    return await response.json();
+    const data = await response.json();
+    return data;
   }
+}
+
+function parseSseOrJson(payload: string): any {
+  const directJson = tryParseJson(payload);
+  if (directJson !== undefined) return directJson;
+  const dataLine = payload.split(/\r?\n/).map(line => line.trim()).find(line => line.startsWith('data:'));
+  if (dataLine) return JSON.parse(dataLine.substring(5).trimStart());
+  throw invalidSseFormatError(payload);
+}
+
+function tryParseJson(payload: string): any | undefined {
+  const trimmed = payload.trim();
+  if (!trimmed.startsWith('{') && !trimmed.startsWith('[')) return undefined;
+  try { return JSON.parse(trimmed); }
+  catch { return undefined; }
+}
+
+function invalidSseFormatError(payload: string): Error {
+  const firstRecord = payload.split(/\r?\n/).map(line => line.trim()).find(Boolean) ?? '';
+  const shape = !firstRecord ? 'empty response'
+    : firstRecord.startsWith('data:') ? 'data field without a readable JSON event'
+      : firstRecord.startsWith('event:') ? 'event field without a preceding data field'
+        : firstRecord.startsWith('{') || firstRecord.startsWith('[') ? 'JSON body labelled as SSE'
+          : 'unrecognised SSE record';
+  return new Error(`Grsai API returned invalid SSE format (${shape})`);
 }
 
 export async function describeGrsai(
@@ -146,7 +172,6 @@ export async function describeGrsai(
       },
     },
     formValues: {
-      model,
       aspectRatio: 'auto',
       imageSize: '1K',
     },
@@ -161,7 +186,7 @@ export async function createGrsaiTask(
   platformConfig: PlatformConfig | undefined,
   options?: TaskRequestOptions
 ): Promise<TaskCreateResult> {
-  const { apiKey, baseURL } = ensureGrsaiConfig(platformConfig);
+  const { apiKey, baseUrl } = ensureGrsaiConfig(platformConfig);
   const model = parseGrsaiModel(url);
   const signal = options?.signal;
 
@@ -169,17 +194,26 @@ export async function createGrsaiTask(
     throw createAbortError('Task creation aborted');
   }
 
-  const response = await fetch(`${baseURL}/v1/draw/nano-banana`, {
+  const response = await fetch(`${baseUrl}/v1/draw/nano-banana`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${apiKey}`,
     },
     body: JSON.stringify({
-      model,
       ...payload,
+      // The locator is the source of truth. A stale form field named `model`
+      // must not override it (for example, sending `n` instead of the full
+      // `nano-banana-*` model name).
+      model,
     }),
     signal: signal as AbortSignal,
+  });
+
+  console.debug('[Grsai] Create response received', {
+    status: response.status,
+    statusText: response.statusText,
+    contentType: response.headers.get('content-type'),
   });
 
   if (!response.ok) {
@@ -188,6 +222,11 @@ export async function createGrsaiTask(
 
   // For create task, only read the first SSE event (contains task ID) and return immediately
   const data = await parseResponse(response, true);
+  console.debug('[Grsai] Create response parsed', data);
+
+  if (data && typeof data === 'object' && typeof data.code === 'number' && data.code !== 0) {
+    throw new Error(typeof data.msg === 'string' && data.msg ? data.msg : JSON.stringify(data));
+  }
 
   // Handle possible response formats
   // Format 1: { id: "xxx", status: "pending", ... }
@@ -195,6 +234,10 @@ export async function createGrsaiTask(
   const resultData = data.data || data;
   
   if (!resultData.id) {
+    console.error('[Grsai] Create response did not include a task ID', {
+      payload: data,
+      resultData,
+    });
     throw new Error('Grsai API did not return a task id');
   }
 
@@ -212,14 +255,14 @@ export async function checkGrsaiStatus(
   platformConfig: PlatformConfig | undefined,
   options?: TaskRequestOptions
 ): Promise<TaskStatusResult> {
-  const { apiKey, baseURL } = ensureGrsaiConfig(platformConfig);
+  const { apiKey, baseUrl } = ensureGrsaiConfig(platformConfig);
   const signal = options?.signal;
 
   if (isRequestAborted(signal)) {
     throw createAbortError('Status check aborted');
   }
 
-  const response = await fetch(`${baseURL}/v1/draw/result`, {
+  const response = await fetch(`${baseUrl}/v1/draw/result`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -262,14 +305,14 @@ export async function getGrsaiResult(
   platformConfig: PlatformConfig | undefined,
   options?: TaskRequestOptions
 ): Promise<TaskResult> {
-  const { apiKey, baseURL } = ensureGrsaiConfig(platformConfig);
+  const { apiKey, baseUrl } = ensureGrsaiConfig(platformConfig);
   const signal = options?.signal;
 
   if (isRequestAborted(signal)) {
     throw createAbortError('Result fetch aborted');
   }
 
-  const response = await fetch(`${baseURL}/v1/draw/result`, {
+  const response = await fetch(`${baseUrl}/v1/draw/result`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

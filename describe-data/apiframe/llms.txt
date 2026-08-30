@@ -1,0 +1,93 @@
+# Apiframe API Documentation
+
+## APIFRAME.AI
+
+- [Apiframe v2 \[Important\]](https://docs.apiframe.ai/apiframe-v2-important.md)
+- [What's the Pro API?](https://docs.apiframe.ai/pro-midjourney-api/whats-the-pro-api.md)
+- [API Endpoints](https://docs.apiframe.ai/pro-midjourney-api/api-endpoints.md): New Midjourney API endpoints
+- [Imagine](https://docs.apiframe.ai/pro-midjourney-api/api-endpoints/imagine.md): Generate four images from a text prompt. Available versions are 6.1 and 7
+- [Vary Strong and Subtle](https://docs.apiframe.ai/pro-midjourney-api/api-endpoints/vary-strong-and-subtle.md): Generate four (4) new images from a previous generation task: Imagine, Upscale, Vary, or Variations.
+- [Upscale Subtle and Creative](https://docs.apiframe.ai/pro-midjourney-api/api-endpoints/upscale-subtle-and-creative.md): Upscale an image (2X) while keeping the details (Subtle) or adding some details (Creative). Can be done after: Imagine, Vary, or Variations.
+- [Variations](https://docs.apiframe.ai/pro-midjourney-api/api-endpoints/variations.md): Generate four (4) new images from a previous generation task: Imagine, Upscale, Vary, or Variations.
+- [Pan](https://docs.apiframe.ai/pro-midjourney-api/api-endpoints/pan.md): Pan an existing image (from Midjourney) to one direction: Up, Down, Right or Left
+- [Zoom](https://docs.apiframe.ai/pro-midjourney-api/api-endpoints/zoom.md): Zoom an existing image (from Midjourney); the zoom ratio from 1 to 2
+- [Inpaint](https://docs.apiframe.ai/pro-midjourney-api/api-endpoints/inpaint.md): Partially redraw an area of an image.
+- [Seed](https://docs.apiframe.ai/pro-midjourney-api/api-endpoints/seed.md): Get the seed of a previous task
+- [Can I still use the Original API?](https://docs.apiframe.ai/original-api/can-i-still-use-the-original-api.md)
+- [Get Started](https://docs.apiframe.ai/get-started.md): Explore comprehensive documentation for the Midjourney API, designed to simplify and optimize your development workflow.
+- [My Account](https://docs.apiframe.ai/my-account.md)
+- [Image credits](https://docs.apiframe.ai/my-account/image-credits.md): What are image credits?
+- [Generation modes](https://docs.apiframe.ai/my-account/generation-modes.md): Midjourney AI generation modes
+- [Delete My Account](https://docs.apiframe.ai/my-account/delete-my-account.md)
+- [Apiframe SDKs](https://docs.apiframe.ai/apiframe-sdks.md)
+- [Node.js SDK](https://docs.apiframe.ai/apiframe-sdks/node.js-sdk.md)
+- [Python SDK](https://docs.apiframe.ai/apiframe-sdks/python-sdk.md)
+- [Go SDK](https://docs.apiframe.ai/apiframe-sdks/go-sdk.md)
+- [PHP SDK](https://docs.apiframe.ai/apiframe-sdks/php-sdk.md)
+- [MEDIA UPLOAD APIS](https://docs.apiframe.ai/media-upload-apis.md): A set of APIs to upload media file to APIFRAME and use them later for other tasks.
+- [Upload Image](https://docs.apiframe.ai/media-upload-apis/upload-image.md): Upload an image and get an image URL. You can then use this image URL in your prompts.
+- [Upload Audio](https://docs.apiframe.ai/media-upload-apis/upload-audio.md): You can upload an audio file and get an audio URL. You can then use this audio URL for other tasks, such as the Suno AI Extend task.
+- [Nano Banana](https://docs.apiframe.ai/nano-banana.md): Generate and edit amazing images with Nano Banana
+- [Nano Banana](https://docs.apiframe.ai/nano-banana/nano-banana.md): Generate or edit images with Google's Nano Banana
+- [Nano Banana Pro](https://docs.apiframe.ai/nano-banana/nano-banana-pro.md): Generate or edit images with Google's Nano Banana Pro
+- [MIDJOURNEY](https://docs.apiframe.ai/api-endpoints.md): Midjourney API endpoints details
+- [Read this](https://docs.apiframe.ai/api-endpoints/read-this.md)
+- [Authentication](https://docs.apiframe.ai/api-endpoints/authentication.md)
+- [Imagine](https://docs.apiframe.ai/api-endpoints/imagine.md): Generate an image using a text prompt. This is the /imagine command on Discord.
+- [Imagine Video](https://docs.apiframe.ai/api-endpoints/imagine-video.md): Generate videos using a text prompt and an image URL.
+- [Extend Video](https://docs.apiframe.ai/api-endpoints/extend-video.md): Extend previously generated videos.
+- [Reroll](https://docs.apiframe.ai/api-endpoints/reroll.md): Reroll to create new images from a previous Imagine task.
+- [Upscales](https://docs.apiframe.ai/api-endpoints/upscales.md): Enhance previously generated images by upscaling them.
+- [Upscale 1x](https://docs.apiframe.ai/api-endpoints/upscales/upscale-1x.md): Upscale one of the 4 generated images by the Imagine endpoint to get a single image.
+- [Upscale: Creative and Subtle](https://docs.apiframe.ai/api-endpoints/upscales/upscale-creative-and-subtle.md): The Upscale (Subtle) option doubles the size of your image and keeps details very similar to the original adds Upscale (Creative) adds details to the image. Of course you first need to Upscale 1x.
+- [Upscale: 2x and 4x](https://docs.apiframe.ai/api-endpoints/upscales/upscale-2x-and-4x.md): Upscale any image to higher resolution, this is not from Midjourney. Image must not be larger than 2048x2048.
+- [Variations](https://docs.apiframe.ai/api-endpoints/variations.md): Create 4 new variations of one of the 4 generated images by the Imagine request.
+- [Faceswap](https://docs.apiframe.ai/api-endpoints/faceswap.md): Swap the face on a target image with the face on a provided image. Each image must contain only one face.
+- [Inpaint (Vary Region)](https://docs.apiframe.ai/api-endpoints/inpaint-vary-region.md): Redraw a selected area of an image. Of course you first need to Upscale 1x.
+- [Outpaint (Zoom Out)](https://docs.apiframe.ai/api-endpoints/outpaint-zoom-out.md): The outpaint endpoint enlarges an image's canvas beyond its original size while keeping the contents of the original image unchanged. Of course you first need to Upscale 1x.
+- [Pan](https://docs.apiframe.ai/api-endpoints/pan.md): Broadens the image canvas in a specific direction, keeping the original content intact and using prompts and the original image as guides for filling the expanded area. You first need to Upscale 1x
+- [Shorten](https://docs.apiframe.ai/api-endpoints/shorten.md): This analyzes your prompt, highlights some of your prompt's most influential words, and suggests unnecessary words you could remove. You can then optimize your prompt by focusing on essential terms.
+- [Describe](https://docs.apiframe.ai/api-endpoints/describe.md): Writes four example prompts based on an image you upload. This is the same as using the /describe command in Discord.
+- [Blend](https://docs.apiframe.ai/api-endpoints/blend.md): Blend multiple images into one image.
+- [Seed](https://docs.apiframe.ai/api-endpoints/seed.md): Get the seed of a generated image.
+- [Fetch](https://docs.apiframe.ai/api-endpoints/fetch.md): Get the result/status of a submitted task.
+- [Fetch Many](https://docs.apiframe.ai/api-endpoints/fetch-many.md): Get the results/statuses of multiple tasks using their task\_id.
+- [Account Info](https://docs.apiframe.ai/api-endpoints/account-info.md): Get details about your account: credits remaining, stats, etc..
+- [Statuses](https://docs.apiframe.ai/api-endpoints/statuses.md): Here are the different possible statuses for a task
+- [Postman Collection](https://docs.apiframe.ai/api-endpoints/postman-collection.md)
+- [AI Photos](https://docs.apiframe.ai/ai-photos.md): Generate hyper realistic photos of human subjects.
+- [Upload and Prepare](https://docs.apiframe.ai/ai-photos/upload-and-prepare.md): Upload 10 to 30 images of the subject and prepare them for AI training.
+- [Train](https://docs.apiframe.ai/ai-photos/train.md): Train AI on a human subject using previously uploaded and prepared images.
+- [Generate](https://docs.apiframe.ai/ai-photos/generate.md): Generate realistic photos of the subject using the trained model.
+- [Best Input Images](https://docs.apiframe.ai/ai-photos/best-input-images.md)
+- [IDEOGRAM](https://docs.apiframe.ai/ideogram.md)
+- [Imagine](https://docs.apiframe.ai/ideogram/imagine.md): Generate an image using a text prompt.
+- [Remix](https://docs.apiframe.ai/ideogram/remix.md): Generate an image using a text prompt.
+- [Upscale](https://docs.apiframe.ai/ideogram/upscale.md): Upscale an existing image to a higher quality and resolution.
+- [Describe](https://docs.apiframe.ai/ideogram/describe.md): Extensively describe the provided image.
+- [FLUX](https://docs.apiframe.ai/flux.md): Generate high accuracy images with Flux models from Black Forest Labs
+- [Imagine](https://docs.apiframe.ai/flux/imagine.md): Generate an image using a text prompt and an image.
+- [LUMA AI API](https://docs.apiframe.ai/luma-ai-api.md): This service allows you to interact with one of the most advanced video generation model: Luma Dream Machine.
+- [IMAGINE](https://docs.apiframe.ai/luma-ai-api/imagine.md): Generate a video based on a prompt and/or an image input.
+- [EXTEND](https://docs.apiframe.ai/luma-ai-api/extend.md): Extend a previously generated video based on a prompt and/or an image input.
+- [SUNO AI API](https://docs.apiframe.ai/suno-ai-api.md): This service allows you to interact with one of the most advanced music generation model: SUNO AI.
+- [IMAGINE](https://docs.apiframe.ai/suno-ai-api/imagine.md): Generate a song with a lyrics video clip. You have access to the chirp-v3-0 and chirp-v3-5 models. This endpoint actually generates two songs with the same lyrics.
+- [UPLOAD](https://docs.apiframe.ai/suno-ai-api/upload.md): Upload an audio file and get an audio url (don't need it if you already have an audio url).
+- [EXTEND](https://docs.apiframe.ai/suno-ai-api/extend.md): Extend a previously generated song or an uploaded audio.
+- [LYRICS](https://docs.apiframe.ai/suno-ai-api/lyrics.md): Generate song Lyrics based on a prompt.
+- [UDIO AI API](https://docs.apiframe.ai/udio-ai-api.md): Generate great music songs with Udio
+- [Generate a song](https://docs.apiframe.ai/udio-ai-api/generate-a-song.md): Generate a song using Udio AI.
+- [Extend a song](https://docs.apiframe.ai/udio-ai-api/extend-a-song.md): Extend an existing Udio song by adding more content.
+- [Generate Lyrics](https://docs.apiframe.ai/udio-ai-api/generate-lyrics.md): Generate song lyrics using Udio AI.
+- [RUNWAY ML API](https://docs.apiframe.ai/runway-ml-api.md): Generate realistic videos with Runway ML
+- [IMAGINE](https://docs.apiframe.ai/runway-ml-api/imagine.md): Generate a video based on a prompt and/or an image input or a video input.
+- [WAN VIDEO](https://docs.apiframe.ai/wan-video.md): Generate videos using Alibaba Cloud Wan models. Supports both text-to-video and image-to-video.
+- [Seedance](https://docs.apiframe.ai/seedance.md): Generate videos using ByteDance's Seedance models. Supports text-to-video and image-to-video generation.
+- [KLING AI API](https://docs.apiframe.ai/kling-ai-api.md): Generate realistic videos with Kling AI
+- [KLING 2.6](https://docs.apiframe.ai/kling-ai-api/kling-2.6.md): Generate cinematic videos with synchronized audio using Kling 2.6 Pro. Supports both text-to-video and image-to-video generation.
+- [KLING 2.5 TURBO PRO](https://docs.apiframe.ai/kling-ai-api/kling-2.5-turbo-pro.md): Generate cinematic videos with smooth motion and remarkable prompt adherence using Kling 2.5 Turbo Pro. Supports text-to-video and image-to-video with start/end frame control.
+- [SORA AI API](https://docs.apiframe.ai/sora-ai-api.md): (Coming Soon)
+- [Webhooks](https://docs.apiframe.ai/webhooks.md)
+- [MJ Banned Words](https://docs.apiframe.ai/mj-banned-words.md): List of  words banned by Midjourney.
+- [Help Me With Integration](https://docs.apiframe.ai/help-me-with-integration.md)
+- [FAQ](https://docs.apiframe.ai/faq.md): You can find here the answers to many of your questions.

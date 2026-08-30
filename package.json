@@ -3,17 +3,21 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "main": "./dist/index.js",
-  "module": "./dist/index.js",
-  "types": "./dist/core/src/index.d.ts",
+  "main": "./core/src/index.ts",
+  "module": "./core/src/index.ts",
+  "types": "./core/src/index.ts",
   "exports": {
     ".": {
-      "types": "./dist/core/src/index.d.ts",
-      "import": "./dist/index.js"
+      "types": "./core/src/index.ts",
+      "import": "./core/src/index.ts"
     },
     "./executors/inline": {
-      "types": "./dist/executors/inline/src/index.d.ts",
-      "import": "./dist/executors/inline.js"
+      "types": "./executors/inline/src/index.ts",
+      "import": "./executors/inline/src/index.ts"
+    },
+    "./locator-catalog": {
+      "types": "./core/src/locator-catalog.ts",
+      "import": "./core/src/locator-catalog.ts"
     }
   },
   "files": [
@@ -23,7 +27,19 @@
     "build": "vite build && tsc --project tsconfig.build.json",
     "dev": "vite build --watch",
     "test": "vitest run",
-    "prepublishOnly": "pnpm run build"
+    "pptask:sync-provider-data": "node core/scripts/sync-provider-data.mjs",
+    "pptask:generate-kie-apiframe-catalogs": "node core/scripts/generate-kie-apiframe-catalogs.mjs",
+    "pptask:generate-provider-catalogs": "node core/scripts/generate-provider-catalogs.mjs",
+    "pptask:sync-kie-apiframe-describe-data": "node core/scripts/sync-kie-apiframe-describe-data.mjs",
+    "prepublishOnly": "pnpm run build",
+    "typecheck": "tsc -p tsconfig.build.json --noEmit"
+  },
+  "nx": {
+    "tags": [
+      "scope:capability",
+      "platform:agnostic",
+      "type:lib"
+    ]
   },
   "dependencies": {
     "@google/genai": "^1.35.0",
@@ -34,8 +50,9 @@
   "devDependencies": {
     "@types/node": "^20.11.25",
     "tsx": "^4.7.0",
-    "typescript": "^5.4.0",
-    "vite": "^7.3.1",
-    "vitest": "^1.5.0"
+    "typescript": "5.9.3",
+    "vite": "^8.2.2",
+    "vitest": "^4.1.11",
+    "yaml": "^2.9.0"
   }
 }

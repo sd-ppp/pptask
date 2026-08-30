@@ -91,6 +91,10 @@ export type UploadResult = {
   raw: any;
 };
 
+export type CancelCapabilityParams = {
+  locator: string;
+};
+
 export type ProviderDefinition = {
   describeResource(params: DescribeParams): Promise<DescribeResult>;
   
@@ -102,6 +106,15 @@ export type ProviderDefinition = {
   checkStatus?: (params: TaskCheckParams) => Promise<TaskStatusResult>;
   getResult?: (params: TaskResultParams) => Promise<TaskResult>;
   cancelTask?: (params: TaskCheckParams) => Promise<void>;
+
+  /**
+   * Locator-aware cancellation capability check. A provider may implement
+   * `cancelTask` while only actually supporting it for some locators (e.g.
+   * RunningHub's legacy `app` API supports remote cancellation but its newer
+   * `api` API does not). When defined, this takes precedence over merely
+   * checking whether `cancelTask` is a function.
+   */
+  canCancelTask?: (params: CancelCapabilityParams) => boolean;
 };
 
 export type UploadProviderDefinition = {

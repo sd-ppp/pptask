@@ -13,6 +13,6 @@ export default defineConfig({
     globals: true,
     
     // Load test.env before running tests
-    setupFiles: [resolve(__dirname, 'vitest.setup.ts')],
+    setupFiles: [resolve(import.meta.dirname, 'vitest.setup.ts')],
   },
 });

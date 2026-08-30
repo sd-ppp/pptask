@@ -37,6 +37,7 @@ describe('grsai provider (unit tests)', () => {
     expect(describeResult.formSchema.properties.prompt).toBeDefined();
     expect(describeResult.formSchema.properties.aspectRatio).toBeDefined();
     expect(describeResult.formSchema.properties.imageSize).toBeDefined();
+    expect(describeResult.formValues).not.toHaveProperty('model');
     expect(describeResult.recommendUploadProvider).toBe('grsai');
     expect(describeResult.cancelable).toBe(false);
   });
@@ -56,6 +57,58 @@ describe('grsai provider (unit tests)', () => {
     expect(createResult.provider).toBe('grsai');
     expect(createResult.taskId).toBe('task-abc123');
     expect(createResult.status).toBe('pending');
+  });
+
+  it('accepts a JSON task response incorrectly labelled as SSE', async () => {
+    fetchMock.mockResolvedValueOnce(new Response(JSON.stringify({
+      id: 'task-json-as-sse',
+      status: 'pending',
+    }), {
+      status: 200,
+      headers: { 'content-type': 'text/event-stream' },
+    }));
+
+    const createResult = await createTask({
+      locator,
+      payload: { prompt: 'test' },
+      platformConfig: { apiKey, baseUrl: 'https://api.grsai.com' },
+    });
+
+    expect(createResult.taskId).toBe('task-json-as-sse');
+    expect(createResult.status).toBe('pending');
+  });
+
+  it('returns the provider error message when task creation fails', async () => {
+    fetchMock.mockResolvedValueOnce(new Response(JSON.stringify({
+      code: -1,
+      data: null,
+      msg: 'model not found',
+    }), {
+      status: 200,
+      headers: { 'content-type': 'text/event-stream' },
+    }));
+
+    await expect(createTask({
+      locator,
+      payload: { prompt: 'test' },
+      platformConfig: { apiKey, baseUrl: 'https://api.grsai.com' },
+    })).rejects.toThrow('model not found');
+  });
+
+  it('uses the model from the locator when payload contains a model field', async () => {
+    const platformConfig = { apiKey, baseURL: 'https://api.grsai.com' };
+    await createTask({
+      locator,
+      payload: { model: 'n', prompt: '飞机' },
+      platformConfig,
+    });
+
+    const request = fetchMock.mock.calls.find(([url]) => String(url).includes('/v1/draw/nano-banana'));
+    expect(request).toBeDefined();
+    expect(JSON.parse(request?.[1]?.body as string)).toMatchObject({
+      model: 'nano-banana-fast',
+      prompt: '飞机',
+    });
   });
 
   it('checks status', async () => {
@@ -203,6 +256,9 @@ function mockJsonResponse(body: any, status = 200): Promise<Response> {
   return Promise.resolve({
     ok,
     status,
+    headers: new Headers({
+      'content-type': 'application/json'
+    }),
     json: () => Promise.resolve(body),
   } as Response);
 }

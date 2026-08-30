@@ -49,6 +49,9 @@ export const grsaiProviderDefinition: ProviderDefinition = {
     const url = ensureGrsaiUrl(params.locator);
     await cancelGrsaiTask(url, params.taskId, params.platformConfig, params.options);
   },
+  canCancelTask(): boolean {
+    return false;
+  },
 };
 
 export {

@@ -1,0 +1,992 @@
+[
+  {
+    "providerId": "apiframe",
+    "locator": "apiframe://image/dall-e-2",
+    "label": "dall-e-2",
+    "category": "image",
+    "outputType": "image",
+    "description": "",
+    "searchText": "dall-e-2 dall-e-2 image",
+    "supported": false
+  },
+  {
+    "providerId": "apiframe",
+    "locator": "apiframe://image/dall-e-3",
+    "label": "dall-e-3",
+    "category": "image",
+    "outputType": "image",
+    "description": "",
+    "searchText": "dall-e-3 dall-e-3 image",
+    "supported": false
+  },
+  {
+    "providerId": "apiframe",
+    "locator": "apiframe://image/flux-1.1-pro",
+    "label": "flux-1.1-pro",
+    "category": "image",
+    "outputType": "image",
+    "description": "",
+    "searchText": "flux-1.1-pro flux-1.1-pro image",
+    "supported": false
+  },
+  {
+    "providerId": "apiframe",
+    "locator": "apiframe://image/flux-1.1-pro-ultra",
+    "label": "flux-1.1-pro-ultra",
+    "category": "image",
+    "outputType": "image",
+    "description": "",
+    "searchText": "flux-1.1-pro-ultra flux-1.1-pro-ultra image",
+    "supported": false
+  },
+  {
+    "providerId": "apiframe",
+    "locator": "apiframe://image/flux-2-dev",
+    "label": "flux-2-dev",
+    "category": "image",
+    "outputType": "image",
+    "description": "",
+    "searchText": "flux-2-dev flux-2-dev image",
+    "supported": false
+  },
+  {
+    "providerId": "apiframe",
+    "locator": "apiframe://image/flux-2-flex",
+    "label": "flux-2-flex",
+    "category": "image",
+    "outputType": "image",
+    "description": "",
+    "searchText": "flux-2-flex flux-2-flex image",
+    "supported": false
+  },
+  {
+    "providerId": "apiframe",
+    "locator": "apiframe://image/flux-2-max",
+    "label": "flux-2-max",
+    "category": "image",
+    "outputType": "image",
+    "description": "",
+    "searchText": "flux-2-max flux-2-max image",
+    "supported": false
+  },
+  {
+    "providerId": "apiframe",
+    "locator": "apiframe://image/flux-2-pro",
+    "label": "flux-2-pro",
+    "category": "image",
+    "outputType": "image",
+    "description": "",
+    "searchText": "flux-2-pro flux-2-pro image",
+    "supported": true
+  },
+  {
+    "providerId": "apiframe",
+    "locator": "apiframe://image/flux-lora",
+    "label": "flux-lora",
+    "category": "image",
+    "outputType": "image",
+    "description": "",
+    "searchText": "flux-lora flux-lora image",
+    "supported": false
+  },
+  {
+    "providerId": "apiframe",
+    "locator": "apiframe://image/gpt-image-1.5",
+    "label": "gpt-image-1.5",
+    "category": "image",
+    "outputType": "image",
+    "description": "",
+    "searchText": "gpt-image-1.5 gpt-image-1.5 image",
+    "supported": true
+  },
+  {
+    "providerId": "apiframe",
+    "locator": "apiframe://image/gpt-image-2",
+    "label": "gpt-image-2",
+    "category": "image",
+    "outputType": "image",
+    "description": "",
+    "searchText": "gpt-image-2 gpt-image-2 image",
+    "supported": false
+  },
+  {
+    "providerId": "apiframe",
+    "locator": "apiframe://image/grok-imagine-image",
+    "label": "grok-imagine-image",
+    "category": "image",
+    "outputType": "image",
+    "description": "",
+    "searchText": "grok-imagine-image grok-imagine-image image",
+    "supported": false
+  },
+  {
+    "providerId": "apiframe",
+    "locator": "apiframe://image/ideogram-character",
+    "label": "ideogram-character",
+    "category": "image",
+    "outputType": "image",
+    "description": "",
+    "searchText": "ideogram-character ideogram-character image",
+    "supported": false
+  },
+  {
+    "providerId": "apiframe",
+    "locator": "apiframe://image/ideogram-v2",
+    "label": "ideogram-v2",
+    "category": "image",
+    "outputType": "image",
+    "description": "",
+    "searchText": "ideogram-v2 ideogram-v2 image",
+    "supported": false
+  },
+  {
+    "providerId": "apiframe",
+    "locator": "apiframe://image/ideogram-v2-turbo",
+    "label": "ideogram-v2-turbo",
+    "category": "image",
+    "outputType": "image",
+    "description": "",
+    "searchText": "ideogram-v2-turbo ideogram-v2-turbo image",
+    "supported": false
+  },
+  {
+    "providerId": "apiframe",
+    "locator": "apiframe://image/ideogram-v2a",
+    "label": "ideogram-v2a",
+    "category": "image",
+    "outputType": "image",
+    "description": "",
+    "searchText": "ideogram-v2a ideogram-v2a image",
+    "supported": false
+  },
+  {
+    "providerId": "apiframe",
+    "locator": "apiframe://image/ideogram-v2a-turbo",
+    "label": "ideogram-v2a-turbo",
+    "category": "image",
+    "outputType": "image",
+    "description": "",
+    "searchText": "ideogram-v2a-turbo ideogram-v2a-turbo image",
+    "supported": false
+  },
+  {
+    "providerId": "apiframe",
+    "locator": "apiframe://image/ideogram-v3-balanced",
+    "label": "ideogram-v3-balanced",
+    "category": "image",
+    "outputType": "image",
+    "description": "",
+    "searchText": "ideogram-v3-balanced ideogram-v3-balanced image",
+    "supported": false
+  },
+  {
+    "providerId": "apiframe",
+    "locator": "apiframe://image/ideogram-v3-quality",
+    "label": "ideogram-v3-quality",
+    "category": "image",
+    "outputType": "image",
+    "description": "",
+    "searchText": "ideogram-v3-quality ideogram-v3-quality image",
+    "supported": false
+  },
+  {
+    "providerId": "apiframe",
+    "locator": "apiframe://image/ideogram-v3-turbo",
+    "label": "ideogram-v3-turbo",
+    "category": "image",
+    "outputType": "image",
+    "description": "",
+    "searchText": "ideogram-v3-turbo ideogram-v3-turbo image",
+    "supported": false
+  },
+  {
+    "providerId": "apiframe",
+    "locator": "apiframe://image/ideogram-v4-balanced",
+    "label": "ideogram-v4-balanced",
+    "category": "image",
+    "outputType": "image",
+    "description": "",
+    "searchText": "ideogram-v4-balanced ideogram-v4-balanced image",
+    "supported": false
+  },
+  {
+    "providerId": "apiframe",
+    "locator": "apiframe://image/ideogram-v4-quality",
+    "label": "ideogram-v4-quality",
+    "category": "image",
+    "outputType": "image",
+    "description": "",
+    "searchText": "ideogram-v4-quality ideogram-v4-quality image",
+    "supported": false
+  },
+  {
+    "providerId": "apiframe",
+    "locator": "apiframe://image/ideogram-v4-turbo",
+    "label": "ideogram-v4-turbo",
+    "category": "image",
+    "outputType": "image",
+    "description": "",
+    "searchText": "ideogram-v4-turbo ideogram-v4-turbo image",
+    "supported": false
+  },
+  {
+    "providerId": "apiframe",
+    "locator": "apiframe://image/imagen-3",
+    "label": "imagen-3",
+    "category": "image",
+    "outputType": "image",
+    "description": "",
+    "searchText": "imagen-3 imagen-3 image",
+    "supported": false
+  },
+  {
+    "providerId": "apiframe",
+    "locator": "apiframe://image/imagen-3-fast",
+    "label": "imagen-3-fast",
+    "category": "image",
+    "outputType": "image",
+    "description": "",
+    "searchText": "imagen-3-fast imagen-3-fast image",
+    "supported": false
+  },
+  {
+    "providerId": "apiframe",
+    "locator": "apiframe://image/imagen-4",
+    "label": "imagen-4",
+    "category": "image",
+    "outputType": "image",
+    "description": "",
+    "searchText": "imagen-4 imagen-4 image",
+    "supported": false
+  },
+  {
+    "providerId": "apiframe",
+    "locator": "apiframe://image/imagen-4-fast",
+    "label": "imagen-4-fast",
+    "category": "image",
+    "outputType": "image",
+    "description": "",
+    "searchText": "imagen-4-fast imagen-4-fast image",
+    "supported": false
+  },
+  {
+    "providerId": "apiframe",
+    "locator": "apiframe://image/imagen-4-ultra",
+    "label": "imagen-4-ultra",
+    "category": "image",
+    "outputType": "image",
+    "description": "",
+    "searchText": "imagen-4-ultra imagen-4-ultra image",
+    "supported": false
+  },
+  {
+    "providerId": "apiframe",
+    "locator": "apiframe://image/kling-image",
+    "label": "kling-image",
+    "category": "image",
+    "outputType": "image",
+    "description": "",
+    "searchText": "kling-image kling-image image",
+    "supported": false
+  },
+  {
+    "providerId": "apiframe",
+    "locator": "apiframe://image/midjourney",
+    "label": "midjourney",
+    "category": "image",
+    "outputType": "image",
+    "description": "",
+    "searchText": "midjourney midjourney image",
+    "supported": false
+  },
+  {
+    "providerId": "apiframe",
+    "locator": "apiframe://image/nano-banana",
+    "label": "nano-banana",
+    "category": "image",
+    "outputType": "image",
+    "description": "",
+    "searchText": "nano-banana nano-banana image",
+    "supported": false
+  },
+  {
+    "providerId": "apiframe",
+    "locator": "apiframe://image/nano-banana-2",
+    "label": "nano-banana-2",
+    "category": "image",
+    "outputType": "image",
+    "description": "",
+    "searchText": "nano-banana-2 nano-banana-2 image",
+    "supported": false
+  },
+  {
+    "providerId": "apiframe",
+    "locator": "apiframe://image/nano-banana-2-lite",
+    "label": "nano-banana-2-lite",
+    "category": "image",
+    "outputType": "image",
+    "description": "",
+    "searchText": "nano-banana-2-lite nano-banana-2-lite image",
+    "supported": false
+  },
+  {
+    "providerId": "apiframe",
+    "locator": "apiframe://image/nano-banana-pro",
+    "label": "nano-banana-pro",
+    "category": "image",
+    "outputType": "image",
+    "description": "",
+    "searchText": "nano-banana-pro nano-banana-pro image",
+    "supported": true
+  },
+  {
+    "providerId": "apiframe",
+    "locator": "apiframe://image/qwen-image",
+    "label": "qwen-image",
+    "category": "image",
+    "outputType": "image",
+    "description": "",
+    "searchText": "qwen-image qwen-image image",
+    "supported": false
+  },
+  {
+    "providerId": "apiframe",
+    "locator": "apiframe://image/qwen-image-2",
+    "label": "qwen-image-2",
+    "category": "image",
+    "outputType": "image",
+    "description": "",
+    "searchText": "qwen-image-2 qwen-image-2 image",
+    "supported": false
+  },
+  {
+    "providerId": "apiframe",
+    "locator": "apiframe://image/qwen-image-2-pro",
+    "label": "qwen-image-2-pro",
+    "category": "image",
+    "outputType": "image",
+    "description": "",
+    "searchText": "qwen-image-2-pro qwen-image-2-pro image",
+    "supported": false
+  },
+  {
+    "providerId": "apiframe",
+    "locator": "apiframe://image/reve-create",
+    "label": "reve-create",
+    "category": "image",
+    "outputType": "image",
+    "description": "",
+    "searchText": "reve-create reve-create image",
+    "supported": false
+  },
+  {
+    "providerId": "apiframe",
+    "locator": "apiframe://image/seedream-3",
+    "label": "seedream-3",
+    "category": "image",
+    "outputType": "image",
+    "description": "",
+    "searchText": "seedream-3 seedream-3 image",
+    "supported": false
+  },
+  {
+    "providerId": "apiframe",
+    "locator": "apiframe://image/seedream-3.1",
+    "label": "seedream-3.1",
+    "category": "image",
+    "outputType": "image",
+    "description": "",
+    "searchText": "seedream-3.1 seedream-3.1 image",
+    "supported": false
+  },
+  {
+    "providerId": "apiframe",
+    "locator": "apiframe://image/seedream-4",
+    "label": "seedream-4",
+    "category": "image",
+    "outputType": "image",
+    "description": "",
+    "searchText": "seedream-4 seedream-4 image",
+    "supported": false
+  },
+  {
+    "providerId": "apiframe",
+    "locator": "apiframe://image/seedream-4.5",
+    "label": "seedream-4.5",
+    "category": "image",
+    "outputType": "image",
+    "description": "",
+    "searchText": "seedream-4.5 seedream-4.5 image",
+    "supported": false
+  },
+  {
+    "providerId": "apiframe",
+    "locator": "apiframe://image/seedream-5-lite",
+    "label": "seedream-5-lite",
+    "category": "image",
+    "outputType": "image",
+    "description": "",
+    "searchText": "seedream-5-lite seedream-5-lite image",
+    "supported": false
+  },
+  {
+    "providerId": "apiframe",
+    "locator": "apiframe://image/seedream-5-pro",
+    "label": "seedream-5-pro",
+    "category": "image",
+    "outputType": "image",
+    "description": "",
+    "searchText": "seedream-5-pro seedream-5-pro image",
+    "supported": true
+  },
+  {
+    "providerId": "apiframe",
+    "locator": "apiframe://image/stable-diffusion-3",
+    "label": "stable-diffusion-3",
+    "category": "image",
+    "outputType": "image",
+    "description": "",
+    "searchText": "stable-diffusion-3 stable-diffusion-3 image",
+    "supported": false
+  },
+  {
+    "providerId": "apiframe",
+    "locator": "apiframe://image/stable-diffusion-3.5-large",
+    "label": "stable-diffusion-3.5-large",
+    "category": "image",
+    "outputType": "image",
+    "description": "",
+    "searchText": "stable-diffusion-3.5-large stable-diffusion-3.5-large image",
+    "supported": false
+  },
+  {
+    "providerId": "apiframe",
+    "locator": "apiframe://image/stable-diffusion-3.5-large-turbo",
+    "label": "stable-diffusion-3.5-large-turbo",
+    "category": "image",
+    "outputType": "image",
+    "description": "",
+    "searchText": "stable-diffusion-3.5-large-turbo stable-diffusion-3.5-large-turbo image",
+    "supported": false
+  },
+  {
+    "providerId": "apiframe",
+    "locator": "apiframe://image/stable-diffusion-3.5-medium",
+    "label": "stable-diffusion-3.5-medium",
+    "category": "image",
+    "outputType": "image",
+    "description": "",
+    "searchText": "stable-diffusion-3.5-medium stable-diffusion-3.5-medium image",
+    "supported": false
+  },
+  {
+    "providerId": "apiframe",
+    "locator": "apiframe://image/wan-image-2.6",
+    "label": "wan-image-2.6",
+    "category": "image",
+    "outputType": "image",
+    "description": "",
+    "searchText": "wan-image-2.6 wan-image-2.6 image",
+    "supported": false
+  },
+  {
+    "providerId": "apiframe",
+    "locator": "apiframe://image/wan-image-2.7",
+    "label": "wan-image-2.7",
+    "category": "image",
+    "outputType": "image",
+    "description": "",
+    "searchText": "wan-image-2.7 wan-image-2.7 image",
+    "supported": false
+  },
+  {
+    "providerId": "apiframe",
+    "locator": "apiframe://image/wan-image-2.7-pro",
+    "label": "wan-image-2.7-pro",
+    "category": "image",
+    "outputType": "image",
+    "description": "",
+    "searchText": "wan-image-2.7-pro wan-image-2.7-pro image",
+    "supported": false
+  },
+  {
+    "providerId": "apiframe",
+    "locator": "apiframe://music/elevenlabs-music",
+    "label": "elevenlabs-music",
+    "category": "music",
+    "outputType": "music",
+    "description": "",
+    "searchText": "elevenlabs-music elevenlabs-music music",
+    "supported": false
+  },
+  {
+    "providerId": "apiframe",
+    "locator": "apiframe://music/lyria-3-clip",
+    "label": "lyria-3-clip",
+    "category": "music",
+    "outputType": "music",
+    "description": "",
+    "searchText": "lyria-3-clip lyria-3-clip music",
+    "supported": false
+  },
+  {
+    "providerId": "apiframe",
+    "locator": "apiframe://music/lyria-3-pro",
+    "label": "lyria-3-pro",
+    "category": "music",
+    "outputType": "music",
+    "description": "",
+    "searchText": "lyria-3-pro lyria-3-pro music",
+    "supported": false
+  },
+  {
+    "providerId": "apiframe",
+    "locator": "apiframe://music/mureka",
+    "label": "mureka",
+    "category": "music",
+    "outputType": "music",
+    "description": "",
+    "searchText": "mureka mureka music",
+    "supported": true
+  },
+  {
+    "providerId": "apiframe",
+    "locator": "apiframe://music/producer",
+    "label": "producer",
+    "category": "music",
+    "outputType": "music",
+    "description": "",
+    "searchText": "producer producer music",
+    "supported": false
+  },
+  {
+    "providerId": "apiframe",
+    "locator": "apiframe://music/suno",
+    "label": "suno",
+    "category": "music",
+    "outputType": "music",
+    "description": "",
+    "searchText": "suno suno music",
+    "supported": true
+  },
+  {
+    "providerId": "apiframe",
+    "locator": "apiframe://music/udio",
+    "label": "udio",
+    "category": "music",
+    "outputType": "music",
+    "description": "",
+    "searchText": "udio udio music",
+    "supported": false
+  },
+  {
+    "providerId": "apiframe",
+    "locator": "apiframe://video/grok-imagine-video",
+    "label": "grok-imagine-video",
+    "category": "video",
+    "outputType": "video",
+    "description": "",
+    "searchText": "grok-imagine-video grok-imagine-video video",
+    "supported": false
+  },
+  {
+    "providerId": "apiframe",
+    "locator": "apiframe://video/hailuo-02",
+    "label": "hailuo-02",
+    "category": "video",
+    "outputType": "video",
+    "description": "",
+    "searchText": "hailuo-02 hailuo-02 video",
+    "supported": false
+  },
+  {
+    "providerId": "apiframe",
+    "locator": "apiframe://video/hailuo-03",
+    "label": "hailuo-03",
+    "category": "video",
+    "outputType": "video",
+    "description": "",
+    "searchText": "hailuo-03 hailuo-03 video",
+    "supported": false
+  },
+  {
+    "providerId": "apiframe",
+    "locator": "apiframe://video/hailuo-2.3",
+    "label": "hailuo-2.3",
+    "category": "video",
+    "outputType": "video",
+    "description": "",
+    "searchText": "hailuo-2.3 hailuo-2.3 video",
+    "supported": false
+  },
+  {
+    "providerId": "apiframe",
+    "locator": "apiframe://video/hailuo-2.3-fast",
+    "label": "hailuo-2.3-fast",
+    "category": "video",
+    "outputType": "video",
+    "description": "",
+    "searchText": "hailuo-2.3-fast hailuo-2.3-fast video",
+    "supported": false
+  },
+  {
+    "providerId": "apiframe",
+    "locator": "apiframe://video/happyhorse-1.0",
+    "label": "happyhorse-1.0",
+    "category": "video",
+    "outputType": "video",
+    "description": "",
+    "searchText": "happyhorse-1.0 happyhorse-1.0 video",
+    "supported": false
+  },
+  {
+    "providerId": "apiframe",
+    "locator": "apiframe://video/happyhorse-1.1",
+    "label": "happyhorse-1.1",
+    "category": "video",
+    "outputType": "video",
+    "description": "",
+    "searchText": "happyhorse-1.1 happyhorse-1.1 video",
+    "supported": false
+  },
+  {
+    "providerId": "apiframe",
+    "locator": "apiframe://video/kling-2.1",
+    "label": "kling-2.1",
+    "category": "video",
+    "outputType": "video",
+    "description": "",
+    "searchText": "kling-2.1 kling-2.1 video",
+    "supported": false
+  },
+  {
+    "providerId": "apiframe",
+    "locator": "apiframe://video/kling-2.1-master",
+    "label": "kling-2.1-master",
+    "category": "video",
+    "outputType": "video",
+    "description": "",
+    "searchText": "kling-2.1-master kling-2.1-master video",
+    "supported": false
+  },
+  {
+    "providerId": "apiframe",
+    "locator": "apiframe://video/kling-2.5-turbo-pro",
+    "label": "kling-2.5-turbo-pro",
+    "category": "video",
+    "outputType": "video",
+    "description": "",
+    "searchText": "kling-2.5-turbo-pro kling-2.5-turbo-pro video",
+    "supported": false
+  },
+  {
+    "providerId": "apiframe",
+    "locator": "apiframe://video/kling-2.6",
+    "label": "kling-2.6",
+    "category": "video",
+    "outputType": "video",
+    "description": "",
+    "searchText": "kling-2.6 kling-2.6 video",
+    "supported": false
+  },
+  {
+    "providerId": "apiframe",
+    "locator": "apiframe://video/kling-3.0",
+    "label": "kling-3.0",
+    "category": "video",
+    "outputType": "video",
+    "description": "",
+    "searchText": "kling-3.0 kling-3.0 video",
+    "supported": true
+  },
+  {
+    "providerId": "apiframe",
+    "locator": "apiframe://video/kling-3.0-motion-control",
+    "label": "kling-3.0-motion-control",
+    "category": "video",
+    "outputType": "video",
+    "description": "",
+    "searchText": "kling-3.0-motion-control kling-3.0-motion-control video",
+    "supported": false
+  },
+  {
+    "providerId": "apiframe",
+    "locator": "apiframe://video/kling-3.0-omni",
+    "label": "kling-3.0-omni",
+    "category": "video",
+    "outputType": "video",
+    "description": "",
+    "searchText": "kling-3.0-omni kling-3.0-omni video",
+    "supported": false
+  },
+  {
+    "providerId": "apiframe",
+    "locator": "apiframe://video/luma-ray-2",
+    "label": "luma-ray-2",
+    "category": "video",
+    "outputType": "video",
+    "description": "",
+    "searchText": "luma-ray-2 luma-ray-2 video",
+    "supported": false
+  },
+  {
+    "providerId": "apiframe",
+    "locator": "apiframe://video/luma-ray-flash-2",
+    "label": "luma-ray-flash-2",
+    "category": "video",
+    "outputType": "video",
+    "description": "",
+    "searchText": "luma-ray-flash-2 luma-ray-flash-2 video",
+    "supported": false
+  },
+  {
+    "providerId": "apiframe",
+    "locator": "apiframe://video/midjourney-video",
+    "label": "midjourney-video",
+    "category": "video",
+    "outputType": "video",
+    "description": "",
+    "searchText": "midjourney-video midjourney-video video",
+    "supported": false
+  },
+  {
+    "providerId": "apiframe",
+    "locator": "apiframe://video/runway-gen4-turbo",
+    "label": "runway-gen4-turbo",
+    "category": "video",
+    "outputType": "video",
+    "description": "",
+    "searchText": "runway-gen4-turbo runway-gen4-turbo video",
+    "supported": false
+  },
+  {
+    "providerId": "apiframe",
+    "locator": "apiframe://video/runway-gen4.5",
+    "label": "runway-gen4.5",
+    "category": "video",
+    "outputType": "video",
+    "description": "",
+    "searchText": "runway-gen4.5 runway-gen4.5 video",
+    "supported": false
+  },
+  {
+    "providerId": "apiframe",
+    "locator": "apiframe://video/seedance-1-lite",
+    "label": "seedance-1-lite",
+    "category": "video",
+    "outputType": "video",
+    "description": "",
+    "searchText": "seedance-1-lite seedance-1-lite video",
+    "supported": false
+  },
+  {
+    "providerId": "apiframe",
+    "locator": "apiframe://video/seedance-1-pro",
+    "label": "seedance-1-pro",
+    "category": "video",
+    "outputType": "video",
+    "description": "",
+    "searchText": "seedance-1-pro seedance-1-pro video",
+    "supported": false
+  },
+  {
+    "providerId": "apiframe",
+    "locator": "apiframe://video/seedance-1-pro-fast",
+    "label": "seedance-1-pro-fast",
+    "category": "video",
+    "outputType": "video",
+    "description": "",
+    "searchText": "seedance-1-pro-fast seedance-1-pro-fast video",
+    "supported": false
+  },
+  {
+    "providerId": "apiframe",
+    "locator": "apiframe://video/seedance-1.5-pro",
+    "label": "seedance-1.5-pro",
+    "category": "video",
+    "outputType": "video",
+    "description": "",
+    "searchText": "seedance-1.5-pro seedance-1.5-pro video",
+    "supported": false
+  },
+  {
+    "providerId": "apiframe",
+    "locator": "apiframe://video/seedance-2",
+    "label": "seedance-2",
+    "category": "video",
+    "outputType": "video",
+    "description": "",
+    "searchText": "seedance-2 seedance-2 video",
+    "supported": true
+  },
+  {
+    "providerId": "apiframe",
+    "locator": "apiframe://video/seedance-2-fast",
+    "label": "seedance-2-fast",
+    "category": "video",
+    "outputType": "video",
+    "description": "",
+    "searchText": "seedance-2-fast seedance-2-fast video",
+    "supported": false
+  },
+  {
+    "providerId": "apiframe",
+    "locator": "apiframe://video/seedance-2-mini",
+    "label": "seedance-2-mini",
+    "category": "video",
+    "outputType": "video",
+    "description": "",
+    "searchText": "seedance-2-mini seedance-2-mini video",
+    "supported": false
+  },
+  {
+    "providerId": "apiframe",
+    "locator": "apiframe://video/seedance-2.5",
+    "label": "seedance-2.5",
+    "category": "video",
+    "outputType": "video",
+    "description": "",
+    "searchText": "seedance-2.5 seedance-2.5 video",
+    "supported": false
+  },
+  {
+    "providerId": "apiframe",
+    "locator": "apiframe://video/sora-2",
+    "label": "sora-2",
+    "category": "video",
+    "outputType": "video",
+    "description": "",
+    "searchText": "sora-2 sora-2 video",
+    "supported": false
+  },
+  {
+    "providerId": "apiframe",
+    "locator": "apiframe://video/sora-2-pro",
+    "label": "sora-2-pro",
+    "category": "video",
+    "outputType": "video",
+    "description": "",
+    "searchText": "sora-2-pro sora-2-pro video",
+    "supported": true
+  },
+  {
+    "providerId": "apiframe",
+    "locator": "apiframe://video/veo-2",
+    "label": "veo-2",
+    "category": "video",
+    "outputType": "video",
+    "description": "",
+    "searchText": "veo-2 veo-2 video",
+    "supported": false
+  },
+  {
+    "providerId": "apiframe",
+    "locator": "apiframe://video/veo-3",
+    "label": "veo-3",
+    "category": "video",
+    "outputType": "video",
+    "description": "",
+    "searchText": "veo-3 veo-3 video",
+    "supported": false
+  },
+  {
+    "providerId": "apiframe",
+    "locator": "apiframe://video/veo-3-fast",
+    "label": "veo-3-fast",
+    "category": "video",
+    "outputType": "video",
+    "description": "",
+    "searchText": "veo-3-fast veo-3-fast video",
+    "supported": false
+  },
+  {
+    "providerId": "apiframe",
+    "locator": "apiframe://video/veo-3.1",
+    "label": "veo-3.1",
+    "category": "video",
+    "outputType": "video",
+    "description": "",
+    "searchText": "veo-3.1 veo-3.1 video",
+    "supported": true
+  },
+  {
+    "providerId": "apiframe",
+    "locator": "apiframe://video/veo-3.1-fast",
+    "label": "veo-3.1-fast",
+    "category": "video",
+    "outputType": "video",
+    "description": "",
+    "searchText": "veo-3.1-fast veo-3.1-fast video",
+    "supported": false
+  },
+  {
+    "providerId": "apiframe",
+    "locator": "apiframe://video/veo-3.1-lite",
+    "label": "veo-3.1-lite",
+    "category": "video",
+    "outputType": "video",
+    "description": "",
+    "searchText": "veo-3.1-lite veo-3.1-lite video",
+    "supported": false
+  },
+  {
+    "providerId": "apiframe",
+    "locator": "apiframe://video/wan-2.5",
+    "label": "wan-2.5",
+    "category": "video",
+    "outputType": "video",
+    "description": "",
+    "searchText": "wan-2.5 wan-2.5 video",
+    "supported": false
+  },
+  {
+    "providerId": "apiframe",
+    "locator": "apiframe://video/wan-2.5-fast",
+    "label": "wan-2.5-fast",
+    "category": "video",
+    "outputType": "video",
+    "description": "",
+    "searchText": "wan-2.5-fast wan-2.5-fast video",
+    "supported": false
+  },
+  {
+    "providerId": "apiframe",
+    "locator": "apiframe://video/wan-2.6",
+    "label": "wan-2.6",
+    "category": "video",
+    "outputType": "video",
+    "description": "",
+    "searchText": "wan-2.6 wan-2.6 video",
+    "supported": false
+  },
+  {
+    "providerId": "apiframe",
+    "locator": "apiframe://video/wan-2.6-flash",
+    "label": "wan-2.6-flash",
+    "category": "video",
+    "outputType": "video",
+    "description": "",
+    "searchText": "wan-2.6-flash wan-2.6-flash video",
+    "supported": false
+  },
+  {
+    "providerId": "apiframe",
+    "locator": "apiframe://video/wan-2.7",
+    "label": "wan-2.7",
+    "category": "video",
+    "outputType": "video",
+    "description": "",
+    "searchText": "wan-2.7 wan-2.7 video",
+    "supported": false
+  },
+  {
+    "providerId": "apiframe",
+    "locator": "apiframe://video/wan-2.7-r2v",
+    "label": "wan-2.7-r2v",
+    "category": "video",
+    "outputType": "video",
+    "description": "",
+    "searchText": "wan-2.7-r2v wan-2.7-r2v video",
+    "supported": false
+  }
+]

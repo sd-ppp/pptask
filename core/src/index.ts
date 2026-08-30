@@ -37,6 +37,18 @@ import {
   comfyProviderDefinition,
   comfyUploadProviderDefinition,
 } from './providers/comfy/index.ts';
+import {
+  kieProviderDefinition,
+} from './providers/kie/index.ts';
+import {
+  apiframeProviderDefinition,
+} from './providers/apiframe/index.ts';
+import {
+  kieUploadProviderDefinition,
+} from './upload-providers/kie/index.ts';
+import {
+  apiframeUploadProviderDefinition,
+} from './upload-providers/apiframe/index.ts';
 import { normalizeScheme, parseLocator } from './resource.ts';
 import type {
   DescribeParams,
@@ -59,6 +71,8 @@ export * from './providers/grsai/index.ts';
 export * from './providers/gemini/index.ts';
 export * from './providers/openai/index.ts';
 export * from './providers/comfy/index.ts';
+export * from './providers/kie/index.ts';
+export * from './providers/apiframe/index.ts';
 export * from './resource.ts';
 export * from './types.ts';
 export { getProvider, getUploadProvider, listProviders, listUploadProviders, unregisterProvider };
@@ -99,6 +113,18 @@ function ensureDefaultProvidersRegistered(): void {
   }
   if (!getUploadProvider('comfy-https')) {
     registerUploadProviderInternal('comfy-https', comfyUploadProviderDefinition);
+  }
+  if (!getProvider('kie')) {
+    registerProviderInternal('kie', kieProviderDefinition);
+  }
+  if (!getUploadProvider('kie')) {
+    registerUploadProviderInternal('kie', kieUploadProviderDefinition);
+  }
+  if (!getProvider('apiframe')) {
+    registerProviderInternal('apiframe', apiframeProviderDefinition);
+  }
+  if (!getUploadProvider('apiframe')) {
+    registerUploadProviderInternal('apiframe', apiframeUploadProviderDefinition);
   }
 }
 

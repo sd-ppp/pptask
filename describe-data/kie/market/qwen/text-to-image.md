@@ -1,0 +1,433 @@
+# Qwen - Text to Image
+
+## OpenAPI Specification
+
+```yaml
+openapi: 3.0.1
+info:
+  title: ''
+  description: ''
+  version: 1.0.0
+paths:
+  /api/v1/jobs/createTask:
+    post:
+      summary: Qwen - Text to Image
+      deprecated: false
+      description: >-
+        High-quality photorealistic image generation powered by Qwen's advanced
+        AI model
+
+
+        ## Query Task Status
+
+
+        After submitting a task, use the unified query endpoint to check
+        progress and retrieve results:
+
+
+        <Card title="Get Task Details" icon="lucide-search"
+        href="/market/common/get-task-detail">
+          Learn how to query task status and retrieve generation results
+        </Card>
+
+
+        ::: tip[]
+
+        For production use, we recommend using the `callBackUrl` parameter to
+        receive automatic notifications when generation completes, rather than
+        polling the status endpoint.
+
+        :::
+
+
+        ## Related Resources
+
+
+        <CardGroup cols={2}>
+          <Card title="Market Overview" icon="lucide-store" href="/market/quickstart">
+            Explore all available models
+          </Card>
+          <Card title="Common API" icon="lucide-cog" href="/common-api/get-account-credits">
+            Check credits and account usage
+          </Card>
+        </CardGroup>
+      operationId: qwen-text-to-image
+      tags:
+        - docs/en/Market/Image    Models/Qwen
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - model
+              properties:
+                model:
+                  type: string
+                  enum:
+                    - qwen/text-to-image
+                  default: qwen/text-to-image
+                  description: |-
+                    The model name to use for generation. Required field.
+
+                    - Must be `qwen/text-to-image` for this endpoint
+                  examples:
+                    - qwen/text-to-image
+                callBackUrl:
+                  type: string
+                  format: uri
+                  description: >-
+                    The URL to receive generation task completion updates.
+                    Optional but recommended for production use.
+
+
+                    - System will POST task status and results to this URL when
+                    generation completes
+
+                    - Callback includes generated content URLs and task
+                    information
+
+                    - Your callback endpoint should accept POST requests with
+                    JSON payload containing results
+
+                    - Alternatively, use the Get Task Details endpoint to poll
+                    task status
+
+                    - To ensure callback security, see [Webhook Verification
+                    Guide](/common-api/webhook-verification) for signature
+                    verification implementation
+                  examples:
+                    - https://your-domain.com/api/callback
+                input:
+                  type: object
+                  description: Input parameters for the generation task
+                  properties:
+                    prompt:
+                      description: >-
+                        The prompt to generate the image with (Max length: 5000
+                        characters)
+                      type: string
+                      maxLength: 5000
+                      examples:
+                        - ''
+                    image_size:
+                      description: The size of the generated image
+                      type: string
+                      enum:
+                        - square
+                        - square_hd
+                        - portrait_4_3
+                        - portrait_16_9
+                        - landscape_4_3
+                        - landscape_16_9
+                      default: square_hd
+                      examples:
+                        - square_hd
+                    num_inference_steps:
+                      description: >-
+                        The number of inference steps to perform (Min: 2, Max:
+                        250, Step: 1) (step: 1)
+                      type: number
+                      minimum: 2
+                      maximum: 250
+                      default: 30
+                      examples:
+                        - 30
+                    seed:
+                      description: >-
+                        The same seed and the same prompt given to the same
+                        version of the model will output the same image every
+                        time
+                      type: integer
+                    guidance_scale:
+                      description: >-
+                        The CFG (Classifier Free Guidance) scale is a measure of
+                        how close you want the model to stick to your prompt
+                        when looking for a related image to show you (Min: 0,
+                        Max: 20, Step: 0.1) (step: 0.1)
+                      type: number
+                      minimum: 0
+                      maximum: 20
+                      default: 2.5
+                      examples:
+                        - 2.5
+                    enable_safety_checker:
+                      description: >-
+                        The safety checker is always enabled in Playground. It
+                        can only be disabled by setting false through the API.
+                        (Boolean value (true/false))
+                      type: boolean
+                      examples:
+                        - true
+                    output_format:
+                      description: The format of the generated image
+                      type: string
+                      enum:
+                        - png
+                        - jpeg
+                      default: png
+                      examples:
+                        - png
+                    negative_prompt:
+                      description: >-
+                        The negative prompt for the generation (Max length: 500
+                        characters)
+                      type: string
+                      maxLength: 500
+                      examples:
+                        - ' '
+                    acceleration:
+                      description: >-
+                        Acceleration level for image generation. Options:
+                        'none', 'regular', 'high'. Higher acceleration increases
+                        speed. 'regular' balances speed and quality. 'high' is
+                        recommended for images without text
+                      type: string
+                      enum:
+                        - none
+                        - regular
+                        - high
+                      default: none
+                      examples:
+                        - none
+                    nsfw_checker:
+                      type: boolean
+                      description: >-
+                        Defaults to false. You can set it to false based on your
+                        needs. If set to false, our content filtering will be
+                        disabled, and all results will be returned directly by
+                        the model itself.
+
+                        Note: There is no guarantee that everything can be
+                        filtered out; if you are not satisfied with the results,
+                        you will need to make your own arrangements.
+                  required:
+                    - prompt
+                  x-apidog-orders:
+                    - prompt
+                    - image_size
+                    - num_inference_steps
+                    - seed
+                    - guidance_scale
+                    - enable_safety_checker
+                    - output_format
+                    - negative_prompt
+                    - acceleration
+                    - 01KWKKY7BT19W5R0JHASAQTSFY
+                  x-apidog-refs:
+                    01KWKKY7BT19W5R0JHASAQTSFY:
+                      $ref: '#/components/schemas/nsfw_checker'
+                  x-apidog-ignore-properties:
+                    - nsfw_checker
+              x-apidog-orders:
+                - model
+                - callBackUrl
+                - input
+              x-apidog-ignore-properties: []
+            example:
+              model: qwen/text-to-image
+              callBackUrl: https://your-domain.com/api/callback
+              input:
+                prompt: ''
+                image_size: square_hd
+                num_inference_steps: 30
+                guidance_scale: 2.5
+                enable_safety_checker: true
+                output_format: png
+                negative_prompt: ' '
+                acceleration: none
+      responses:
+        '200':
+          description: Request successful
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponse'
+              example:
+                code: 200
+                msg: success
+                data:
+                  taskId: task_qwen_1765178144357
+          headers: {}
+          x-apidog-name: ''
+      security:
+        - BearerAuth: []
+          x-apidog:
+            schemeGroups:
+              - id: kn8M4YUlc5i0A0179ezwx
+                schemeIds:
+                  - BearerAuth
+            required: true
+            use:
+              id: kn8M4YUlc5i0A0179ezwx
+            scopes:
+              kn8M4YUlc5i0A0179ezwx:
+                BearerAuth: []
+      x-apidog-folder: docs/en/Market/Image    Models/Qwen
+      x-apidog-status: released
+      x-run-in-apidog: https://app.apidog.com/web/project/1184766/apis/api-28506380-run
+components:
+  schemas:
+    nsfw_checker:
+      type: object
+      properties:
+        nsfw_checker:
+          type: boolean
+          description: >-
+            Defaults to false. You can set it to false based on your needs. If
+            set to false, our content filtering will be disabled, and all
+            results will be returned directly by the model itself.
+
+            Note: There is no guarantee that everything can be filtered out; if
+            you are not satisfied with the results, you will need to make your
+            own arrangements.
+      x-apidog-orders:
+        - nsfw_checker
+      x-apidog-ignore-properties: []
+      x-apidog-folder: ''
+    ApiResponse:
+      type: object
+      properties:
+        code:
+          type: integer
+          description: >-
+            Response status code
+
+
+            - **200**: Success - Request has been processed successfully
+
+            - **401**: Unauthorized - Authentication credentials are missing or
+            invalid
+
+            - **402**: Insufficient Credits - Account does not have enough
+            credits to perform the operation
+
+            - **404**: Not Found - The requested resource or endpoint does not
+            exist
+
+            - **422**: Validation Error - The request parameters failed
+            validation checks
+
+            - **429**: Rate Limited - Request limit has been exceeded for this
+            resource
+
+            - **433**: Request Limit - Sub-key Usage Exceeds Limit
+
+            - **455**: Service Unavailable - System is currently undergoing
+            maintenance
+
+            - **500**: Server Error - An unexpected error occurred while
+            processing the request
+
+            - **501**: Generation Failed - Content generation task failed
+
+            - **505**: Feature Disabled - The requested feature is currently
+            disabled
+          enum:
+            - 200
+            - 401
+            - 402
+            - 404
+            - 422
+            - 429
+            - 433
+            - 455
+            - 500
+            - 501
+            - 505
+          x-apidog-enum:
+            - value: 200
+              name: ''
+              description: ''
+            - value: 401
+              name: ''
+              description: ''
+            - value: 402
+              name: ''
+              description: ''
+            - value: 404
+              name: ''
+              description: ''
+            - value: 422
+              name: ''
+              description: ''
+            - value: 429
+              name: ''
+              description: ''
+            - value: 433
+              name: ''
+              description: ''
+            - value: 455
+              name: ''
+              description: ''
+            - value: 500
+              name: ''
+              description: ''
+            - value: 501
+              name: ''
+              description: ''
+            - value: 505
+              name: ''
+              description: ''
+        msg:
+          type: string
+          description: Response message, error description when failed
+          examples:
+            - success
+        data:
+          type: object
+          properties:
+            taskId:
+              type: string
+              description: >-
+                Task ID, can be used with Get Task Details endpoint to query
+                task status
+          x-apidog-orders:
+            - taskId
+          required:
+            - taskId
+          x-apidog-ignore-properties: []
+      x-apidog-orders:
+        - code
+        - msg
+        - data
+      title: response not with recordId
+      required:
+        - data
+      x-apidog-ignore-properties: []
+      x-apidog-folder: ''
+  securitySchemes:
+    BearerAuth:
+      type: bearer
+      scheme: bearer
+      bearerFormat: API Key
+      description: >-
+        All API requests require a Bearer Token. Add the header `Authorization:
+        Bearer YOUR_API_KEY` to authenticate requests.
+    BearerAuth1:
+      type: bearer
+      scheme: bearer
+      bearerFormat: API Key
+      description: >-
+        所有 API 请求都需要 Bearer Token。请在请求头中添加 `Authorization: Bearer YOUR_API_KEY`
+        进行身份验证。
+servers:
+  - url: https://api.kie.ai
+    description: 正式环境
+security:
+  - BearerAuth: []
+    x-apidog:
+      schemeGroups:
+        - id: kn8M4YUlc5i0A0179ezwx
+          schemeIds:
+            - BearerAuth
+      required: true
+      use:
+        id: kn8M4YUlc5i0A0179ezwx
+      scopes:
+        kn8M4YUlc5i0A0179ezwx:
+          BearerAuth: []
+
+```

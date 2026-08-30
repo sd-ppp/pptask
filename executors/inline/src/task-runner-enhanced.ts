@@ -7,7 +7,7 @@ import {
   cancelTask as coreCancelTask,
   getProvider,
 } from '../../../core/src/index.ts';
-import { parseLocator } from '../../../core/src/resource.ts';
+import { parseLocator } from '../../../core/src/index.ts';
 import type {
   TaskCheckParams,
   TaskCreateParams,
@@ -17,7 +17,7 @@ import type {
   TaskResult,
   TaskStatusResult,
   PlatformConfig,
-} from '../../../core/src/types.ts';
+} from '../../../core/src/index.ts';
 import type { RunOptions } from './types.ts';
 
 const DEFAULT_POLL_INTERVAL = 1000;
@@ -26,7 +26,7 @@ const DEFAULT_POLL_INTERVAL = 1000;
  * Task event types for async generator
  */
 export type TaskEvent =
-  | { type: 'created'; taskId: string; metadata?: any }
+  | { type: 'created'; taskId: string; cancelable: boolean; metadata?: any }
   | { type: 'progress'; taskId: string; progress?: number; status: string; metadata?: any }
   | { type: 'completed'; taskId: string; result: TaskResult }
   | { type: 'failed'; taskId: string; error: string }
@@ -57,6 +57,30 @@ const localClient: TaskClient = {
 
 /**
  * Create task handle with async generator support
+ * 
+ * Usage:
+ * ```typescript
+ * const taskStream = createTaskHandleStream(locator, payload, config);
+ * 
+ * for await (const event of taskStream) {
+ *   switch (event.type) {
+ *     case 'created':
+ *       console.log('Task created:', event.taskId);
+ *       break;
+ *     case 'progress':
+ *       console.log('Progress:', event.progress, event.status);
+ *       break;
+ *     case 'completed':
+ *       console.log('Completed with result:', event.result);
+ *       console.log('Outputs:', event.result.outputs);
+ *       console.log('Cost:', event.result.costCoins, event.result.costMoney);
+ *       break;
+ *     case 'failed':
+ *       console.error('Failed:', event.error);
+ *       break;
+ *   }
+ * }
+ * ```
  */
 export async function* createTaskHandleStream(
   locator: string,
@@ -68,11 +92,11 @@ export async function* createTaskHandleStream(
 ): AsyncGenerator<TaskEvent, TaskResult | void, void> {
   const taskOptions = toTaskRequestOptions(runOptions);
   const context = runOptions?.context;
-
+  
   // Check if provider supports sync execution
   const { scheme } = parseLocator(locator);
   const provider = getProvider(scheme);
-
+  
   if (provider?.createTaskSync) {
     // Synchronous execution path
     yield* createSyncTaskStream(
@@ -115,21 +139,21 @@ async function* createSyncTaskStream(
   taskOptions: TaskRequestOptions | undefined
 ): AsyncGenerator<TaskEvent, TaskResult, void> {
   const syncTaskId = `sync-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
-
+  
   try {
     throwIfAborted(taskOptions?.signal);
-
-    yield { type: 'created', taskId: syncTaskId, metadata: { mode: 'sync' } };
-
+    
+    yield { type: 'created', taskId: syncTaskId, cancelable: false, metadata: { mode: 'sync' } };
+    
     const result = await provider.createTaskSync({
       locator,
       payload,
       platformConfig,
       options: taskOptions,
     });
-
+    
     yield { type: 'completed', taskId: syncTaskId, result };
-
+    
     return result; // Return full TaskResult
   } catch (err: any) {
     if (isAbortError(err)) {
@@ -151,7 +175,7 @@ async function* createAsyncTaskStream(
   client: TaskClient,
   context: Record<string, any> | undefined
 ): AsyncGenerator<TaskEvent, TaskResult, void> {
-  // 1. Create task
+  const cancelable = isProviderCancelable(locator);
   const created = await client.createTaskAsync({
     locator,
     payload,
@@ -159,24 +183,45 @@ async function* createAsyncTaskStream(
     options: taskOptions,
     context,
   });
-
+  
   const taskId = created.taskId;
-
-  // Emit created event
-  yield { type: 'created', taskId, metadata: created.metadata };
-
-  // 2. Poll until done, yielding progress events
+  const signal = taskOptions?.signal;
+  const onAbort = () => {
+    if (!cancelable) return;
+    // The signal that just fired 'abort' is now aborted; forwarding it to the
+    // remote cancelTask call would make signal-aware clients (fetch, etc.)
+    // reject immediately without ever reaching the network, defeating the
+    // remote cancellation. Omit the signal entirely for this fire-and-forget
+    // request instead.
+    client.cancelTask({
+      locator,
+      taskId,
+      platformConfig,
+      options: undefined,
+      context,
+    }).catch(cancelError => {
+      // Fire-and-forget: this is not awaited by any caller, so a rejection
+      // here must be caught here to avoid an unhandled promise rejection.
+      console.error('[pptask] remote cancelTask on abort failed', { locator, taskId, error: cancelError });
+    });
+  };
+  if (signal && 'addEventListener' in signal) {
+    signal.addEventListener('abort', onAbort, { once: true });
+  }
+  
+  yield { type: 'created', taskId, cancelable, metadata: created.metadata };
+  
   try {
     let iteration = 0;
     let consecutiveStatusFailures = 0;
-
+    
     while (true) {
       throwIfAborted(taskOptions?.signal);
-
+      
       if (iteration > 0) {
         await delay(pollIntervalMs);
       }
-
+      
       let status: TaskStatusResult;
       try {
         status = await client.checkStatus({
@@ -204,7 +249,7 @@ async function* createAsyncTaskStream(
         iteration += 1;
         continue;
       }
-
+      
       // Emit progress event
       yield {
         type: 'progress',
@@ -213,9 +258,9 @@ async function* createAsyncTaskStream(
         status: status.status,
         metadata: status.raw,
       };
-
+      
       const normalizedStatus = status.status;
-
+      
       if (normalizedStatus === 'succeeded') {
         try {
           const result = await client.getResult({
@@ -237,29 +282,49 @@ async function* createAsyncTaskStream(
           throw error;
         }
       }
-
+      
       if (normalizedStatus === 'failed') {
         const errorMsg = buildTaskErrorMessage(taskId, status, 'Task failed');
         yield { type: 'failed', taskId, error: errorMsg };
         throw new Error(errorMsg);
       }
-
+      
       if (normalizedStatus === 'cancelled') {
+        const error = createAbortError('Task cancelled');
+        (error as any).taskStatus = status;
         yield { type: 'cancelled', taskId };
-        throw new Error(`Task cancelled (taskId=${taskId})`);
+        throw error;
       }
-
+      
       iteration += 1;
     }
   } catch (err: any) {
-    if (isAbortError(err)) {
-      // Already yielded cancelled event
-    } else if (!err.message?.includes('Task failed') && !err.message?.includes('Task cancelled')) {
-      // Only yield if we haven't already
+    if (isCancelledTaskError(err)) {
+      // cancelled event already emitted when applicable
+    } else if (!err.message?.includes('Task failed')) {
       yield { type: 'failed', taskId, error: err?.message || 'Task terminated' };
     }
     throw err;
+  } finally {
+    if (signal && 'removeEventListener' in signal) {
+      signal.removeEventListener('abort', onAbort);
+    }
   }
+}
+
+function isProviderCancelable(locator: string): boolean {
+  const { scheme } = parseLocator(locator);
+  const provider = getProvider(scheme);
+  if (!provider) return false;
+  if (typeof provider.canCancelTask === 'function') {
+    return provider.canCancelTask({ locator });
+  }
+  return typeof provider.cancelTask === 'function';
+}
+
+function isCancelledTaskError(err: any): boolean {
+  if (isAbortError(err)) return true;
+  return err?.taskStatus?.status === 'cancelled';
 }
 
 function throwIfAborted(signal: TaskRequestOptions['signal']) {
@@ -290,7 +355,14 @@ function createAbortError(message: string): DOMException {
 }
 
 function buildTaskErrorMessage(taskId: string, status: TaskStatusResult, message: string): string {
-  return `${message} (taskId=${taskId}, status=${status.status})`;
+  const raw = status.raw && typeof status.raw === 'object' ? status.raw as Record<string, unknown> : {};
+  const failedReason = raw.failedReason ?? raw.failure_reason;
+  const detail = raw.errorMessage
+    ?? raw.error
+    ?? raw.message
+    ?? (failedReason && typeof failedReason === 'object' ? JSON.stringify(failedReason) : failedReason);
+  const code = raw.errorCode ? `[${String(raw.errorCode)}] ` : '';
+  return `${detail ? `${code}${String(detail)}` : message} (taskId=${taskId}, status=${status.status})`;
 }
 
 function delay(ms: number): Promise<void> {
