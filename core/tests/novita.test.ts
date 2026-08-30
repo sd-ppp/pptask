@@ -486,6 +486,10 @@ describe('novita provider', () => {
     });
     expect(result.cancelable).toBe(true);
     expect(result.formSchema.properties).toHaveProperty('referenceAudios');
+    expect(result.formSchema.properties.duration).toMatchObject({
+      'x-component': 'Slider',
+      'x-component-props': { min: 4, max: 15, step: 1, unit: 's' },
+    });
     expect(result.formSchema.properties.firstFrameFile['x-component']).toBe('Upload');
     expect(result.formSchema.properties.lastFrameFile['x-component-props'].maxCount).toBe(1);
     expect(result.formSchema.properties.referenceImageFiles['x-component-props'].maxCount).toBe(9);

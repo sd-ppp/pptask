@@ -303,8 +303,8 @@ function buildNovitaSeedanceOverseaFormSchema(model: string): FormilySchema {
       },
       duration: {
         type: 'number', title: 'Duration (seconds)', 'x-decorator': 'FormItem',
-        'x-component': 'NumberPicker',
-        'x-component-props': { min: 4, max: 15, precision: 0 }, default: 5,
+        'x-component': 'Slider',
+        'x-component-props': { min: 4, max: 15, step: 1, unit: 's' }, default: 5,
       },
       ratio: {
         type: 'string', title: 'Aspect Ratio', 'x-decorator': 'FormItem', 'x-component': 'Select',

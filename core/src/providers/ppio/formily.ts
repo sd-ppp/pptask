@@ -135,8 +135,8 @@ function buildPpioSeedanceCnMeteredFormSchema(model: string): FormilySchema {
         enum: resolutions.map(value => ({ label: value, value })), default: '480p',
       },
       duration: {
-        type: 'number', title: 'Duration (seconds)', 'x-decorator': 'FormItem', 'x-component': 'NumberPicker',
-        'x-component-props': { min: 4, max: 15, precision: 0 }, default: 5,
+        type: 'number', title: 'Duration (seconds)', 'x-decorator': 'FormItem', 'x-component': 'Slider',
+        'x-component-props': { min: 4, max: 15, step: 1, unit: 's' }, default: 5,
       },
       ratio: {
         type: 'string', title: 'Aspect Ratio', 'x-decorator': 'FormItem', 'x-component': 'Select',
@@ -544,8 +544,8 @@ function buildPpioSeedanceFormSchema(): FormilySchema {
         default: '16:9',
       },
       duration: {
-        type: 'number', title: 'Duration (seconds)', 'x-decorator': 'FormItem', 'x-component': 'NumberPicker',
-        'x-component-props': { min: 4, max: 15, precision: 0 }, default: 5,
+        type: 'number', title: 'Duration (seconds)', 'x-decorator': 'FormItem', 'x-component': 'Slider',
+        'x-component-props': { min: 4, max: 15, step: 1, unit: 's' }, default: 5,
       },
       seed: {
         type: 'number', title: 'Seed', 'x-decorator': 'FormItem', 'x-component': 'NumberPicker',

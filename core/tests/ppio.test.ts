@@ -689,6 +689,10 @@ describe('ppio provider', () => {
     });
     expect(result.formSchema.properties).toHaveProperty('referenceVideos');
     expect(result.formSchema.properties).toHaveProperty('generateAudio');
+    expect(result.formSchema.properties.duration).toMatchObject({
+      'x-component': 'Slider',
+      'x-component-props': { min: 4, max: 15, step: 1, unit: 's' },
+    });
     expect(result.formValues).toMatchObject({ fast: false, resolution: '720p', duration: 5 });
     expect(ppioProviderDefinition.getExecutionMode?.({ locator: 'ppio:///seedance-2.0' })).toBe('async');
     expect(ppioProviderDefinition.getExecutionMode?.({ locator: 'ppio:///gpt-image-2' })).toBe('sync');
@@ -1188,6 +1192,10 @@ describe('ppio provider', () => {
         protocol: 'bytedance-cn-content-generation-metered',
       });
       expect(result.formSchema.properties).toHaveProperty('referenceAudios');
+      expect(result.formSchema.properties.duration).toMatchObject({
+        'x-component': 'Slider',
+        'x-component-props': { min: 4, max: 15, step: 1, unit: 's' },
+      });
       expect(ppioProviderDefinition.getExecutionMode?.({ locator: `ppio:///${model}` })).toBe('async');
     }
     const legacy = await ppioProviderDefinition.describeResource({ locator: 'ppio:///seedance-2.0' });
