@@ -6,6 +6,8 @@ export type SignalLike = AbortSignal | { aborted?: boolean } | undefined;
 
 export type TaskRequestOptions = {
   signal?: SignalLike;
+  /** Stable caller-owned key for retrying create without duplicating side effects. */
+  idempotencyKey?: string;
 };
 
 export type PlatformConfig = Record<string, any>;
