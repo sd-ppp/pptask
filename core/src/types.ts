@@ -10,6 +10,26 @@ export type TaskRequestOptions = {
 
 export type PlatformConfig = Record<string, any>;
 
+export type TaskInputSemantic = 'prompt' | 'reference-image' | 'reference-video' | 'reference-audio';
+
+export type TaskInputBinding = {
+  field: string;
+  semantic: TaskInputSemantic;
+  required?: boolean;
+  multiple?: boolean;
+  maxItems?: number;
+};
+
+export type ResourceDescriptor = {
+  id: string;
+  locator: string;
+  title: string;
+  description?: string;
+  mediaKind?: string;
+  operations?: readonly string[];
+  revision?: string;
+};
+
 export type TaskCreateParams = {
   locator: string;
   payload?: Record<string, any>;
@@ -44,7 +64,10 @@ export type TaskCreateResult = {
   provider: ProviderScheme;
   taskId: string;
   status: TaskStatus;
-  raw: any;
+  /** Provider diagnostic data; removed by the public task facade. */
+  raw?: unknown;
+  /** Present when the Provider completed synchronously. */
+  result?: TaskResult;
   metadata?: Record<string, any>;
 };
 
@@ -53,7 +76,8 @@ export type TaskStatusResult = {
   taskId: string;
   status: TaskStatus;
   progress?: number;
-  raw: any;
+  /** Provider diagnostic data; removed by the public task facade. */
+  raw?: unknown;
 };
 
 export type TaskResult = {
@@ -64,7 +88,8 @@ export type TaskResult = {
   costCoins?: number;
   costMoney?: number;
   costMoneyCurrency?: string;
-  raw: any;
+  /** Provider diagnostic data; removed by the public task facade. */
+  raw?: unknown;
 };
 
 export type TaskExecutionResult =
@@ -79,7 +104,8 @@ export type TaskExecutionResult =
 
 export type TaskOutput = {
   url?: string;
-  rawData: any;
+  /** Provider diagnostic data; removed by the public task facade. */
+  rawData?: unknown;
   [key: string]: any;
 };
 
@@ -89,6 +115,10 @@ export type DescribeResult = {
     scheme: ProviderScheme;
     [key: string]: any;
   };
+  protocolVersion?: 'pptask.describe/v1' | string;
+  schemaVersion?: string;
+  resource?: ResourceDescriptor;
+  bindings?: readonly TaskInputBinding[];
   formSchema: FormilySchema;
   formValues: Record<string, any>;
   recommendUploadProvider?: string;
@@ -98,7 +128,8 @@ export type DescribeResult = {
 export type UploadResult = {
   provider: ProviderScheme;
   url: string;
-  raw: any;
+  /** Provider diagnostic data; removed by the public task facade. */
+  raw?: unknown;
 };
 
 export type CancelCapabilityParams = {

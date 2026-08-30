@@ -5,6 +5,10 @@
 
 import { config as loadEnv } from 'dotenv';
 import { resolve } from 'path';
+import { registerBuiltinProviders } from './core/src/builtins.ts';
+
+// Unit tests use the compatibility singleton explicitly; production imports do not.
+registerBuiltinProviders();
 
 const testEnvPath = resolve(__dirname, 'test.env');
 const result = loadEnv({ path: testEnvPath });

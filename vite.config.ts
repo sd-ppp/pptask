@@ -6,6 +6,9 @@ export default defineConfig({
     lib: {
       entry: {
         index: resolve(import.meta.dirname, 'core/src/index.ts'),
+        contracts: resolve(import.meta.dirname, 'core/src/contracts.ts'),
+        registry: resolve(import.meta.dirname, 'core/src/registry.ts'),
+        builtins: resolve(import.meta.dirname, 'core/src/builtins.ts'),
         'executors/inline': resolve(import.meta.dirname, 'executors/inline/src/index.ts'),
         'locator-catalog': resolve(import.meta.dirname, 'core/src/locator-catalog.ts'),
       },

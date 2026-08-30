@@ -1,6 +1,7 @@
 {
-  "name": "pptask",
-  "version": "0.1.0",
+  "name": "@sdppp/pptask",
+  "version": "0.2.0",
+  "private": true,
   "description": "A unified TypeScript interface for AI media generation across providers.",
   "license": "Apache-2.0",
   "author": "SDPPP Contributors",
@@ -29,6 +30,18 @@
     ".": {
       "types": "./dist/core/src/index.d.ts",
       "import": "./dist/index.js"
+    },
+    "./contracts": {
+      "types": "./dist/core/src/contracts.d.ts",
+      "import": "./dist/contracts.js"
+    },
+    "./registry": {
+      "types": "./dist/core/src/registry.d.ts",
+      "import": "./dist/registry.js"
+    },
+    "./builtins": {
+      "types": "./dist/core/src/builtins.d.ts",
+      "import": "./dist/builtins.js"
     },
     "./executors/inline": {
       "types": "./dist/executors/inline/src/index.d.ts",

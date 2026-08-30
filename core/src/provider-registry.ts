@@ -5,60 +5,68 @@ import type {
   UploadProviderDefinition,
 } from './types.ts';
 
-const providers = new Map<ProviderScheme, ProviderDefinition>();
-const uploadProviders = new Map<ProviderScheme, UploadProviderDefinition>();
+export type ProviderRegistry = {
+  registerProvider(scheme: string, definition: ProviderDefinition): void;
+  unregisterProvider(scheme: string): void;
+  getProvider(scheme: string): ProviderDefinition | undefined;
+  ensureProvider(scheme: string): ProviderDefinition;
+  listProviders(): ProviderScheme[];
+  registerUploadProvider(scheme: string, definition: UploadProviderDefinition): void;
+  getUploadProvider(scheme: string): UploadProviderDefinition | undefined;
+  ensureUploadProvider(scheme: string): UploadProviderDefinition;
+  listUploadProviders(): ProviderScheme[];
+};
 
-export function registerProvider(scheme: string, definition: ProviderDefinition): void {
-  if (!definition) {
-    throw new Error('provider definition is required');
-  }
-  const normalized = normalizeScheme(scheme);
-  providers.set(normalized, definition);
+export function createProviderRegistry(): ProviderRegistry {
+  const providers = new Map<ProviderScheme, ProviderDefinition>();
+  const uploadProviders = new Map<ProviderScheme, UploadProviderDefinition>();
+
+  return {
+    registerProvider(scheme, definition) {
+      if (!definition) throw new Error('provider definition is required');
+      providers.set(normalizeScheme(scheme), definition);
+    },
+    unregisterProvider(scheme) {
+      providers.delete(normalizeScheme(scheme));
+    },
+    getProvider(scheme) {
+      return providers.get(normalizeScheme(scheme));
+    },
+    ensureProvider(scheme) {
+      const provider = providers.get(normalizeScheme(scheme));
+      if (!provider) throw new Error(`No provider registered for scheme: ${normalizeScheme(scheme)}`);
+      return provider;
+    },
+    listProviders() {
+      return Array.from(providers.keys());
+    },
+    registerUploadProvider(scheme, definition) {
+      if (!definition) throw new Error('upload provider definition is required');
+      uploadProviders.set(normalizeScheme(scheme), definition);
+    },
+    getUploadProvider(scheme) {
+      return uploadProviders.get(normalizeScheme(scheme));
+    },
+    ensureUploadProvider(scheme) {
+      const provider = uploadProviders.get(normalizeScheme(scheme));
+      if (!provider) throw new Error(`No provider registered for name: ${normalizeScheme(scheme)}`);
+      return provider;
+    },
+    listUploadProviders() {
+      return Array.from(uploadProviders.keys());
+    },
+  };
 }
 
-export function unregisterProvider(scheme: string): void {
-  const normalized = normalizeScheme(scheme);
-  providers.delete(normalized);
-}
+/** The compatibility singleton starts empty; built-ins are never registered implicitly. */
+export const defaultProviderRegistry = createProviderRegistry();
 
-export function getProvider(scheme: string): ProviderDefinition | undefined {
-  const normalized = normalizeScheme(scheme);
-  return providers.get(normalized);
-}
-
-export function ensureProvider(scheme: string): ProviderDefinition {
-  const provider = getProvider(scheme);
-  if (!provider) {
-    throw new Error(`No provider registered for scheme: ${normalizeScheme(scheme)}`);
-  }
-  return provider;
-}
-
-export function listProviders(): ProviderScheme[] {
-  return Array.from(providers.keys());
-}
-
-export function registerUploadProvider(scheme: string, definition: UploadProviderDefinition): void {
-  if (!definition) {
-    throw new Error('upload provider definition is required');
-  }
-  const normalized = normalizeScheme(scheme);
-  uploadProviders.set(normalized, definition);
-}
-
-export function getUploadProvider(scheme: string): UploadProviderDefinition | undefined {
-  const normalized = normalizeScheme(scheme);
-  return uploadProviders.get(normalized);
-}
-
-export function ensureUploadProvider(scheme: string): UploadProviderDefinition {
-  const provider = getUploadProvider(scheme);
-  if (!provider) {
-    throw new Error(`No upload provider registered for name: ${normalizeScheme(scheme)}`);
-  }
-  return provider;
-}
-
-export function listUploadProviders(): ProviderScheme[] {
-  return Array.from(uploadProviders.keys());
-}
+export const registerProvider = defaultProviderRegistry.registerProvider;
+export const unregisterProvider = defaultProviderRegistry.unregisterProvider;
+export const getProvider = defaultProviderRegistry.getProvider;
+export const ensureProvider = defaultProviderRegistry.ensureProvider;
+export const listProviders = defaultProviderRegistry.listProviders;
+export const registerUploadProvider = defaultProviderRegistry.registerUploadProvider;
+export const getUploadProvider = defaultProviderRegistry.getUploadProvider;
+export const ensureUploadProvider = defaultProviderRegistry.ensureUploadProvider;
+export const listUploadProviders = defaultProviderRegistry.listUploadProviders;

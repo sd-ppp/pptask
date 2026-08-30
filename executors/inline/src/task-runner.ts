@@ -4,7 +4,7 @@ import {
   cancelTask as coreCancelTask,
   getProvider,
 } from '../../../core/src/index.ts';
-import { parseLocator } from '../../../core/src/index.ts';
+import { parseLocator } from '../../../core/src/resource.ts';
 import type {
   TaskCheckParams,
   TaskCreateParams,
@@ -15,14 +15,13 @@ import type {
   TaskResult,
   TaskStatusResult,
   PlatformConfig,
-} from '../../../core/src/index.ts';
+} from '../../../core/src/types.ts';
 import type { RunOptions, TaskHandle } from './types.ts';
 
 const DEFAULT_POLL_INTERVAL = 1000;
 
 export type TaskClient = {
-  createTask?: (params: TaskCreateParams & { context?: Record<string, any> }) => Promise<TaskExecutionResult>;
-  createTaskAsync?: (params: TaskCreateParams & { context?: Record<string, any> }) => Promise<TaskCreateResult>;
+  createTask: (params: TaskCreateParams & { context?: Record<string, any> }) => Promise<TaskExecutionResult>;
   checkStatus: (params: TaskCheckParams & { context?: Record<string, any> }) => Promise<TaskStatusResult>;
   getResult: (params: TaskResultParams & { context?: Record<string, any> }) => Promise<TaskResult>;
   cancelTask: (params: TaskCheckParams & { context?: Record<string, any> }) => Promise<void>;
@@ -37,6 +36,7 @@ const localClient: TaskClient = {
     if (provider.createTask) {
       return provider.createTask(params);
     }
+    // Compatibility with providers registered against the pre-unified interface.
     if (provider.createTaskAsync) {
       return { mode: 'async', task: await provider.createTaskAsync(params) };
     }
@@ -61,17 +61,27 @@ export async function createTaskHandle(
   const taskOptions = toTaskRequestOptions(runOptions);
   const context = runOptions?.context;
   
-  const params = { locator, payload, platformConfig, options: taskOptions, context };
-  const created = client.createTask
-    ? await client.createTask(params)
-    : client.createTaskAsync
-      ? { mode: 'async' as const, task: await client.createTaskAsync(params) }
-      : (() => { throw new Error('Task client must implement createTask or createTaskAsync'); })();
+  const created = await client.createTask({
+    locator,
+    payload,
+    platformConfig,
+    options: taskOptions,
+    context,
+  });
+
   if (created.mode === 'sync') {
     return createSyncTaskHandle(created.result, runOptions);
   }
+
   return createAsyncTaskHandle(
-    locator, created.task, platformConfig, taskOptions, runOptions, pollIntervalMs, client, context
+    locator,
+    created.task,
+    platformConfig,
+    taskOptions,
+    runOptions,
+    pollIntervalMs,
+    client,
+    context
   );
 }
 
@@ -81,6 +91,21 @@ function toTaskRequestOptions(options?: RunOptions): TaskRequestOptions | undefi
   return {
     signal: options.signal,
   };
+}
+
+function formatPollingError(error: unknown): Record<string, unknown> {
+  const err = error as any;
+  const formatted: Record<string, unknown> = {
+    name: err?.name,
+    message: err?.message ?? String(error),
+  };
+  if (err?.stack) formatted.stack = err.stack;
+  if (err?.cause) {
+    formatted.cause = (err.cause as any)?.message ?? err.cause;
+  }
+  if (err?.response) formatted.response = err.response;
+  if (err?.raw) formatted.raw = err.raw;
+  return formatted;
 }
 
 // Synchronous task execution
@@ -129,16 +154,6 @@ async function createSyncTaskHandle(
   };
 }
 
-function isProviderCancelable(locator: string): boolean {
-  const { scheme } = parseLocator(locator);
-  const provider = getProvider(scheme);
-  if (!provider) return false;
-  if (typeof provider.canCancelTask === 'function') {
-    return provider.canCancelTask({ locator });
-  }
-  return typeof provider.cancelTask === 'function';
-}
-
 // Asynchronous task execution (original logic)
 async function createAsyncTaskHandle(
   locator: string,
@@ -164,15 +179,16 @@ async function createAsyncTaskHandle(
     context
   );
 
-  const cancelable = isProviderCancelable(locator);
-
   return {
     taskId,
     promise,
-    cancelable,
+    cancelable: true,
     cancel: async () => {
-      if (!cancelable) return;
-      await client.cancelTask({ locator, taskId, platformConfig, options: taskOptions, context });
+      try {
+        await client.cancelTask({ locator, taskId, platformConfig, options: taskOptions, context });
+      } catch {
+        // suppress cancellation failures to keep cancel idempotent for callers
+      }
     },
   };
 }
@@ -190,6 +206,7 @@ async function pollUntilDone(
   try {
     let iteration = 0;
     let consecutiveStatusFailures = 0;
+    const statusFailureErrors: Array<Record<string, unknown>> = [];
     while (true) {
       throwIfAborted(taskOptions?.signal);
       if (iteration > 0) {
@@ -210,18 +227,17 @@ async function pollUntilDone(
           throw error;
         }
         consecutiveStatusFailures += 1;
-        console.error('[pptask][poll] status check failed', {
-          locator,
-          taskId,
-          consecutiveStatusFailures,
-          error: error instanceof Error ? error.message : String(error),
-        });
+        statusFailureErrors.push(formatPollingError(error));
+        if (statusFailureErrors.length > 3) {
+          statusFailureErrors.shift();
+        }
         if (consecutiveStatusFailures >= 3) {
-          const reason = error instanceof Error ? error.message : String(error);
+          const recentErrorsJson = JSON.stringify(statusFailureErrors, null, 2);
           const pollingError = new Error(
-            `Task status polling failed ${consecutiveStatusFailures} times consecutively: ${reason}`
+            `Task status polling failed ${consecutiveStatusFailures} times consecutively. Recent errors: ${recentErrorsJson}`
           );
           (pollingError as any).cause = error;
+          (pollingError as any).details = statusFailureErrors;
           throw pollingError;
         }
         iteration += 1;
@@ -256,14 +272,14 @@ async function pollUntilDone(
         throw error;
       }
       if (normalizedStatus === 'cancelled') {
-        const error = createAbortError('Task cancelled');
-        (error as any).taskStatus = status;
+        const error = buildTaskError(taskId, status, 'Task cancelled');
+        runOptions?.reporter?.onFinish?.(taskId, 'cancelled', error.message);
         throw error;
       }
       iteration += 1;
     }
   } catch (err: any) {
-    if (isCancelledTaskError(err)) {
+    if (isAbortError(err)) {
       runOptions?.reporter?.onFinish?.(taskId, 'cancelled', err.message);
     } else if (runOptions?.reporter) {
       runOptions.reporter.onFinish?.(taskId, 'failed', err?.message ?? 'Task terminated');
@@ -290,11 +306,6 @@ function throwIfAborted(signal: TaskRequestOptions['signal']) {
   }
 }
 
-function isCancelledTaskError(err: any): boolean {
-  if (isAbortError(err)) return true;
-  return err?.taskStatus?.status === 'cancelled';
-}
-
 function isAbortError(err: any): boolean {
   if (!err) return false;
   if (err instanceof DOMException) return err.name === 'AbortError';
@@ -312,22 +323,23 @@ function createAbortError(message: string): DOMException {
 }
 
 function buildTaskError(taskId: string, status: TaskStatusResult, message: string): Error {
-  const rawData = status.raw && typeof status.raw === 'object' ? status.raw as Record<string, unknown> : {};
-  const failedReason = rawData.failedReason ?? rawData.failure_reason;
-  const detailedError = rawData.errorMessage
-    ?? rawData.error
-    ?? rawData.message
-    ?? (failedReason && typeof failedReason === 'object' ? JSON.stringify(failedReason) : failedReason);
-  const errorCode = rawData.errorCode;
-  const detail = [
-    errorCode ? `[${String(errorCode)}]` : '',
-    detailedError ? String(detailedError) : '',
-  ].filter(Boolean).join(' ');
-  const errorMessage = `${detail || message} (taskId=${taskId}, status=${status.status})`;
+  // Extract detailed error message from provider's raw response
+  // Priority: error > failure_reason > message from raw data
+  const rawData = isRecord(status.raw) ? status.raw : {};
+  const detailedError = rawData.error || rawData.failure_reason || rawData.message;
+  
+  // Use detailed error if available, otherwise use generic message
+  const errorMessage = detailedError 
+    ? `${detailedError} (taskId=${taskId}, status=${status.status})`
+    : `${message} (taskId=${taskId}, status=${status.status})`;
   
   const error = new Error(errorMessage);
   (error as any).taskStatus = status;
   return error;
+}
+
+function isRecord(value: unknown): value is Record<string, any> {
+  return Boolean(value) && typeof value === 'object' && !Array.isArray(value);
 }
 
 function delay(ms: number): Promise<void> {
