@@ -47,7 +47,7 @@ import { createInlineExecutor } from '@sdppp/pptask/executors/inline';
 ## File Structure
 
 ```
-packages/pptask/
+.
 ├── core/src/              # Source code
 ├── executors/inline/src/  # Executor source code
 ├── dist/                  # Compiled output (gitignored)
@@ -56,6 +56,8 @@ packages/pptask/
 │   │   └── inline.js     # Inline executor bundle
 │   ├── core/src/         # Type declarations
 │   └── executors/        # Executor type declarations
+├── docs/BUILD.md         # Build documentation
+├── scripts/test-build.mjs # Built-package smoke test
 ├── vite.config.ts        # Vite build configuration
 ├── tsconfig.json         # TypeScript config for development
 └── tsconfig.build.json   # TypeScript config for production build
@@ -83,4 +85,5 @@ Tests continue to use TypeScript source files directly through Vitest, so no bui
 ```bash
 pnpm test                        # Run all tests
 pnpm test runninghub-api.test.ts # Run specific test
+pnpm run test:build              # Build and smoke-test package exports
 ```

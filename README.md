@@ -26,6 +26,9 @@ when the returned task needs status polling.
 
 默认已注册 Replicate、RunningHub、GRSAI、Gemini、OpenAI、PPIO、Novita、火山方舟（Ark）与 Comfy Provider，并可按需扩展新 Provider（上传逻辑可通过 `registerUploadProvider` 拆分复用）：
 
+构建与发布说明见 [docs/BUILD.md](docs/BUILD.md)，RunningHub API 模式说明见
+[docs/RUNNINGHUB_API.md](docs/RUNNINGHUB_API.md)。
+
 ```ts
 import { registerProvider, registerUploadProvider } from './core/src/index.ts';
 import type { ProviderDefinition, UploadProviderDefinition } from './core/src/types.ts';

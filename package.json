@@ -23,6 +23,7 @@
     "build": "vite build && tsc --project tsconfig.build.json",
     "dev": "vite build --watch",
     "test": "vitest run",
+    "test:build": "pnpm run build && node scripts/test-build.mjs",
     "prepublishOnly": "pnpm run build"
   },
   "dependencies": {
