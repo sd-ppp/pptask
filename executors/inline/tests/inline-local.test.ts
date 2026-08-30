@@ -10,8 +10,10 @@ vi.mock('../../../core/src/index.ts', async (importOriginal) => {
     getResult: vi.fn(),
     cancelTask: vi.fn(),
     upload: vi.fn(),
-    // Mock getProvider to return a provider without createTaskSync
+    // Mock getProvider to return a provider using the unified task API
     getProvider: vi.fn(() => ({
+      describeResource: vi.fn(),
+      createTask: vi.fn(),
       createTaskAsync: vi.fn(),
       checkStatus: vi.fn(),
       getResult: vi.fn(),
@@ -54,6 +56,16 @@ describe('inline executor (local mode)', () => {
 
   it('runs tasks to completion and returns full result', async () => {
     const mockProvider = {
+      describeResource: vi.fn(),
+      createTask: vi.fn().mockResolvedValue({
+        mode: 'async',
+        task: {
+          provider: 'replicate',
+          taskId: 'task-1',
+          status: 'pending',
+          raw: {},
+        },
+      }),
       createTaskAsync: vi.fn().mockResolvedValue({
         provider: 'replicate',
         taskId: 'task-1',

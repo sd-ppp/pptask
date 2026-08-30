@@ -14,15 +14,14 @@ const outputDir = join(__dirname, 'output', 'grsai');
 
 grsaiSuite('grsai provider (integration tests)', () => {
   const apiKey = process.env.GRSAI_API_KEY!;
-  // baseURL and model are hardcoded in the test, not from environment variables
-  const baseUrl = 'https://grsai.dakka.com.cn';
-  const model = 'nano-banana-pro';
-  const locator = `grsai:///${model}`;
+  const baseUrl = 'https://grsaiapi.com';
   const platformConfig = { apiKey, baseURL: baseUrl };
 
   it(
-    'creates task, polls status, and fetches result',
+    'nano-banana-pro: creates task, polls status, and fetches result',
     async () => {
+      const model = 'nano-banana-pro';
+      const locator = `grsai:///${model}`;
       const runInput = process.env.GRSAI_RUN_INPUT_JSON
         ? JSON.parse(process.env.GRSAI_RUN_INPUT_JSON)
         : { 
@@ -35,7 +34,7 @@ grsaiSuite('grsai provider (integration tests)', () => {
       mkdirSync(outputDir, { recursive: true });
       
       const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
-      const outputFile = join(outputDir, `test-${timestamp}.json`);
+      const outputFile = join(outputDir, `nano-banana-pro-${timestamp}.json`);
       
       const testLog: any = {
         startTime: new Date().toISOString(),
@@ -106,6 +105,93 @@ grsaiSuite('grsai provider (integration tests)', () => {
       log(`✓ Test output saved to: ${outputFile}`);
     },
     300_000 // 5 minutes timeout for image generation
+  );
+
+  it(
+    'gpt-image-2: completions API create, poll, and fetch result',
+    async () => {
+      const model = 'gpt-image-2';
+      const locator = `grsai:///${model}`;
+      const runInput = process.env.GRSAI_GPT_RUN_INPUT_JSON
+        ? JSON.parse(process.env.GRSAI_GPT_RUN_INPUT_JSON)
+        : {
+            prompt: '联通性测试：极简扁平风，纯蓝色正方形图标，无文字',
+            aspectRatio: '1:1',
+            imageSize: '1K',
+          };
+
+      mkdirSync(outputDir, { recursive: true });
+
+      const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+      const outputFile = join(outputDir, `gpt-image-2-${timestamp}.json`);
+
+      const testLog: any = {
+        startTime: new Date().toISOString(),
+        input: runInput,
+        locator,
+        baseUrl,
+        model,
+        apiPath: '/v1/draw/completions',
+        logs: [],
+      };
+
+      function log(message: string, data?: any) {
+        const logEntry = { time: new Date().toISOString(), message, data };
+        testLog.logs.push(logEntry);
+        console.log(message, data !== undefined ? data : '');
+      }
+
+      const created = await createTask({ locator, payload: runInput, platformConfig });
+      expect(typeof created.taskId).toBe('string');
+      expect(created.provider).toBe('grsai');
+      testLog.taskId = created.taskId;
+      testLog.createResult = created;
+      log(`✓ Created gpt-image-2 task: ${created.taskId}`);
+
+      let latestStatus = created;
+      for (let attempt = 0; attempt < 60; attempt += 1) {
+        await wait(3000);
+        latestStatus = await checkStatus({
+          locator,
+          taskId: created.taskId,
+          platformConfig,
+        });
+        log(`  Polling [${attempt + 1}/60]: status=${latestStatus.status}, progress=${latestStatus.progress || 0}%`);
+
+        if (latestStatus.status === 'succeeded') break;
+        if (latestStatus.status === 'failed' || latestStatus.status === 'cancelled') {
+          testLog.endTime = new Date().toISOString();
+          testLog.error = `Task ended with status=${latestStatus.status}`;
+          testLog.finalStatus = latestStatus;
+          writeFileSync(outputFile, JSON.stringify(testLog, null, 2));
+          throw new Error(
+            `gpt-image-2 task failed: ${latestStatus.status} raw=${JSON.stringify(latestStatus.raw)}`
+          );
+        }
+      }
+
+      expect(latestStatus.status).toBe('succeeded');
+
+      const result = await getResult({
+        locator,
+        taskId: created.taskId,
+        platformConfig,
+      });
+
+      expect(Array.isArray(result.outputs)).toBe(true);
+      expect(result.outputs.length).toBeGreaterThan(0);
+      expect(result.outputs[0]?.url).toBeDefined();
+
+      testLog.finalResult = result;
+      testLog.endTime = new Date().toISOString();
+      testLog.success = true;
+
+      const urls = result.outputs.map((o) => o.url).join(', ');
+      log(`✓ gpt-image-2 result URLs: ${urls}`);
+      writeFileSync(outputFile, JSON.stringify(testLog, null, 2));
+      log(`✓ Test output saved to: ${outputFile}`);
+    },
+    300_000
   );
 });
 

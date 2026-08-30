@@ -6,6 +6,7 @@ import type {
   TaskCheckParams,
   TaskCreateParams,
   TaskCreateResult,
+  TaskExecutionResult,
   TaskResult,
   TaskResultParams,
   TaskStatusResult,
@@ -33,6 +34,11 @@ export const replicateProviderDefinition: ProviderDefinition = {
   async describeResource(params: DescribeParams): Promise<DescribeResult> {
     const url = ensureReplicateUrl(params.locator);
     return describeReplicate(url, params.platformConfig, params.options);
+  },
+  async createTask(params: TaskCreateParams): Promise<TaskExecutionResult> {
+    const url = ensureReplicateUrl(params.locator);
+    const task = await createReplicateTask(url, params.payload ?? {}, params.platformConfig, params.options);
+    return { mode: 'async', task };
   },
   async createTaskAsync(params: TaskCreateParams): Promise<TaskCreateResult> {
     const url = ensureReplicateUrl(params.locator);

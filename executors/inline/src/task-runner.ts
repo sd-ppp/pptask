@@ -9,6 +9,7 @@ import type {
   TaskCheckParams,
   TaskCreateParams,
   TaskCreateResult,
+  TaskExecutionResult,
   TaskRequestOptions,
   TaskResultParams,
   TaskResult,
@@ -20,22 +21,28 @@ import type { RunOptions, TaskHandle } from './types.ts';
 const DEFAULT_POLL_INTERVAL = 1000;
 
 export type TaskClient = {
-  createTaskAsync: (params: TaskCreateParams & { context?: Record<string, any> }) => Promise<TaskCreateResult>;
+  createTask: (params: TaskCreateParams & { context?: Record<string, any> }) => Promise<TaskExecutionResult>;
   checkStatus: (params: TaskCheckParams & { context?: Record<string, any> }) => Promise<TaskStatusResult>;
   getResult: (params: TaskResultParams & { context?: Record<string, any> }) => Promise<TaskResult>;
   cancelTask: (params: TaskCheckParams & { context?: Record<string, any> }) => Promise<void>;
 };
 
 const localClient: TaskClient = {
-  createTaskAsync: async ({ context: _ctx, ...params }) => {
+  createTask: async ({ context: _ctx, ...params }) => {
     const provider = getProvider(parseLocator(params.locator).scheme);
     if (!provider) {
       throw new Error(`Provider not found for locator: ${params.locator}`);
     }
-    if (!provider.createTaskAsync) {
-      throw new Error(`Provider does not support async execution: ${params.locator}`);
+    if (provider.createTask) {
+      return provider.createTask(params);
     }
-    return provider.createTaskAsync(params);
+    if (provider.createTaskAsync) {
+      return { mode: 'async', task: await provider.createTaskAsync(params) };
+    }
+    if (provider.createTaskSync) {
+      return { mode: 'sync', result: await provider.createTaskSync(params) };
+    }
+    throw new Error(`Provider does not support task creation: ${params.locator}`);
   },
   checkStatus: ({ context: _ctx, ...params }) => coreCheckStatus(params),
   getResult: ({ context: _ctx, ...params }) => coreGetResult(params),
@@ -53,33 +60,13 @@ export async function createTaskHandle(
   const taskOptions = toTaskRequestOptions(runOptions);
   const context = runOptions?.context;
   
-  // Check if provider supports sync execution (prioritize sync)
-  const { scheme } = parseLocator(locator);
-  const provider = getProvider(scheme);
-  
-  if (provider?.createTaskSync) {
-    // Synchronous execution path
-    return createSyncTaskHandle(
-      provider,
-      locator,
-      payload,
-      platformConfig,
-      taskOptions,
-      runOptions
-    );
-  } else {
-    // Asynchronous execution path (original logic)
-    return createAsyncTaskHandle(
-      locator,
-      payload,
-      platformConfig,
-      taskOptions,
-      runOptions,
-      pollIntervalMs,
-      client,
-      context
-    );
+  const created = await client.createTask({ locator, payload, platformConfig, options: taskOptions, context });
+  if (created.mode === 'sync') {
+    return createSyncTaskHandle(created.result, runOptions);
   }
+  return createAsyncTaskHandle(
+    locator, created.task, platformConfig, taskOptions, runOptions, pollIntervalMs, client, context
+  );
 }
 
 function toTaskRequestOptions(options?: RunOptions): TaskRequestOptions | undefined {
@@ -92,11 +79,7 @@ function toTaskRequestOptions(options?: RunOptions): TaskRequestOptions | undefi
 
 // Synchronous task execution
 async function createSyncTaskHandle(
-  provider: any,
-  locator: string,
-  payload: Record<string, any>,
-  platformConfig: PlatformConfig | undefined,
-  taskOptions: TaskRequestOptions | undefined,
+  result: TaskResult,
   runOptions: RunOptions | undefined
 ): Promise<TaskHandle<TaskResult>> {
   const syncTaskId = `sync-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
@@ -105,15 +88,6 @@ async function createSyncTaskHandle(
   
   const promise = (async () => {
     try {
-      throwIfAborted(taskOptions?.signal);
-      
-      const result = await provider.createTaskSync({
-        locator,
-        payload,
-        platformConfig,
-        options: taskOptions,
-      });
-      
       runOptions?.reporter?.onFinish?.(syncTaskId, 'completed');
       return result; // Return full TaskResult
     } catch (err: any) {
@@ -162,7 +136,7 @@ function isProviderCancelable(locator: string): boolean {
 // Asynchronous task execution (original logic)
 async function createAsyncTaskHandle(
   locator: string,
-  payload: Record<string, any>,
+  created: TaskCreateResult,
   platformConfig: PlatformConfig | undefined,
   taskOptions: TaskRequestOptions | undefined,
   runOptions: RunOptions | undefined,
@@ -170,13 +144,6 @@ async function createAsyncTaskHandle(
   client: TaskClient,
   context: Record<string, any> | undefined
 ): Promise<TaskHandle<TaskResult>> {
-  const created = await client.createTaskAsync({
-    locator,
-    payload,
-    platformConfig,
-    options: taskOptions,
-    context,
-  });
   const taskId = created.taskId;
   runOptions?.reporter?.onStart?.(taskId, created.metadata);
 

@@ -27,6 +27,7 @@
     "build": "vite build && tsc --project tsconfig.build.json",
     "dev": "vite build --watch",
     "test": "vitest run",
+    "test:build": "pnpm run build && node scripts/test-build.mjs",
     "pptask:sync-provider-data": "node core/scripts/sync-provider-data.mjs",
     "pptask:generate-kie-apiframe-catalogs": "node core/scripts/generate-kie-apiframe-catalogs.mjs",
     "pptask:generate-provider-catalogs": "node core/scripts/generate-provider-catalogs.mjs",

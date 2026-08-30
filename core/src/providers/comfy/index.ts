@@ -6,6 +6,7 @@ import type {
   TaskCheckParams,
   TaskCreateParams,
   TaskCreateResult,
+  TaskExecutionResult,
   TaskResult,
   TaskResultParams,
   TaskStatusResult,
@@ -37,6 +38,12 @@ export const comfyProviderDefinition: ProviderDefinition = {
   async describeResource(params: DescribeParams): Promise<DescribeResult> {
     const url = ensureComfyUrl(params.locator);
     return describeComfy(url, params.platformConfig, params.options);
+  },
+
+  async createTask(params: TaskCreateParams): Promise<TaskExecutionResult> {
+    const url = ensureComfyUrl(params.locator);
+    const task = await createComfyTask(url, params.payload ?? {}, params.platformConfig, params.options);
+    return { mode: 'async', task };
   },
 
   async createTaskAsync(params: TaskCreateParams): Promise<TaskCreateResult> {

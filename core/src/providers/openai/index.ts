@@ -4,6 +4,7 @@ import type {
   DescribeResult,
   ProviderDefinition,
   TaskCreateParams,
+  TaskExecutionResult,
   TaskResult,
 } from '../../types.ts';
 import { describeOpenAI, createOpenAITaskSync } from './api.ts';
@@ -24,6 +25,12 @@ export const openaiProviderDefinition: ProviderDefinition = {
     return describeOpenAI(url, params.platformConfig, params.options);
   },
   
+  async createTask(params: TaskCreateParams): Promise<TaskExecutionResult> {
+    const url = ensureOpenAIUrl(params.locator);
+    const result = await createOpenAITaskSync(url, params.payload ?? {}, params.platformConfig, params.options);
+    return { mode: 'sync', result };
+  },
+
   async createTaskSync(params: TaskCreateParams): Promise<TaskResult> {
     const url = ensureOpenAIUrl(params.locator);
     return createOpenAITaskSync(url, params.payload ?? {}, params.platformConfig, params.options);

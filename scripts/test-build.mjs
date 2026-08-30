@@ -5,9 +5,9 @@ import {
   checkStatus, 
   getResult,
   listProviders
-} from './dist/index.js';
+} from '../dist/index.js';
 
-import { createInlineExecutor } from './dist/executors/inline.js';
+import { createInlineExecutor } from '../dist/executors/inline.js';
 
 console.log('✓ Successfully imported from dist/index.js');
 console.log('✓ Available functions:', {

@@ -34,6 +34,15 @@ import {
   openaiProviderDefinition,
 } from './providers/openai/index.ts';
 import {
+  ppioProviderDefinition,
+} from './providers/ppio/index.ts';
+import {
+  arkProviderDefinition,
+} from './providers/ark/index.ts';
+import {
+  novitaProviderDefinition,
+} from './providers/novita/index.ts';
+import {
   comfyProviderDefinition,
   comfyUploadProviderDefinition,
 } from './providers/comfy/index.ts';
@@ -57,6 +66,7 @@ import type {
   TaskCheckParams,
   TaskCreateParams,
   TaskCreateResult,
+  TaskExecutionResult,
   TaskResult,
   TaskResultParams,
   TaskStatusResult,
@@ -70,6 +80,9 @@ export * from './providers/runninghub/index.ts';
 export * from './providers/grsai/index.ts';
 export * from './providers/gemini/index.ts';
 export * from './providers/openai/index.ts';
+export * from './providers/ppio/index.ts';
+export * from './providers/ark/index.ts';
+export * from './providers/novita/index.ts';
 export * from './providers/comfy/index.ts';
 export * from './providers/kie/index.ts';
 export * from './providers/apiframe/index.ts';
@@ -101,6 +114,15 @@ function ensureDefaultProvidersRegistered(): void {
   }
   if (!getProvider('openai')) {
     registerProviderInternal('openai', openaiProviderDefinition);
+  }
+  if (!getProvider('ppio')) {
+    registerProviderInternal('ppio', ppioProviderDefinition);
+  }
+  if (!getProvider('ark')) {
+    registerProviderInternal('ark', arkProviderDefinition);
+  }
+  if (!getProvider('novita')) {
+    registerProviderInternal('novita', novitaProviderDefinition);
   }
   if (!getProvider('comfy-http')) {
     registerProviderInternal('comfy-http', comfyProviderDefinition);
@@ -145,11 +167,19 @@ export async function describeResource(params: DescribeParams): Promise<Describe
 
 export async function createTask(params: TaskCreateParams): Promise<TaskCreateResult> {
   const provider = resolveProvider(params.locator);
-  
-  // Prioritize sync execution, but createTask expects async result
-  if (provider.createTaskSync) {
-    // Sync provider: execute and return as a completed task
-    const result = await provider.createTaskSync(params);
+  let execution: TaskExecutionResult;
+  if (provider.createTask) {
+    execution = await provider.createTask(params);
+  } else if (provider.createTaskSync) {
+    execution = { mode: 'sync', result: await provider.createTaskSync(params) };
+  } else if (provider.createTaskAsync) {
+    execution = { mode: 'async', task: await provider.createTaskAsync(params) };
+  } else {
+    throw new Error(`Provider has no task creation method: ${params.locator}`);
+  }
+
+  if (execution.mode === 'sync') {
+    const result = execution.result;
     return {
       provider: result.provider,
       taskId: result.taskId,
@@ -157,11 +187,9 @@ export async function createTask(params: TaskCreateParams): Promise<TaskCreateRe
       raw: result.raw,
       metadata: { syncCompleted: true, outputs: result.outputs },
     };
-  } else if (provider.createTaskAsync) {
-    return provider.createTaskAsync(params);
-  } else {
-    throw new Error(`Provider has no task creation method: ${params.locator}`);
   }
+
+  return execution.task;
 }
 
 export async function checkStatus(params: TaskCheckParams): Promise<TaskStatusResult> {
