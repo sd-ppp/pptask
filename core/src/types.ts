@@ -108,6 +108,7 @@ export type ProviderDefinition = {
   createTask: (params: TaskCreateParams) => Promise<TaskExecutionResult>;
 
   // Deprecated compatibility aliases. New code should use createTask.
+  getExecutionMode?: (params: TaskCreateParams) => 'sync' | 'async';
   createTaskSync?: (params: TaskCreateParams) => Promise<TaskResult>;
   createTaskAsync?: (params: TaskCreateParams) => Promise<TaskCreateResult>;
   checkStatus?: (params: TaskCheckParams) => Promise<TaskStatusResult>;

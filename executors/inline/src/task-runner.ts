@@ -36,7 +36,6 @@ const localClient: TaskClient = {
     if (provider.createTask) {
       return provider.createTask(params);
     }
-    // Compatibility with providers registered against the pre-unified interface.
     if (provider.createTaskAsync) {
       return { mode: 'async', task: await provider.createTaskAsync(params) };
     }
@@ -61,27 +60,12 @@ export async function createTaskHandle(
   const taskOptions = toTaskRequestOptions(runOptions);
   const context = runOptions?.context;
   
-  const created = await client.createTask({
-    locator,
-    payload,
-    platformConfig,
-    options: taskOptions,
-    context,
-  });
-
+  const created = await client.createTask({ locator, payload, platformConfig, options: taskOptions, context });
   if (created.mode === 'sync') {
     return createSyncTaskHandle(created.result, runOptions);
   }
-
   return createAsyncTaskHandle(
-    locator,
-    created.task,
-    platformConfig,
-    taskOptions,
-    runOptions,
-    pollIntervalMs,
-    client,
-    context
+    locator, created.task, platformConfig, taskOptions, runOptions, pollIntervalMs, client, context
   );
 }
 
