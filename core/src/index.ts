@@ -43,6 +43,12 @@ import {
   novitaProviderDefinition,
 } from './providers/novita/index.ts';
 import {
+  crunProviderDefinition,
+} from './providers/crun/index.ts';
+import {
+  crunUploadProviderDefinition,
+} from './upload-providers/crun/index.ts';
+import {
   comfyProviderDefinition,
   comfyUploadProviderDefinition,
 } from './providers/comfy/index.ts';
@@ -70,6 +76,7 @@ export * from './providers/openai/index.ts';
 export * from './providers/ppio/index.ts';
 export * from './providers/ark/index.ts';
 export * from './providers/novita/index.ts';
+export * from './providers/crun/index.ts';
 export * from './providers/comfy/index.ts';
 export * from './resource.ts';
 export * from './types.ts';
@@ -108,6 +115,12 @@ function ensureDefaultProvidersRegistered(): void {
   }
   if (!getProvider('novita')) {
     registerProviderInternal('novita', novitaProviderDefinition);
+  }
+  if (!getProvider('crun')) {
+    registerProviderInternal('crun', crunProviderDefinition);
+  }
+  if (!getUploadProvider('crun')) {
+    registerUploadProviderInternal('crun', crunUploadProviderDefinition);
   }
   if (!getProvider('comfy-http')) {
     registerProviderInternal('comfy-http', comfyProviderDefinition);
