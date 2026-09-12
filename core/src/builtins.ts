@@ -39,6 +39,8 @@ import {
   deepgramProviderDefinition,
   fireworksProviderDefinition,
 } from './providers/modern/index.ts';
+import { crunProviderDefinition } from './providers/crun/index.ts';
+import { crunUploadProviderDefinition } from './upload-providers/crun/index.ts';
 
 /** Explicitly registers the built-in Providers into the supplied registry. */
 export function registerBuiltinProviders(registry: ProviderRegistry = defaultProviderRegistry): void {
@@ -78,6 +80,8 @@ export function registerBuiltinProviders(registry: ProviderRegistry = defaultPro
   registerIfMissing(registry, 'cartesia', cartesiaProviderDefinition);
   registerIfMissing(registry, 'deepgram', deepgramProviderDefinition);
   registerIfMissing(registry, 'fireworks', fireworksProviderDefinition);
+  registerIfMissing(registry, 'crun', crunProviderDefinition);
+  registerUploadIfMissing(registry, 'crun', crunUploadProviderDefinition);
 }
 
 function registerIfMissing(

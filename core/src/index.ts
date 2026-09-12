@@ -22,6 +22,7 @@ import type {
 } from './types.ts';
 
 export * from './providers/modern/index.ts';
+export * from './providers/crun/index.ts';
 export * from './resource.ts';
 export * from './types.ts';
 export { createProviderRegistry, defaultProviderRegistry } from './provider-registry.ts';
