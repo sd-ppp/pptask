@@ -94,8 +94,29 @@ type TaskResult = {
 | OpenAI | `openai:` | Image generation, editing, and variations |
 | Gemini | `gemini:` | Gemini image generation |
 | Volcengine Ark | `ark:` | Volcengine Ark image models |
+| Fish Audio | `fish:` | TTS, streaming TTS, voice design |
+| DeepInfra | `deepinfra:` | Image, video, speech model gateway |
+| OpenRouter | `openrouter:` | Multimodal model gateway |
+| Tavus / Scenario / HeyGen / D-ID | respective schemes | Digital human, workflow, and media resources |
+| xAI / Cloudflare / Vertex / Bedrock / Azure / NVIDIA | respective schemes | Cloud model and media endpoints |
+| Leonardo / Cartesia / Deepgram / Fireworks | respective schemes | Image and audio endpoints |
 
 See the [Provider Guide](docs/PROVIDER_GUIDE.md) for model-level parameters and platform-specific behavior.
+
+Providers with machine-readable catalogs expose `listModernCatalog(provider, config)`. For platforms without a per-model schema, `describeResource` returns an operation/task-family schema; pass the exact API operation in the locator path and keep provider-specific fields in `payload`.
+
+Example for the modern adapters:
+
+```ts
+import { listModernCatalog, createTask } from 'pptask';
+
+const voices = await listModernCatalog('fish');
+const task = await createTask({
+  locator: 'fish:///v1/tts',
+  payload: { text: 'Hello from PPTask', reference_id: voices[0]?.id },
+  platformConfig: { apiKey: process.env.FISH_API_KEY },
+});
+```
 
 ## Quick start
 
@@ -257,8 +278,29 @@ type TaskResult = {
 | OpenAI | `openai:` | 图片生成、编辑与变体 |
 | Gemini | `gemini:` | Gemini 图片生成能力 |
 | Volcengine Ark | `ark:` | 火山方舟图片模型 |
+| Fish Audio | `fish:` | TTS、流式 TTS、声音设计 |
+| DeepInfra | `deepinfra:` | 图像、视频、语音模型网关 |
+| OpenRouter | `openrouter:` | 多模态模型网关 |
+| Tavus / Scenario / HeyGen / D-ID | 对应 scheme | 数字人、工作流和媒体资源 |
+| xAI / Cloudflare / Vertex / Bedrock / Azure / NVIDIA | 对应 scheme | 云端模型与媒体接口 |
+| Leonardo / Cartesia / Deepgram / Fireworks | 对应 scheme | 图像与音频接口 |
 
 具体模型、参数和平台差异见 [Provider Guide](docs/PROVIDER_GUIDE.md)。模型与平台能力会持续变化，代码中的 catalog 和 Provider 测试是最终依据。
+
+具备机器可读目录的平台可调用 `listModernCatalog(provider, config)`。没有逐模型 Schema 的平台，`describeResource` 返回操作级或任务族级 Schema；请在 locator 路径中写明具体 API 操作，平台特有字段继续放在 `payload` 中。
+
+现代适配器示例：
+
+```ts
+import { listModernCatalog, createTask } from 'pptask';
+
+const voices = await listModernCatalog('fish');
+const task = await createTask({
+  locator: 'fish:///v1/tts',
+  payload: { text: 'Hello from PPTask', reference_id: voices[0]?.id },
+  platformConfig: { apiKey: process.env.FISH_API_KEY },
+});
+```
 
 ## 快速开始
 
