@@ -105,6 +105,18 @@ See the [Provider Guide](docs/PROVIDER_GUIDE.md) for model-level parameters and 
 
 Providers with machine-readable catalogs expose `listModernCatalog(provider, config)`. For platforms without a per-model schema, `describeResource` returns an operation/task-family schema; pass the exact API operation in the locator path and keep provider-specific fields in `payload`.
 
+CRUN provides a unified media endpoint for image, video, audio, and multimodal models. Use locators such as `crun:///google/nano-banana-2`, `crun:///bytedance/seedance2-5-t2v`, or `crun:///gpt-5.6-terra`. Register the built-ins explicitly with `registerBuiltinProviders()` and provide `CRUN_API_KEY` through `platformConfig.apiKey`.
+
+```ts
+import { createTask } from 'pptask';
+
+const task = await createTask({
+  locator: 'crun:///bytedance/seedance2-5-t2v',
+  payload: { prompt: 'A cinematic product shot at sunrise' },
+  platformConfig: { apiKey: process.env.CRUN_API_KEY },
+});
+```
+
 Example for the modern adapters:
 
 ```ts
