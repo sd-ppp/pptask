@@ -1,7 +1,7 @@
 {
   "name": "pptask",
   "projectType": "library",
-  "sourceRoot": "libs/domain/pptask/core/src",
+  "sourceRoot": "libs/domain/pptask/src",
   "tags": [
     "layer:domain",
     "type:domain-core",
@@ -15,23 +15,21 @@
         "script": "build"
       }
     },
-    "dev": {
-      "executor": "nx:run-script",
-      "options": {
-        "script": "dev"
-      }
-    },
     "test": {
       "executor": "nx:run-script",
-      "options": {
-        "script": "test"
-      }
+      "options": { "script": "test" }
+    },
+    "test-browser": {
+      "executor": "nx:run-script",
+      "options": { "script": "test:browser" }
+    },
+    "test-integration": {
+      "executor": "nx:run-script",
+      "options": { "script": "test:integration" }
     },
     "typecheck": {
       "executor": "nx:run-script",
-      "options": {
-        "script": "typecheck"
-      }
+      "options": { "script": "typecheck" }
     }
   }
 }

@@ -1,104 +1,103 @@
 {
-  "name": "@sdppp/pptask",
-  "version": "0.2.1",
+  "name": "@sdppp/pptask-aisdk",
+  "version": "0.0.0",
   "private": true,
-  "description": "A unified TypeScript interface for AI media generation across providers.",
-  "license": "Apache-2.0",
-  "author": "SDPPP Contributors",
-  "homepage": "https://github.com/sd-ppp/pptask#readme",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/sd-ppp/pptask.git"
-  },
-  "bugs": {
-    "url": "https://github.com/sd-ppp/pptask/issues"
-  },
-  "keywords": [
-    "ai",
-    "media-generation",
-    "image-generation",
-    "video-generation",
-    "provider",
-    "task-runner",
-    "typescript"
-  ],
   "type": "module",
   "main": "./dist/index.js",
   "module": "./dist/index.js",
-  "types": "./dist/core/src/index.d.ts",
+  "types": "./dist/types/index.d.ts",
   "exports": {
     ".": {
-      "types": "./dist/core/src/index.d.ts",
+      "types": "./dist/types/index.d.ts",
       "import": "./dist/index.js"
     },
-    "./contracts": {
-      "types": "./dist/core/src/contracts.d.ts",
-      "import": "./dist/contracts.js"
+    "./browser": {
+      "types": "./dist/types/browser.d.ts",
+      "import": "./dist/browser.js"
     },
-    "./registry": {
-      "types": "./dist/core/src/registry.d.ts",
-      "import": "./dist/registry.js"
+    "./server": {
+      "types": "./dist/types/server.d.ts",
+      "import": "./dist/server.js"
     },
-    "./builtins": {
-      "types": "./dist/core/src/builtins.d.ts",
-      "import": "./dist/builtins.js"
+    "./providers/replicate": {
+      "types": "./dist/types/providers/replicate/index.d.ts",
+      "import": "./dist/providers/replicate.js"
     },
-    "./executors/inline": {
-      "types": "./dist/executors/inline/src/index.d.ts",
-      "import": "./dist/executors/inline.js"
+    "./providers/runninghub": {
+      "types": "./dist/types/providers/runninghub/index.d.ts",
+      "import": "./dist/providers/runninghub.js"
     },
-    "./locator-catalog": {
-      "types": "./dist/core/src/locator-catalog.d.ts",
-      "import": "./dist/locator-catalog.js"
+    "./providers/crun": {
+      "types": "./dist/types/providers/crun/index.d.ts",
+      "import": "./dist/providers/crun.js"
+    },
+    "./providers/kie": {
+      "types": "./dist/types/providers/kie/index.d.ts",
+      "import": "./dist/providers/kie.js"
+    },
+    "./providers/apiframe": {
+      "types": "./dist/types/providers/apiframe/index.d.ts",
+      "import": "./dist/providers/apiframe.js"
+    },
+    "./providers/grsai": {
+      "types": "./dist/types/providers/grsai/index.d.ts",
+      "import": "./dist/providers/grsai.js"
+    },
+    "./providers/ppio": {
+      "types": "./dist/types/providers/ppio/index.d.ts",
+      "import": "./dist/providers/ppio.js"
+    },
+    "./providers/novita": {
+      "types": "./dist/types/providers/novita/index.d.ts",
+      "import": "./dist/providers/novita.js"
+    },
+    "./providers/ark": {
+      "types": "./dist/types/providers/ark/index.d.ts",
+      "import": "./dist/providers/ark.js"
+    },
+    "./providers/comfy": {
+      "types": "./dist/types/providers/comfy/index.d.ts",
+      "import": "./dist/providers/comfy.js"
+    },
+    "./providers/openai": {
+      "types": "./dist/types/providers/openai/index.d.ts",
+      "import": "./dist/providers/openai.js"
+    },
+    "./providers/gemini": {
+      "types": "./dist/types/providers/gemini/index.d.ts",
+      "import": "./dist/providers/gemini.js"
+    },
+    "./providers/modern": {
+      "types": "./dist/types/providers/modern/index.d.ts",
+      "import": "./dist/providers/modern.js"
     }
   },
   "sideEffects": false,
   "files": [
-    "dist/**/*.js",
-    "dist/**/*.d.ts",
-    "docs",
-    "CONTRIBUTING.md",
-    "SECURITY.md"
+    "dist",
+    "README.md",
+    "LICENSE"
   ],
   "scripts": {
-    "build": "vite build && tsc --project tsconfig.build.json",
-    "dev": "vite build --watch",
+    "build": "vite build && tsc -p tsconfig.build.json",
     "test": "vitest run",
-    "test:build": "pnpm run build && node scripts/test-build.mjs",
-    "pptask:sync-provider-data": "node core/scripts/sync-provider-data.mjs",
-    "pptask:generate-kie-apiframe-catalogs": "node core/scripts/generate-kie-apiframe-catalogs.mjs",
-    "pptask:generate-provider-catalogs": "node core/scripts/generate-provider-catalogs.mjs",
-    "pptask:sync-kie-apiframe-describe-data": "node core/scripts/sync-kie-apiframe-describe-data.mjs",
-    "prepack": "pnpm run build",
-    "prepublishOnly": "pnpm run build",
-    "typecheck": "tsc -p tsconfig.build.json --noEmit"
+    "test:browser": "playwright test",
+    "test:integration": "PPTASK_INTEGRATION=1 vitest run tests/integration/providers.integration.test.ts",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
   },
-  "engines": {
-    "node": ">=20"
-  },
-  "publishConfig": {
-    "access": "public",
-    "provenance": true
-  },
-  "nx": {
-    "tags": [
-      "scope:capability",
-      "platform:agnostic",
-      "type:lib"
-    ]
+  "peerDependencies": {
+    "ai": "^7.0.0"
   },
   "dependencies": {
-    "@google/genai": "^1.35.0",
-    "dotenv": "^16.4.5",
-    "replicate": "^1.0.1",
-    "zod": "^3.23.8"
+    "@ai-sdk/provider": "^4.0.14"
   },
   "devDependencies": {
-    "@types/node": "^20.11.25",
-    "tsx": "^4.7.0",
+    "@playwright/test": "1.55.0",
+    "@types/node": "^24.3.0",
+    "ai": "^7.0.99",
+    "fake-indexeddb": "^6.2.4",
     "typescript": "5.9.3",
-    "vite": "^8.2.2",
-    "vitest": "^4.1.11",
-    "yaml": "^2.9.0"
+    "vite": "^8.3.0",
+    "vitest": "^4.1.11"
   }
 }

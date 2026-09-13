@@ -1,7 +1,17 @@
-.env
-test.env
+# Build and test artifacts
 node_modules/
+.pnpm-store/
 dist/
-tests/cases/**/output/
-core/tests/output/
-core/.test-output/
+coverage/
+test-results/
+playwright-report/
+blob-report/
+
+# Tool caches
+.vite/
+vitest.config.*.timestamp-*.mjs
+
+# Local environment overrides
+.env
+.env.*
+!.env.example
