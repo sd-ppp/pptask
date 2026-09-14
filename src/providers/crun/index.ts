@@ -48,6 +48,8 @@ export {
   getCrunSeedanceProfile,
   isCrunNanoBananaModel,
   isCrunGptImage2,
+  isCrunGptImage25,
+  isCrunGptImage25Official,
   isCrunGptImage2Stable,
   isCrunGptImage2Premium,
   isCrunSeedreamModel,

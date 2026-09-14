@@ -11,12 +11,20 @@ export const NOVITA_DEFAULT_SEEDANCE_OVERSEA_METERED_BASE_URL =
 export const NOVITA_GPT_IMAGE_MODELS = [
   'gpt-image-2',
   'gpt-image-2-oai',
+  'gpt-image-2.5-sunburst-oai',
+  'gpt-image-2.5-flare-oai',
+] as const;
+
+export const NOVITA_GPT_IMAGE_25_MODELS = [
+  'gpt-image-2.5-sunburst-oai',
+  'gpt-image-2.5-flare-oai',
 ] as const;
 
 export const NOVITA_GPT56_MODELS = [
   'pa/gpt-5.6-terra',
   'pa/gpt-5.6-luna',
   'pa/gpt-5.6-sol',
+  'openai/gpt-6-astra',
 ] as const;
 
 export const NOVITA_SEEDANCE_OVERSEA_MODELS = [
@@ -205,6 +213,10 @@ export function buildNovitaSeedanceOverseaTaskEndpoint(
 
 export function isNovitaGptImageModel(model: string): boolean {
   return (NOVITA_GPT_IMAGE_MODELS as readonly string[]).includes(model);
+}
+
+export function isNovitaGptImage25Model(model: string): boolean {
+  return (NOVITA_GPT_IMAGE_25_MODELS as readonly string[]).includes(model);
 }
 
 export function isNovitaGpt56Model(model: string): boolean {

@@ -21,6 +21,7 @@ import {
   isNovitaAsyncModel,
   isNovitaGpt56Model,
   isNovitaGptImageModel,
+  isNovitaGptImage25Model,
   isNovitaKlingV3Model,
   isNovitaSeedanceOverseaModel,
   isNovitaVeo31Model,
@@ -139,7 +140,8 @@ export async function describeNovita(
       },
       formSchema: buildNovitaFormSchema(model),
       formValues: {
-        prompt: '', urls: [], mask: [], n: 1, size: '1024x1024', quality: 'high',
+        prompt: '', urls: [], mask: [], n: 1, size: '1024x1024',
+        quality: isNovitaGptImage25Model(model) ? 'auto' : 'high',
         outputFormat: 'png', outputCompression: 100, background: 'auto', moderation: 'low',
         inputFidelity: 'high',
       },
@@ -1674,8 +1676,13 @@ function buildGptImageCommonBody(
   outputFormat: 'png' | 'jpeg' | 'webp'
 ): Record<string, any> {
   const size = normalizeGptImageSize(payload.size ?? '1024x1024');
+  const defaultQuality = isNovitaGptImage25Model(model) ? 'auto' : 'high';
   const quality = normalizeGptImageEnum(
-    payload.quality ?? 'high', ['low', 'medium', 'high', 'auto'] as const, 'quality'
+    payload.quality ?? defaultQuality,
+    isNovitaGptImage25Model(model)
+      ? ['low', 'medium', 'high', 'xhigh', 'max', 'auto'] as const
+      : ['low', 'medium', 'high', 'auto'] as const,
+    'quality'
   );
   const n = normalizeInteger(payload.n ?? 1, 1, 10, 'n');
   const background = normalizeGptImageEnum(
