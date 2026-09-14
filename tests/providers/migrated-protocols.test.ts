@@ -1,5 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
 import {
+  buildCrunGptImage2RequestBody,
   buildCrunGeminiOmniRequestBody,
   buildCrunGrokImagineVideoRequestBody,
   buildCrunImageExpandRequestBody,
@@ -15,6 +16,59 @@ import {
   createNovitaProvider,
   createPpioProvider,
 } from '../../src/index.ts';
+
+describe('CRUN GPT Image 2.5 transport', () => {
+  it('builds the documented unified model request', () => {
+    const body = buildCrunGptImage2RequestBody('openai/gpt-image-2-5', {
+      prompt: 'Refine the product lighting',
+      imgUrls: ['https://input.test/product.png'],
+      modelVariant: 'sunburst',
+      aspectRatio: '4:5',
+      resolution: '4K',
+      n: 2,
+    });
+    expect(body).toEqual({
+      model: 'openai/gpt-image-2-5',
+      input: {
+        prompt: 'Refine the product lighting',
+        img_urls: ['https://input.test/product.png'],
+        aspect_ratio: '4:5',
+        model_variant: 'sunburst',
+        resolution: '4k',
+        n: 2,
+      },
+    });
+  });
+
+  it('describes the variant, resolution, and image count controls', async () => {
+    const provider = createCrunProvider({ apiKey: 'key', fetch: vi.fn() as typeof fetch });
+    const description = await provider.describe(provider.imageModel('openai/gpt-image-2-5'));
+    expect(description.defaultInput).toMatchObject({ modelVariant: 'flare', resolution: '1k', n: 1 });
+    expect((description.inputSchema as any).properties.modelVariant.enum.map((item: any) => item.value))
+      .toEqual(['flare', 'sunburst']);
+  });
+
+  it('builds the extended official-channel options', async () => {
+    const body = buildCrunGptImage2RequestBody('openai/gpt-image-2-5-official', {
+      prompt: 'Refine the product materials',
+      modelVariant: 'sunburst', aspectRatio: '21:9', resolution: '4K', n: 10,
+      quality: 'max', background: 'transparent', outputFormat: 'webp', outputCompression: 80,
+    });
+    expect(body).toEqual({
+      model: 'openai/gpt-image-2-5-official',
+      input: {
+        prompt: 'Refine the product materials', model_variant: 'sunburst', aspect_ratio: '21:9',
+        resolution: '4k', n: 10, quality: 'max', background: 'transparent',
+        output_format: 'webp', output_compression: 80,
+      },
+    });
+
+    const provider = createCrunProvider({ apiKey: 'key', fetch: vi.fn() as typeof fetch });
+    const description = await provider.describe(provider.imageModel('openai/gpt-image-2-5-official'));
+    expect(description.defaultInput).toMatchObject({ aspectRatio: 'auto', quality: 'auto', outputFormat: 'png' });
+    expect((description.inputSchema as any).properties.n['x-component-props'].max).toBe(10);
+  });
+});
 
 describe('migrated model protocol builders', () => {
   it('routes every CRUN model family through a model-specific builder', () => {
@@ -76,6 +130,45 @@ describe('PPIO migrated transport', () => {
 });
 
 describe('Novita migrated transport', () => {
+  it('supports the openai/gpt-6-astra language model', async () => {
+    const fetchMock = vi.fn(async (input: string | URL, init?: RequestInit) => {
+      expect(String(input)).toBe('https://api.novita.ai/openai/v1/responses');
+      expect(JSON.parse(String(init?.body))).toMatchObject({
+        model: 'openai/gpt-6-astra', input: 'hello', stream: false,
+      });
+      return Response.json({ output: [{ type: 'message', content: [{ type: 'output_text', text: 'ok' }] }] });
+    });
+    const provider = createNovitaProvider({ apiKey: 'key', fetch: fetchMock as typeof fetch });
+    const result = await provider.languageModel('openai/gpt-6-astra').doGenerate!({
+      prompt: [{ role: 'user', content: [{ type: 'text', text: 'hello' }] }],
+      maxOutputTokens: undefined, temperature: undefined, topP: undefined,
+      stopSequences: undefined, presencePenalty: undefined, frequencyPenalty: undefined,
+      responseFormat: undefined, tools: undefined, toolChoice: undefined, providerOptions: {},
+    } as any);
+    expect(result.content[0]).toMatchObject({ type: 'text', text: 'ok' });
+  });
+
+  it('supports GPT Image 2.5 native models and extended quality tiers', async () => {
+    const fetchMock = vi.fn(async (input: string | URL | Request, init?: RequestInit) => {
+      expect(String(input)).toBe('https://api.novita.ai/openai/v1/images/generations');
+      expect(JSON.parse(String(init?.body))).toMatchObject({
+        model: 'gpt-image-2.5-flare-oai',
+        quality: 'xhigh',
+      });
+      return Response.json({ data: [{ b64_json: 'AQID', output_format: 'png' }], usage: { total_tokens: 123 } });
+    });
+    const provider = createNovitaProvider({ apiKey: 'key', fetch: fetchMock as typeof fetch });
+    const description = await provider.describe(provider.imageModel('gpt-image-2.5-flare-oai'));
+    expect((description.defaultInput as any).quality).toBe('auto');
+    expect((description.inputSchema as any).properties.quality.enum.map((item: any) => item.value)).toContain('max');
+    const image = await provider.imageModel('gpt-image-2.5-flare-oai').doGenerate!({
+      prompt: 'draw', n: 1, size: undefined, aspectRatio: undefined, seed: undefined,
+      files: undefined, mask: undefined,
+      providerOptions: { novita: { quality: 'xhigh' } },
+    });
+    expect(image.images[0]).toEqual(new Uint8Array([1, 2, 3]));
+  });
+
   it('uses the legacy GPT-5.6 body and GPT Image multipart protocol', async () => {
     const fetchMock = vi.fn(async (input: string | URL, init?: RequestInit) => {
       const url = String(input);

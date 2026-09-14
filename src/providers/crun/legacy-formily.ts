@@ -8,6 +8,8 @@ import {
   getCrunPixverseV6Profile,
   getCrunSeedanceProfile,
   getCrunVeo31Profile,
+  isCrunGptImage25,
+  isCrunGptImage25Official,
   isCrunGptImage2Premium,
   isCrunGptImage2Stable,
   isCrunNanoBanana2,
@@ -1063,8 +1065,15 @@ export function buildCrunKlingFormSchema(model: string): FormilySchema {
 export function buildCrunGptImage2FormSchema(
   model = 'openai/gpt-image-2'
 ): FormilySchema {
+  const isGptImage25Official = isCrunGptImage25Official(model);
+  const isGptImage25 = isCrunGptImage25(model) || isGptImage25Official;
   const isStable = isCrunGptImage2Stable(model);
   const isPremium = isCrunGptImage2Premium(model);
+  const aspectRatios = isGptImage25Official
+    ? ['auto', '1:1', '3:2', '2:3', '4:3', '3:4', '5:4', '4:5', '16:9', '9:16', '2:1', '1:2', '21:9', '9:21', '3:1', '1:3']
+    : isGptImage25
+    ? ['auto', '1:1', '2:3', '3:2', '3:4', '4:3', '4:5', '5:4', '9:16', '16:9', '21:9']
+    : ASPECT_RATIOS;
   const properties: Record<string, any> = {
       prompt: {
         type: 'string',
@@ -1079,7 +1088,9 @@ export function buildCrunGptImage2FormSchema(
       },
       imgUrls: imageUploadField(
         'Reference Images',
-        isPremium
+        isGptImage25
+          ? `Select up to ${isGptImage25Official ? 16 : 15} local images to upload to CRUN, or reuse HTTP(S) resource URLs.`
+          : isPremium
           ? 'Select up to 14 local images to upload to CRUN, or reuse HTTP(S) resource URLs.'
           : undefined
       ),
@@ -1088,10 +1099,46 @@ export function buildCrunGptImage2FormSchema(
         title: 'Aspect Ratio',
         'x-decorator': 'FormItem',
         'x-component': 'Select',
-        enum: ASPECT_RATIOS.map(value => ({ label: value, value })),
-        default: '1:1',
+        enum: aspectRatios.map(value => ({ label: value, value })),
+        default: isGptImage25Official ? 'auto' : '1:1',
       },
   };
+
+  if (isGptImage25) {
+    properties.modelVariant = {
+      type: 'string', title: 'Model Variant', 'x-decorator': 'FormItem', 'x-component': 'Select',
+      enum: ['flare', 'sunburst'].map(value => ({ label: value, value })), default: 'flare',
+    };
+    properties.resolution = {
+      type: 'string', title: 'Resolution', 'x-decorator': 'FormItem', 'x-component': 'Select',
+      enum: ['1k', '2k', '4k'].map(value => ({ label: value, value })), default: '1k',
+    };
+    properties.n = {
+      type: 'number', title: `Number of Images (1-${isGptImage25Official ? 10 : 4})`, 'x-decorator': 'FormItem',
+      'x-component': 'NumberPicker', 'x-component-props': { min: 1, max: isGptImage25Official ? 10 : 4, step: 1 }, default: 1,
+    };
+  }
+
+  if (isGptImage25Official) {
+    properties.quality = {
+      type: 'string', title: 'Quality', 'x-decorator': 'FormItem', 'x-component': 'Select',
+      enum: ['low', 'medium', 'high', 'xhigh', 'max', 'auto'].map(value => ({ label: value, value })),
+      default: 'auto',
+    };
+    properties.background = {
+      type: 'string', title: 'Background', 'x-decorator': 'FormItem', 'x-component': 'Select',
+      enum: ['auto', 'transparent', 'opaque'].map(value => ({ label: value, value })), default: 'auto',
+    };
+    properties.outputFormat = {
+      type: 'string', title: 'Output Format', 'x-decorator': 'FormItem', 'x-component': 'Select',
+      enum: ['png', 'jpeg', 'webp'].map(value => ({ label: value.toUpperCase(), value })), default: 'png',
+    };
+    properties.outputCompression = {
+      type: 'number', title: 'Output Compression (0-100)', 'x-decorator': 'FormItem',
+      'x-component': 'NumberPicker', 'x-component-props': { min: 0, max: 100, step: 1 },
+      description: 'Only applies to JPEG or WebP output.',
+    };
+  }
 
   if (isStable || isPremium) {
     properties.quality = {

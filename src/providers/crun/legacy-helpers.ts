@@ -16,6 +16,8 @@ export const CRUN_GPT_IMAGE_MODELS = [
   'openai/gpt-image-2',
   'openai/gpt-image-2-stable',
   'openai/gpt-image-2-premium',
+  'openai/gpt-image-2-5',
+  'openai/gpt-image-2-5-official',
 ] as const;
 
 export const CRUN_SEEDREAM_MODELS = [
@@ -266,6 +268,14 @@ export function isCrunNanoBananaModel(model: string): boolean {
 
 export function isCrunGptImage2(model: string): boolean {
   return (CRUN_GPT_IMAGE_MODELS as readonly string[]).includes(model);
+}
+
+export function isCrunGptImage25(model: string): boolean {
+  return model === 'openai/gpt-image-2-5';
+}
+
+export function isCrunGptImage25Official(model: string): boolean {
+  return model === 'openai/gpt-image-2-5-official';
 }
 
 export function isCrunGptImage2Stable(model: string): boolean {

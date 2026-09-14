@@ -42,6 +42,8 @@ import {
   isCrunNanoBanana2Lite,
   isCrunNanoBananaPro,
   isCrunGptImage2,
+  isCrunGptImage25,
+  isCrunGptImage25Official,
   isCrunGptImage2Premium,
   isCrunGptImage2Stable,
   isCrunGpt56Model,
@@ -75,6 +77,8 @@ export async function describeCrun(
   const isV2 = isCrunV2Channel(model);
   const isLite = isCrunNanoBanana2Lite(model);
   const isGptImage2 = isCrunGptImage2(model);
+  const isGptImage25Official = isCrunGptImage25Official(model);
+  const isGptImage25 = isCrunGptImage25(model) || isGptImage25Official;
   const isGptImage2Stable = isCrunGptImage2Stable(model);
   const isGptImage2Premium = isCrunGptImage2Premium(model);
   const isGpt56 = isCrunGpt56Model(model);
@@ -176,6 +180,12 @@ export async function describeCrun(
   } : isSeedream ? {
     prompt: '', imgUrls: [], aspectRatio: '1:1', resolution: '2K',
     outputFormat: 'png', callbackUrl: '',
+  } : isGptImage25 ? {
+    prompt: '', imgUrls: [], modelVariant: 'flare',
+    aspectRatio: isGptImage25Official ? 'auto' : '1:1',
+    resolution: '1k', n: 1,
+    ...(isGptImage25Official ? { quality: 'auto', background: 'auto', outputFormat: 'png' } : {}),
+    callbackUrl: '',
   } : {
     prompt: '',
     imgUrls: [],
@@ -223,14 +233,16 @@ export async function describeCrun(
         isMinimaxH3 ? 'minimax-h3' :
         klingProfile?.channel ?? seedanceProfile?.series ??
         (isSeedream ? 'seedream-5-pro'
+        : isGptImage25Official ? 'gpt-image-2.5-official'
+        : isGptImage25 ? 'gpt-image-2.5'
         : isGptImage2Premium ? 'premium'
         : isGptImage2Stable ? 'stable'
           : isV2 ? 'cost-optimized-v2' : isLite ? 'lite' : 'standard'),
       supportsResolution: isHailuo23 || isVeo31 || isGeminiOmni || isGrokImagineVideo || isHappyHorse11 || isPixverseV6 ||
         (isMinimaxH3 && minimaxH3Profile?.operation !== 'video-regeneration') ||
-        isSeedream || isSeedance || model === 'kling/v3-turbo' || isGptImage2Premium ||
+        isSeedream || isSeedance || model === 'kling/v3-turbo' || isGptImage2Premium || isGptImage25 ||
         (!isGptImage2 && (isCrunNanoBanana2(model) || isCrunNanoBananaPro(model))),
-      supportsOutputFormat: isImageExpand || imageUpscaleProfile?.channel === 'basic' || isSeedream || isGptImage2Stable ||
+      supportsOutputFormat: isImageExpand || imageUpscaleProfile?.channel === 'basic' || isSeedream || isGptImage2Stable || isGptImage25Official ||
         (!isImageUpscale && !isHailuo23 && !isVeo31 && !isGeminiOmni && !isGrokImagineVideo && !isHappyHorse11 && !isPixverseV6 && !isKling && !isSeedance &&
           !isWatermarkRemove && !isGpt56 && !isGptImage2 && !isV2 && !isLite),
       supportsGoogleSearch: !isGptImage2 && model === 'google/nano-banana-2',
@@ -320,15 +332,27 @@ export function buildCrunGptImage2RequestBody(
   if (!prompt) throw new Error(`CRUN ${model} requires a non-empty prompt`);
 
   const input: Record<string, any> = { prompt };
+  const isGptImage25 = isCrunGptImage25(model) || isCrunGptImage25Official(model);
+  const isGptImage25Official = isCrunGptImage25Official(model);
   const imgUrls = normalizeCrunImageUrls(
     payload.img_urls ?? payload.imgUrls ?? payload.imageUrls ?? payload.urls
   );
-  if (isCrunGptImage2Premium(model) && imgUrls.length > 14) {
-    throw new Error(`CRUN ${model} supports at most 14 reference images`);
+  const maxReferenceImages = isGptImage25Official ? 16 : isGptImage25 ? 15 : isCrunGptImage2Premium(model) ? 14 : undefined;
+  if (maxReferenceImages !== undefined && imgUrls.length > maxReferenceImages) {
+    throw new Error(`CRUN ${model} supports at most ${maxReferenceImages} reference images`);
   }
   if (imgUrls.length) input.img_urls = imgUrls;
 
-  const aspectRatio = String(payload.aspect_ratio ?? payload.aspectRatio ?? '1:1').trim();
+  const aspectRatio = isGptImage25
+    ? normalizeCrunEnum(
+      payload.aspect_ratio ?? payload.aspectRatio ?? (isGptImage25Official ? 'auto' : '1:1'),
+      isGptImage25Official
+        ? ['auto', '1:1', '3:2', '2:3', '4:3', '3:4', '5:4', '4:5', '16:9', '9:16', '2:1', '1:2', '21:9', '9:21', '3:1', '1:3']
+        : ['auto', '1:1', '2:3', '3:2', '3:4', '4:3', '4:5', '5:4', '9:16', '16:9', '21:9'],
+      model,
+      'aspect_ratio'
+    )
+    : String(payload.aspect_ratio ?? payload.aspectRatio ?? '1:1').trim();
   if (aspectRatio) input.aspect_ratio = aspectRatio;
 
   if (isCrunGptImage2Stable(model)) {
@@ -351,6 +375,32 @@ export function buildCrunGptImage2RequestBody(
         throw new Error(`CRUN ${model} resolution must be one of: 1K, 2K, 4K`);
       }
       input.resolution = resolution;
+    }
+  }
+
+  if (isGptImage25) {
+    addOptionalEnum(input, 'model_variant', payload.model_variant ?? payload.modelVariant ?? 'flare', ['flare', 'sunburst'], model);
+    const resolution = String(payload.resolution ?? '1k').trim().toLowerCase();
+    if (!['1k', '2k', '4k'].includes(resolution)) {
+      throw new Error(`CRUN ${model} resolution must be one of: 1k, 2k, 4k`);
+    }
+    input.resolution = resolution;
+    input.n = normalizeCrunInteger(payload.n ?? 1, 1, isGptImage25Official ? 10 : 4, model, 'n');
+    if (isGptImage25Official) {
+      addOptionalEnum(input, 'quality', payload.quality, ['low', 'medium', 'high', 'xhigh', 'max', 'auto'], model);
+      addOptionalEnum(input, 'background', payload.background, ['auto', 'transparent', 'opaque'], model);
+      const outputFormat = String(payload.output_format ?? payload.outputFormat ?? 'png').trim().toLowerCase();
+      if (!['png', 'jpeg', 'webp'].includes(outputFormat)) {
+        throw new Error(`CRUN ${model} output_format must be one of: png, jpeg, webp`);
+      }
+      input.output_format = outputFormat;
+      const compression = payload.output_compression ?? payload.outputCompression;
+      if (compression !== undefined && compression !== null && compression !== '') {
+        if (!['jpeg', 'webp'].includes(outputFormat)) {
+          throw new Error(`CRUN ${model} output_compression requires jpeg or webp output_format`);
+        }
+        input.output_compression = normalizeCrunInteger(compression, 0, 100, model, 'output_compression');
+      }
     }
   }
 

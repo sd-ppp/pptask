@@ -1,5 +1,6 @@
 import type { FormilySchema } from './legacy-types.ts';
 import {
+  isNovitaGptImage25Model,
   isNovitaKlingV3Model,
   isNovitaSeedanceOverseaModel,
   isNovitaVeo31Model,
@@ -15,11 +16,11 @@ export function buildNovitaFormSchema(model?: string): FormilySchema {
   if (model && isNovitaSeedanceOverseaModel(model)) {
     return buildNovitaSeedanceOverseaFormSchema(model);
   }
-  if (model && ['pa/gpt-5.6-terra', 'pa/gpt-5.6-luna', 'pa/gpt-5.6-sol'].includes(model)) {
+  if (model && ['pa/gpt-5.6-terra', 'pa/gpt-5.6-luna', 'pa/gpt-5.6-sol', 'openai/gpt-6-astra'].includes(model)) {
     return buildNovitaGpt56FormSchema();
   }
-  if (model === 'gpt-image-2' || model === 'gpt-image-2-oai') {
-    return buildNovitaGptImageFormSchema();
+  if (model && ['gpt-image-2', 'gpt-image-2-oai', 'gpt-image-2.5-sunburst-oai', 'gpt-image-2.5-flare-oai'].includes(model)) {
+    return buildNovitaGptImageFormSchema(model);
   }
   return {
     type: 'object',
@@ -399,7 +400,7 @@ function buildNovitaGpt56FormSchema(): FormilySchema {
   };
 }
 
-function buildNovitaGptImageFormSchema(): FormilySchema {
+function buildNovitaGptImageFormSchema(model: string): FormilySchema {
   return {
     type: 'object',
     properties: {
@@ -460,8 +461,10 @@ function buildNovitaGptImageFormSchema(): FormilySchema {
       },
       quality: {
         type: 'string', title: 'Quality', 'x-decorator': 'FormItem', 'x-component': 'Select',
-        enum: ['low', 'medium', 'high', 'auto'].map(value => ({ label: value, value })),
-        default: 'high',
+        enum: (isNovitaGptImage25Model(model)
+          ? ['low', 'medium', 'high', 'xhigh', 'max', 'auto']
+          : ['low', 'medium', 'high', 'auto']).map(value => ({ label: value, value })),
+        default: isNovitaGptImage25Model(model) ? 'auto' : 'high',
       },
       outputFormat: {
         type: 'string', title: 'Output Format', 'x-decorator': 'FormItem', 'x-component': 'Select',
