@@ -1,5 +1,7 @@
 export * from './core/types.ts';
+export * from './core/execution.ts';
 export * from './core/provider.ts';
+export * from './core/registry.ts';
 export * from './stores/index.ts';
 export * from './providers/replicate/index.ts';
 export * from './providers/runninghub/index.ts';

@@ -1,15 +1,20 @@
 import type {
+  Experimental_VideoModelV4CallOptions,
+  ImageModelV4CallOptions,
+  LanguageModelV4CallOptions,
   LanguageModelV4Content,
   LanguageModelV4GenerateResult,
   LanguageModelV4StreamPart,
   JSONValue,
 } from '@ai-sdk/provider';
-import { createId, delay, tagModel, throwIfAborted } from './internal.ts';
+import { emitPptaskExecution, type PptaskExecutionReporter } from './execution.ts';
+import { createId, delay, serializeError, tagModel, throwIfAborted } from './internal.ts';
 import type {
   PptaskImageModel,
   PptaskImageModelImplementation,
   PptaskLanguageModel,
   PptaskLanguageModelImplementation,
+  PptaskModel,
   PptaskOperationContext,
   PptaskOperationStartResult,
   PptaskOperationStatusResult,
@@ -17,25 +22,70 @@ import type {
   PptaskVideoModelImplementation,
 } from './types.ts';
 
+export type PptaskModelExecutionContext = {
+  executionId: string;
+  jobId?: string;
+  /** Job metadata (e.g. `taskKey`) forwarded onto execution facts. */
+  metadata?: Record<string, unknown>;
+  reporter?: PptaskExecutionReporter;
+};
+
+type PptaskModelExecutor = {
+  generate(options: unknown, context: PptaskModelExecutionContext): Promise<unknown>;
+};
+
+const MODEL_EXECUTOR = Symbol.for('@sdppp/pptask/model-executor');
+
+export function executePptaskModelGenerate(
+  model: PptaskModel,
+  options: unknown,
+  context: PptaskModelExecutionContext,
+): Promise<unknown> {
+  const executor = (model as Record<PropertyKey, unknown>)[MODEL_EXECUTOR] as PptaskModelExecutor | undefined;
+  if (executor) return Promise.resolve(executor.generate(options, context));
+  if (!model.doGenerate) throw new Error('Model does not support generation');
+  return Promise.resolve(model.doGenerate(options as never));
+}
+
 export function createLanguageModel(
   providerId: string,
   modelId: string,
   implementation: PptaskLanguageModelImplementation,
   pollIntervalMs: number,
+  reporter?: PptaskExecutionReporter,
 ): PptaskLanguageModel {
-  const doGenerate = implementation.doGenerate ?? (async options => {
-    return runOperation(implementation, options, pollIntervalMs);
-  });
-  const doStream = implementation.doStream ?? (async options => {
-    const result = await doGenerate(options);
+  const generate = (options: LanguageModelV4CallOptions, context?: PptaskModelExecutionContext) =>
+    reportGenerate(
+      reporter,
+      'language',
+      providerId,
+      modelId,
+      options,
+      context,
+      execution => implementation.doGenerate
+        ? Promise.resolve(implementation.doGenerate(options))
+        : runOperation(implementation, options, pollIntervalMs, execution, providerId, modelId, 'language', reporter),
+    );
+  const doGenerate = async (options: LanguageModelV4CallOptions) => generate(options);
+  const doStream = implementation.doStream
+    ? (options: LanguageModelV4CallOptions) => reportStream(
+      reporter,
+      'language',
+      providerId,
+      modelId,
+      options,
+      Promise.resolve(implementation.doStream!(options)),
+    )
+    : async (options: LanguageModelV4CallOptions) => {
+    const result = await generate(options);
     return {
       stream: streamLanguageResult(result),
       request: result.request,
       response: result.response ? { headers: result.response.headers } : undefined,
     };
-  });
+  };
 
-  return tagModel({
+  const model = tagModel({
     specificationVersion: 'v4' as const,
     provider: providerId,
     modelId,
@@ -47,6 +97,7 @@ export function createLanguageModel(
     doCancel: implementation.doCancel,
     doDescribe: implementation.doDescribe,
   }, 'language');
+  return attachExecutor(model, generate) as PptaskLanguageModel;
 }
 
 export function createImageModel(
@@ -54,34 +105,193 @@ export function createImageModel(
   modelId: string,
   implementation: PptaskImageModelImplementation,
   pollIntervalMs: number,
+  reporter?: PptaskExecutionReporter,
 ): PptaskImageModel {
-  const doGenerate = implementation.doGenerate ?? (async options => {
-    return runOperation(implementation, options, pollIntervalMs);
-  });
-  return tagModel({
+  const generate = (options: ImageModelV4CallOptions, context?: PptaskModelExecutionContext) =>
+    reportGenerate(
+      reporter,
+      'image',
+      providerId,
+      modelId,
+      options,
+      context,
+      execution => implementation.doGenerate
+        ? Promise.resolve(implementation.doGenerate(options))
+        : runOperation(implementation, options, pollIntervalMs, execution, providerId, modelId, 'image', reporter),
+    );
+  const model = tagModel({
     specificationVersion: 'v4' as const,
     provider: providerId,
     modelId,
     maxImagesPerCall: implementation.maxImagesPerCall,
-    doGenerate,
+    doGenerate: async (options: ImageModelV4CallOptions) => generate(options),
     doStart: implementation.doStart,
     doStatus: implementation.doStatus,
     doCancel: implementation.doCancel,
     doDescribe: implementation.doDescribe,
   }, 'image');
+  return attachExecutor(model, generate) as PptaskImageModel;
 }
 
 export function createVideoModel(
   providerId: string,
   modelId: string,
   implementation: PptaskVideoModelImplementation,
+  reporter?: PptaskExecutionReporter,
 ): PptaskVideoModel {
-  return tagModel({
+  const generate = implementation.doGenerate
+    ? (options: Experimental_VideoModelV4CallOptions, context?: PptaskModelExecutionContext) => reportGenerate(
+      reporter,
+      'video',
+      providerId,
+      modelId,
+      options,
+      context,
+      () => Promise.resolve(implementation.doGenerate!(options)),
+    )
+    : undefined;
+  const model = tagModel({
     ...implementation,
     specificationVersion: 'v4' as const,
     provider: providerId,
     modelId,
+    ...(generate ? { doGenerate: async (options: Experimental_VideoModelV4CallOptions) => generate(options) } : {}),
   }, 'video') as PptaskVideoModel;
+  return generate ? attachExecutor(model, generate) as PptaskVideoModel : model;
+}
+
+function attachExecutor<T extends object, OPTIONS>(
+  model: T,
+  generate: (options: OPTIONS, context?: PptaskModelExecutionContext) => Promise<unknown>,
+): T {
+  Object.defineProperty(model, MODEL_EXECUTOR, {
+    value: { generate: (options: unknown, context: PptaskModelExecutionContext) => generate(options as OPTIONS, context) },
+    enumerable: false,
+  });
+  return model;
+}
+
+function reportGenerate<OPTIONS, RESULT>(
+  reporter: PptaskExecutionReporter | undefined,
+  modelType: 'language' | 'image' | 'video',
+  providerId: string,
+  modelId: string,
+  options: OPTIONS,
+  context: PptaskModelExecutionContext | undefined,
+  execute: (context: PptaskModelExecutionContext) => PromiseLike<RESULT>,
+): Promise<RESULT> {
+  const execution: PptaskModelExecutionContext = context ?? { executionId: createId('execution') };
+  const eventReporter = context?.reporter ?? reporter;
+  emitPptaskExecution(eventReporter, {
+    type: 'started',
+    executionId: execution.executionId,
+    jobId: execution.jobId,
+    metadata: execution.metadata,
+    providerId,
+    modelType,
+    modelId,
+    at: new Date().toISOString(),
+    detail: context?.jobId
+      ? { hasInput: options !== undefined, transition: 'submitting' }
+      : { hasInput: options !== undefined },
+  });
+  return Promise.resolve(execute(execution)).then(result => {
+    emitPptaskExecution(eventReporter, {
+      type: 'succeeded',
+      executionId: execution.executionId,
+      jobId: execution.jobId,
+      metadata: execution.metadata,
+      providerId,
+      modelType,
+      modelId,
+      at: new Date().toISOString(),
+      detail: context?.jobId ? { transition: 'succeeded' } : undefined,
+      result,
+    });
+    return result;
+  }, error => {
+    emitPptaskExecution(eventReporter, {
+      type: error instanceof Error && error.name === 'AbortError' ? 'cancelled' : 'failed',
+      executionId: execution.executionId,
+      jobId: execution.jobId,
+      metadata: execution.metadata,
+      providerId,
+      modelType,
+      modelId,
+      at: new Date().toISOString(),
+      detail: context?.jobId ? { transition: error instanceof Error && error.name === 'AbortError' ? 'cancelled' : 'failed' } : undefined,
+      error: serializeError(error),
+    });
+    throw error;
+  });
+}
+
+async function reportStream<RESULT extends { stream: ReadableStream<unknown> }>(
+  reporter: PptaskExecutionReporter | undefined,
+  modelType: 'language' | 'image' | 'video',
+  providerId: string,
+  modelId: string,
+  options: unknown,
+  resultPromise: PromiseLike<RESULT>,
+): Promise<RESULT> {
+  const executionId = createId('execution');
+  const eventReporter = reporter;
+  emitPptaskExecution(eventReporter, {
+    type: 'started', executionId, providerId, modelType, modelId,
+    at: new Date().toISOString(), detail: { hasInput: options !== undefined },
+  });
+  try {
+    const result = await resultPromise;
+    return {
+      ...result,
+      stream: observeStream(result.stream, () => emitPptaskExecution(eventReporter, {
+        type: 'succeeded', executionId, providerId, modelType, modelId, at: new Date().toISOString(),
+      }), error => emitPptaskExecution(eventReporter, {
+        type: 'failed', executionId, providerId, modelType, modelId, at: new Date().toISOString(), error: serializeError(error),
+      }), reason => emitPptaskExecution(eventReporter, {
+        type: 'cancelled', executionId, providerId, modelType, modelId, at: new Date().toISOString(), error: serializeError(reason),
+      })),
+    } as RESULT;
+  } catch (error) {
+    emitPptaskExecution(eventReporter, {
+      type: error instanceof Error && error.name === 'AbortError' ? 'cancelled' : 'failed', executionId, providerId, modelType, modelId,
+      at: new Date().toISOString(), error: serializeError(error),
+    });
+    throw error;
+  }
+}
+
+function observeStream<T>(
+  stream: ReadableStream<T>,
+  onComplete: () => void,
+  onError: (error: unknown) => void,
+  onCancel: (reason: unknown) => void,
+): ReadableStream<T> {
+  let settled = false;
+  const settle = (callback: () => void) => {
+    if (settled) return;
+    settled = true;
+    callback();
+  };
+  const reader = stream.getReader();
+  return new ReadableStream<T>({
+    async pull(controller) {
+      try {
+        const next = await reader.read();
+        if (next.done) {
+          settle(onComplete);
+          controller.close();
+        } else controller.enqueue(next.value);
+      } catch (error) {
+        settle(() => onError(error));
+        controller.error(error);
+      }
+    },
+    async cancel(reason) {
+      settle(() => onCancel(reason));
+      await reader.cancel(reason);
+    },
+  });
 }
 
 async function runOperation<OPTIONS, RESULT extends object>(
@@ -103,14 +313,29 @@ async function runOperation<OPTIONS, RESULT extends object>(
     headers?: Record<string, string | undefined>;
   },
   pollIntervalMs: number,
+  execution: PptaskModelExecutionContext,
+  providerId: string,
+  modelId: string,
+  modelType: 'language' | 'image',
+  reporter?: PptaskExecutionReporter,
 ): Promise<RESULT> {
   if (!implementation.doStart || !implementation.doStatus) {
     throw new Error('Model must implement doGenerate or both doStart and doStatus');
   }
-  const idempotencyKey = ensureIdempotencyKey(options);
   const started = await implementation.doStart(options, {
-    jobId: createId('transient-job'),
-    idempotencyKey,
+    jobId: execution.executionId,
+  });
+  emitPptaskExecution(execution.reporter ?? reporter, {
+    type: 'progress',
+    executionId: execution.executionId,
+    jobId: execution.jobId,
+    providerId,
+    modelType,
+    modelId,
+    at: new Date().toISOString(),
+    state: 'pending',
+    detail: { phase: 'accepted' },
+    operation: started.operation,
   });
   while (true) {
     throwIfAborted(options.abortSignal);
@@ -124,19 +349,20 @@ async function runOperation<OPTIONS, RESULT extends object>(
       return result as RESULT;
     }
     if (status.status === 'error') throw new Error(status.error);
+    emitPptaskExecution(execution.reporter ?? reporter, {
+      type: 'progress',
+      executionId: execution.executionId,
+      jobId: execution.jobId,
+      providerId,
+      modelType,
+      modelId,
+      at: new Date().toISOString(),
+      progress: status.progress,
+      state: status.phase,
+      detail: { phase: status.phase },
+    });
     await delay(pollIntervalMs, options.abortSignal);
   }
-}
-
-function ensureIdempotencyKey(options: { headers?: Record<string, string | undefined> }): string {
-  options.headers ??= {};
-  const existing = Object.entries(options.headers).find(
-    ([key, value]) => key.toLowerCase() === 'idempotency-key' && value,
-  )?.[1];
-  if (existing) return existing;
-  const generated = createId('aisdk');
-  options.headers['idempotency-key'] = generated;
-  return generated;
 }
 
 function streamLanguageResult(result: LanguageModelV4GenerateResult): ReadableStream<LanguageModelV4StreamPart> {

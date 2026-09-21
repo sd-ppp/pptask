@@ -38,9 +38,7 @@ export function createApiframeProvider(options: ApiframeProviderOptions): Pptask
       const raw = await requestJson<any>(config.fetch, 'apiframe', jsonRequest(
         `${config.baseURL}/v2/${modality === 'music' ? 'music' : `${modality}s`}/generate`,
         body,
-        mergeHeaders(auth, context.headers, context.operationContext?.idempotencyKey
-          ? { 'idempotency-key': context.operationContext.idempotencyKey }
-          : undefined),
+        mergeHeaders(auth, context.headers),
       ), context.signal);
       const taskId = raw.jobId;
       if (typeof taskId !== 'string' || !taskId) throw new Error('apiframe createTask did not return jobId');

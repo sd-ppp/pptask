@@ -1,8 +1,8 @@
 import type { ImageModelV4CallOptions, ImageModelV4Result } from '@ai-sdk/provider';
 import {
-  createMemoryJobStore,
+  createMemoryJobRepository,
   createPptaskProvider,
-  type PptaskJobStore,
+  type PptaskJobRepository,
   type PptaskProvider,
 } from '../../src/index.ts';
 
@@ -15,7 +15,7 @@ export type FakeProviderController = {
 };
 
 export function createFakeProvider(options: {
-  store?: PptaskJobStore;
+  store?: PptaskJobRepository;
   controller?: FakeProviderController;
   pollIntervalMs?: number;
 } = {}): { provider: PptaskProvider; controller: FakeProviderController } {
@@ -29,7 +29,7 @@ export function createFakeProvider(options: {
 
   const provider = createPptaskProvider({
     providerId: 'fake',
-    jobStore: options.store ?? createMemoryJobStore(),
+    jobRepository: options.store ?? createMemoryJobRepository(),
     pollIntervalMs: options.pollIntervalMs ?? 1,
     imageModel: modelId => ({
       maxImagesPerCall: 1,

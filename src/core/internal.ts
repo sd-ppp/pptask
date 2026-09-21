@@ -1,6 +1,6 @@
 import type { PptaskModel, PptaskModelType } from './types.ts';
 
-const MODEL_TYPE = Symbol.for('@sdppp/pptask-aisdk/model-type');
+const MODEL_TYPE = Symbol.for('@sdppp/pptask/model-type');
 
 export function tagModel<T extends object>(model: T, modelType: PptaskModelType): T {
   Object.defineProperty(model, MODEL_TYPE, {

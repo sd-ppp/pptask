@@ -11,6 +11,8 @@ export const NOVITA_DEFAULT_SEEDANCE_OVERSEA_METERED_BASE_URL =
 export const NOVITA_GPT_IMAGE_MODELS = [
   'gpt-image-2',
   'gpt-image-2-oai',
+  'gpt-image-2.5-flare-oai',
+  'gpt-image-2.5-sunburst-oai',
 ] as const;
 
 export const NOVITA_GPT56_MODELS = [

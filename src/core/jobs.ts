@@ -8,35 +8,94 @@ import {
   serializeError,
   throwIfAborted,
 } from './internal.ts';
+import { emitPptaskExecution, type PptaskExecutionReporter } from './execution.ts';
+import { executePptaskModelGenerate } from './model.ts';
 import type {
   PptaskJobHandle,
   PptaskJobRecord,
   PptaskJobCallOptions,
   PptaskJobs,
-  PptaskJobStore,
+  PptaskJobRepository,
+  PptaskJobListener,
+  PptaskJobTransition,
   PptaskModel,
   PptaskModelType,
 } from './types.ts';
 
 type CreateJobsOptions = {
   providerId: string;
-  store: PptaskJobStore;
+  store: PptaskJobRepository;
   pollIntervalMs: number;
   maxStatusErrors: number;
   resolveModel(type: PptaskModelType, modelId: string): PptaskModel;
+  reporter?: PptaskExecutionReporter;
 };
 
 export function createJobs(options: CreateJobsOptions): PptaskJobs {
   const inFlightStarts = new Map<string, Promise<void>>();
+  const listeners = new Set<PptaskJobListener>();
+  const internalWrites = new Set<string>();
+  const hasStoreChangeFeed = typeof options.store.subscribe === 'function';
+
+  function publish(job: PptaskJobRecord): void {
+    const event = { type: 'state' as const, job };
+    for (const listener of listeners) {
+      try {
+        listener(event);
+      } catch {
+        // Observers must not be able to break job execution.
+      }
+    }
+  }
+
+  options.store.subscribe?.(event => {
+    if (event.job.providerId !== options.providerId) return;
+    publish(event.job);
+    if (!internalWrites.has(event.job.id)) {
+      const type = event.job.state === 'succeeded'
+        ? 'succeeded'
+        : event.job.state === 'failed'
+          ? 'failed'
+          : event.job.state === 'cancelled'
+            ? 'cancelled'
+            : event.type === 'created' ? 'started' : 'progress';
+      reportJobEvent(event.job, type, { source: 'repository', change: event.type });
+    }
+  });
+
+  async function updateRecord<RESULT = unknown>(
+    jobId: string,
+    updater: (record: PptaskJobRecord<RESULT>) => PptaskJobRecord<RESULT>,
+  ): Promise<PptaskJobRecord<RESULT>> {
+    internalWrites.add(jobId);
+    let updated: PptaskJobRecord<RESULT>;
+    try {
+      updated = await options.store.update(jobId, updater);
+    } finally {
+      internalWrites.delete(jobId);
+    }
+    if (!hasStoreChangeFeed) publish(updated);
+    return updated;
+  }
+
+  function transition<RESULT>(
+    record: PptaskJobRecord<RESULT>,
+    type: PptaskJobTransition['type'],
+    at: string,
+  ): PptaskJobRecord<RESULT> {
+    const transitions = [...(record.transitions ?? [])];
+    transitions.push({ at, type, state: record.state, progress: record.progress });
+    return { ...record, transitions };
+  }
 
   async function start<RESULT = unknown>({
     model,
     input,
-    idempotencyKey,
+    metadata,
   }: {
     model: PptaskModel;
     input: unknown;
-    idempotencyKey?: string;
+    metadata?: Record<string, unknown>;
   }): Promise<PptaskJobHandle<RESULT>> {
     if (model.provider !== options.providerId) {
       throw new Error(`Model provider ${model.provider} does not match ${options.providerId}`);
@@ -45,31 +104,26 @@ export function createJobs(options: CreateJobsOptions): PptaskJobs {
     const record: PptaskJobRecord = {
       schemaVersion: 1,
       id: createId('job'),
-      idempotencyKey: idempotencyKey ?? createId('idempotency'),
       providerId: options.providerId,
       modelType: getModelType(model),
       modelId: model.modelId,
       state: 'creating',
       input: sanitizePersistedInput(input),
+      metadata: metadata ? sanitizePersistedInput(metadata) as Record<string, unknown> : undefined,
+      transitions: [{ at: now, type: 'created', state: 'creating' }],
       createdAt: now,
       updatedAt: now,
     };
-    const claimed = await options.store.create(record);
-    const claimedRecord = claimed.record;
-    if (
-      claimedRecord.providerId !== options.providerId ||
-      claimedRecord.modelType !== record.modelType ||
-      claimedRecord.modelId !== record.modelId
-    ) {
-      throw new Error(
-        `Idempotency key ${record.idempotencyKey} is already used by ` +
-          `${claimedRecord.providerId}/${claimedRecord.modelType}/${claimedRecord.modelId}`,
-      );
+    internalWrites.add(record.id);
+    try {
+      await options.store.create(record);
+    } finally {
+      internalWrites.delete(record.id);
     }
-    if (claimedRecord.state === 'creating' && claimedRecord.operation === undefined) {
-      await startRecordOnce(claimedRecord, model, claimed.created ? input : undefined);
-    }
-    return createHandle<RESULT>(claimedRecord.id);
+    if (!hasStoreChangeFeed) publish(record);
+    reportJobEvent(record, 'created');
+    await startRecordOnce(record, model, input);
+    return createHandle<RESULT>(await ensureRecord(record.id));
   }
 
   const jobs: PptaskJobs = {
@@ -79,18 +133,25 @@ export function createJobs(options: CreateJobsOptions): PptaskJobs {
       if (record.providerId !== options.providerId) {
         throw new Error(`Job ${jobId} belongs to provider ${record.providerId}`);
       }
-      return createHandle<RESULT>(jobId);
+      return createHandle<RESULT>(record);
     },
     status: pollStatus,
     watch,
     wait,
+    updateResult,
     cancel,
     list: filter => options.store.list(filter),
+    subscribe(listener) {
+      listeners.add(listener);
+      return () => listeners.delete(listener);
+    },
   };
 
-  function createHandle<RESULT>(id: string): PptaskJobHandle<RESULT> {
+  function createHandle<RESULT>(record: PptaskJobRecord<RESULT>): PptaskJobHandle<RESULT> {
+    const id = record.id;
     return {
       id,
+      record,
       status: statusOptions => jobs.status<RESULT>(id, statusOptions),
       watch: watchOptions => jobs.watch<RESULT>(id, watchOptions),
       wait: waitOptions => jobs.wait<RESULT>(id, waitOptions),
@@ -118,36 +179,55 @@ export function createJobs(options: CreateJobsOptions): PptaskJobs {
     executionInput: unknown = record.input,
   ): Promise<void> {
     try {
+      const submittingAt = new Date().toISOString();
+      const submitting = await updateRecord(record.id, current => transition(
+        { ...current, startedAt: current.startedAt ?? submittingAt },
+        'submitting',
+        submittingAt,
+      ));
+      if (model.doStart && model.doStatus) reportJobEvent(submitting, 'started', { transition: 'submitting' });
       if (model.doStart && model.doStatus) {
         const started = await model.doStart(executionInput as never, {
           jobId: record.id,
-          idempotencyKey: record.idempotencyKey,
         });
-        await options.store.update(record.id, current => ({
+        const acceptedAt = new Date().toISOString();
+        const accepted = await updateRecord(record.id, current => transition({
           ...current,
           operation: started.operation,
           state: 'pending',
           error: undefined,
-          updatedAt: new Date().toISOString(),
-        }));
+          updatedAt: acceptedAt,
+        }, 'accepted', acceptedAt));
+        reportJobEvent(accepted, 'progress', { phase: 'accepted', transition: 'accepted' });
         return;
       }
 
       if (!model.doGenerate) throw new Error('Model does not support generation or operations');
-      const result = await model.doGenerate(executionInput as never);
-      await options.store.update(record.id, current => ({
+      const result = await executePptaskModelGenerate(model, executionInput, {
+        executionId: record.id,
+        jobId: record.id,
+        metadata: record.metadata,
+        reporter: options.reporter,
+      });
+      const finishedAt = new Date().toISOString();
+      await updateRecord(record.id, current => transition({
         ...current,
         state: 'succeeded',
         result,
-        updatedAt: new Date().toISOString(),
-      }));
+        finishedAt,
+        updatedAt: finishedAt,
+      }, 'succeeded', finishedAt));
     } catch (error) {
       if (isAbortError(error)) throw error;
-      await options.store.update(record.id, current => ({
+      const finishedAt = new Date().toISOString();
+      const failed = await updateRecord(record.id, current => transition({
         ...current,
         error: serializeError(error),
-        updatedAt: new Date().toISOString(),
-      }));
+        state: 'failed',
+        finishedAt,
+        updatedAt: finishedAt,
+      }, 'failed', finishedAt));
+      if (model.doStart && model.doStatus) reportJobEvent(failed, 'failed', { transition: 'failed' });
       throw error;
     }
   }
@@ -177,43 +257,54 @@ export function createJobs(options: CreateJobsOptions): PptaskJobs {
       if (status.status === 'pending') {
         const phase = 'phase' in status ? status.phase : undefined;
         const progress = 'progress' in status ? status.progress : undefined;
-        return options.store.update(jobId, current => {
+        const updatedAt = new Date().toISOString();
+        const updated = await updateRecord(jobId, current => {
           if (isTerminal(current.state)) return current;
-          return {
+          return transition({
             ...current,
             state: phase === 'running' ? 'running' : 'pending',
             progress,
             error: undefined,
-            updatedAt: new Date().toISOString(),
-          };
-        }) as Promise<PptaskJobRecord<RESULT>>;
+            updatedAt,
+          }, 'progress', updatedAt);
+        }) as PptaskJobRecord<RESULT>;
+        reportJobEvent(updated, 'progress', { transition: 'progress' });
+        return updated;
       }
       if (status.status === 'error') {
-        return options.store.update(jobId, current => {
+        const finishedAt = new Date().toISOString();
+        const updated = await updateRecord(jobId, current => {
           if (isTerminal(current.state)) return current;
-          return {
+          return transition({
             ...current,
             state: 'failed',
             error: { message: status.error },
-            updatedAt: new Date().toISOString(),
-          };
-        }) as Promise<PptaskJobRecord<RESULT>>;
+            finishedAt,
+            updatedAt: finishedAt,
+          }, 'failed', finishedAt);
+        }) as PptaskJobRecord<RESULT>;
+        reportJobEvent(updated, 'failed', { transition: 'failed' });
+        return updated;
       }
       const { status: _status, ...result } = status;
-      return options.store.update<RESULT>(jobId, current => {
+      const finishedAt = new Date().toISOString();
+      const updated = await updateRecord<RESULT>(jobId, current => {
         if (isTerminal(current.state)) return current;
-        return {
+        return transition({
           ...current,
           state: 'succeeded',
           progress: 1,
           result: result as RESULT,
           error: undefined,
-          updatedAt: new Date().toISOString(),
-        };
+          finishedAt,
+          updatedAt: finishedAt,
+        }, 'succeeded', finishedAt);
       });
+      reportJobEvent(updated, 'succeeded', { transition: 'succeeded' });
+      return updated;
     } catch (error) {
       if (isAbortError(error) || statusOptions?.signal?.aborted) throw error;
-      await options.store.update(jobId, current => ({
+      await updateRecord(jobId, current => ({
         ...current,
         error: serializeError(error),
         updatedAt: new Date().toISOString(),
@@ -256,6 +347,12 @@ export function createJobs(options: CreateJobsOptions): PptaskJobs {
     throw new Error(`Job ended without a result: ${jobId}`);
   }
 
+  async function updateResult<RESULT>(jobId: string, result: RESULT): Promise<PptaskJobRecord<RESULT>> {
+    const updated = await updateRecord<RESULT>(jobId, current => ({ ...current, result, updatedAt: new Date().toISOString() }));
+    reportJobEvent(updated, 'succeeded', { transition: 'succeeded' });
+    return updated;
+  }
+
   async function cancel(jobId: string, cancelOptions?: PptaskJobCallOptions): Promise<void> {
     throwIfAborted(cancelOptions?.signal);
     const record = await ensureRecord(jobId);
@@ -269,13 +366,39 @@ export function createJobs(options: CreateJobsOptions): PptaskJobs {
       abortSignal: cancelOptions?.signal,
       headers: cancelOptions?.headers,
     });
-    await options.store.update(jobId, current => {
+    const finishedAt = new Date().toISOString();
+    const updated = await updateRecord(jobId, current => {
       if (isTerminal(current.state)) return current;
-      return {
+      return transition({
         ...current,
         state: 'cancelled',
-        updatedAt: new Date().toISOString(),
-      };
+        finishedAt,
+        updatedAt: finishedAt,
+      }, 'cancelled', finishedAt);
+    });
+    reportJobEvent(updated, 'cancelled', { transition: 'cancelled' });
+  }
+
+  function reportJobEvent(
+    record: PptaskJobRecord,
+    type: 'created' | 'started' | 'progress' | 'succeeded' | 'failed' | 'cancelled',
+    detail?: unknown,
+  ): void {
+    emitPptaskExecution(options.reporter, {
+      type,
+      executionId: record.id,
+      jobId: record.id,
+      providerId: record.providerId,
+      modelType: record.modelType,
+      modelId: record.modelId,
+      at: record.updatedAt,
+      state: record.state,
+      progress: record.progress,
+      detail,
+      metadata: record.metadata,
+      operation: record.operation,
+      result: type === 'succeeded' ? record.result : undefined,
+      error: type === 'failed' ? record.error : undefined,
     });
   }
 

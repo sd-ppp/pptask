@@ -6,8 +6,6 @@ export default defineConfig({
     lib: {
       entry: {
         index: resolve(import.meta.dirname, 'src/index.ts'),
-        browser: resolve(import.meta.dirname, 'src/browser.ts'),
-        server: resolve(import.meta.dirname, 'src/server.ts'),
         'providers/replicate': resolve(
           import.meta.dirname,
           'src/providers/replicate/index.ts',

@@ -4,7 +4,6 @@ export function matchesFilter(record: PptaskJobRecord, filter?: PptaskJobFilter)
   if (!filter) return true;
   if (filter.providerId && record.providerId !== filter.providerId) return false;
   if (filter.modelId && record.modelId !== filter.modelId) return false;
-  if (filter.idempotencyKey && record.idempotencyKey !== filter.idempotencyKey) return false;
   if (filter.states && !filter.states.includes(record.state)) return false;
   return true;
 }

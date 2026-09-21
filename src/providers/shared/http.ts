@@ -25,12 +25,22 @@ export async function request(
   descriptor: HttpRequest,
   signal?: AbortSignal,
 ): Promise<Response> {
-  const response = await fetchImpl(descriptor.url, {
-    method: descriptor.method,
-    headers: definedHeaders(descriptor.headers),
-    body: descriptor.body,
-    signal,
-  });
+  let response: Response;
+  try {
+    response = await fetchImpl(descriptor.url, {
+      method: descriptor.method,
+      headers: definedHeaders(descriptor.headers),
+      body: descriptor.body,
+      signal,
+    });
+  } catch (error) {
+    const nested = error && typeof error === 'object' ? (error as { cause?: unknown }).cause : undefined;
+    const cause = nested instanceof Error
+      ? nested.message
+      : error instanceof Error ? error.message : String(error);
+    const target = new URL(descriptor.url).origin;
+    throw new Error(`${providerId} request could not reach ${target}: ${cause}`);
+  }
   if (!response.ok) {
     const body = await response.text().catch(() => '');
     throw new Error(

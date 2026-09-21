@@ -14,7 +14,7 @@ import { createPptaskProvider } from '../../core/provider.ts';
 import type {
   PptaskDescription,
   PptaskImageModelImplementation,
-  PptaskJobStore,
+  PptaskJobRepository,
   PptaskOperationContext,
   PptaskOperationStatusResult,
   PptaskProvider,
@@ -31,7 +31,7 @@ export type RunninghubProviderOptions = {
   apiBaseURL?: string;
   appBaseURL?: string;
   fetch?: typeof globalThis.fetch;
-  jobStore?: PptaskJobStore;
+  jobRepository?: PptaskJobRepository;
   pollIntervalMs?: number;
 };
 
@@ -83,7 +83,7 @@ export function createRunninghubProvider(options: RunninghubProviderOptions): Pp
     imageModel: modelId => createImageModel(modelId, config),
     videoModel: modelId => createVideoModel(modelId, config),
     files: createFiles(config),
-    jobStore: options.jobStore,
+    jobRepository: options.jobRepository,
     pollIntervalMs: options.pollIntervalMs,
   });
 }
@@ -185,7 +185,6 @@ async function startTask(
     authorization: `Bearer ${config.apiKey}`,
     'content-type': 'application/json',
   };
-  if (context?.idempotencyKey) headers['idempotency-key'] = context.idempotencyKey;
   const response = await requestJson(config.fetch, `${config.apiBaseURL}/${model.value}`, {
     method: 'POST',
     headers,

@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
 import { uploadFile } from 'ai';
-import { createMemoryJobStore, createRunninghubProvider } from '../../src/index.ts';
+import { createMemoryJobRepository, createRunninghubProvider } from '../../src/index.ts';
 
 describe('createRunninghubProvider', () => {
   it('runs an API image model through the durable job interface', async () => {
@@ -33,7 +33,7 @@ describe('createRunninghubProvider', () => {
     const provider = createRunninghubProvider({
       apiKey: 'test-key',
       fetch: fetchMock as typeof fetch,
-      jobStore: createMemoryJobStore(),
+      jobRepository: createMemoryJobRepository(),
       pollIntervalMs: 1,
     });
     const job = await provider.jobs.start<{ images: Uint8Array[] }>({
@@ -77,14 +77,14 @@ describe('createRunninghubProvider', () => {
       throw new Error(`Unexpected request: ${url}`);
     });
 
-    const store = createMemoryJobStore();
-    const first = createRunninghubProvider({ apiKey: 'test-key', fetch: fetchMock as typeof fetch, jobStore: store, pollIntervalMs: 1 });
+    const store = createMemoryJobRepository();
+    const first = createRunninghubProvider({ apiKey: 'test-key', fetch: fetchMock as typeof fetch, jobRepository: store, pollIntervalMs: 1 });
     const started = await first.jobs.start({
       model: first.videoModel('app/webapp-1'),
       input: { prompt: 'make a clip', providerOptions: {} },
     });
 
-    const reloaded = createRunninghubProvider({ apiKey: 'test-key', fetch: fetchMock as typeof fetch, jobStore: store, pollIntervalMs: 1 });
+    const reloaded = createRunninghubProvider({ apiKey: 'test-key', fetch: fetchMock as typeof fetch, jobRepository: store, pollIntervalMs: 1 });
     const result = await (await reloaded.jobs.resume<{ videos: Array<{ url: string }> }>(started.id)).wait();
 
     expect(result.videos[0].url).toBe('https://files.test/result.mp4');

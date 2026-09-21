@@ -23,7 +23,11 @@ export async function imageResult(
     images,
     warnings: [],
     providerMetadata: {
-      [providerId]: { images: values.map(value => outputMetadata(value)), ...metadata },
+      [providerId]: {
+        images: values.map(value => outputMetadata(value)),
+        ...metadata,
+        ...(extractUsage(output) ? { usage: extractUsage(output) } : {}),
+      },
     },
     response: { timestamp: new Date(), modelId, headers: undefined },
   };
@@ -46,9 +50,19 @@ export function videoResult(
   return {
     videos,
     warnings: [],
-    providerMetadata: providerMetadata(providerId, metadata),
+    providerMetadata: providerMetadata(providerId, {
+      ...metadata,
+      ...(extractUsage(output) ? { usage: extractUsage(output) } : {}),
+    }),
     response: { timestamp: new Date(), modelId, headers: undefined },
   };
+}
+
+function extractUsage(output: unknown): Record<string, JSONValue> | undefined {
+  if (!isRecord(output)) return undefined;
+  const usage = output.usage ?? output.usageMetadata ?? output.usage_metadata;
+  if (!isRecord(usage)) return undefined;
+  return usage as Record<string, JSONValue>;
 }
 
 export function languageResult(

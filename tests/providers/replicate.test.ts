@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
 import { uploadFile } from 'ai';
-import { createMemoryJobStore, createReplicateProvider } from '../../src/index.ts';
+import { createMemoryJobRepository, createReplicateProvider } from '../../src/index.ts';
 
 describe('createReplicateProvider', () => {
   it('creates and resumes a prediction using model ids', async () => {
@@ -9,7 +9,7 @@ describe('createReplicateProvider', () => {
       const url = String(input);
       if (url.endsWith('/models/owner/model/predictions')) {
         expect(init?.method).toBe('POST');
-        expect(new Headers(init?.headers).get('idempotency-key')).toBeTruthy();
+        expect(new Headers(init?.headers).get('idempotency-key')).toBeNull();
         return Response.json({ id: 'prediction-1', status: 'starting' });
       }
       if (url.endsWith('/predictions/prediction-1')) {
@@ -28,7 +28,7 @@ describe('createReplicateProvider', () => {
     const provider = createReplicateProvider({
       apiKey: 'test-key',
       fetch: fetchMock as typeof fetch,
-      jobStore: createMemoryJobStore(),
+      jobRepository: createMemoryJobRepository(),
       pollIntervalMs: 1,
     });
 

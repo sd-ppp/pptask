@@ -1,24 +1,26 @@
-# PPTask AI SDK
+# PPTask
 
-`@sdppp/pptask-aisdk` extends Vercel AI SDK providers with durable remote jobs.
+`@sdppp/pptask` extends Vercel AI SDK providers with remote job execution.
 Every factory returns one provider that supports both the standard AI SDK model
-methods and an explicit `jobs` API that can survive a browser reload.
+methods and an explicit in-process `jobs` API. Job state is ephemeral: it lives
+for the lifetime of the process, and durability plus recovery belong to the
+scheduling layer (`@sdppp/pptask-worker`).
 
 ## Core API
 
 ```ts
 import { generateImage } from 'ai';
-import { createReplicateProvider } from '@sdppp/pptask-aisdk/browser';
+import { createReplicateProvider } from '@sdppp/pptask';
 
 const replicate = createReplicateProvider({ apiKey: 'REPLICATE_API_TOKEN' });
 const model = replicate.imageModel('black-forest-labs/flux-schnell');
 
-// Durable API. Persist job.id in application state and resume it after reload.
+// In-process jobs API. The drive runs while this process is alive.
 const job = await replicate.jobs.start({
   model,
   input: { prompt: 'A clean product photograph', n: 1, providerOptions: {} },
 });
-const durableResult = await job.wait();
+const result = await job.wait();
 
 // Standard AI SDK API. The same model waits for the remote operation internally.
 const sdkResult = await generateImage({
@@ -40,45 +42,37 @@ The provider adds:
 - `provider.upload(options)` using AI SDK `FilesV4`
 - `provider.jobs.start/resume/status/watch/wait/cancel/list`
 
+Every provider also reports execution facts through the process-wide feed. This
+covers both the durable `jobs` API and standard AI SDK calls such as
+`generateText`, `generateImage`, and `streamText`:
+
+```ts
+import { subscribePptaskExecutions } from '@sdppp/pptask';
+
+const unsubscribe = subscribePptaskExecutions(event => {
+  // Forward the event to an execution history or application-owned sink.
+});
+```
+
+Applications that need a private sink can pass `executionReporter` when creating
+a provider. Pptask reports facts only; retention, projection, and presentation
+belong to the consumer. Durable jobs remain the replayable source for recovery,
+while direct AI SDK calls are observable for the lifetime of the process.
+
 Model IDs are plain provider model IDs. The library does not use URL locators to
 encode provider, model, operation, or credentials.
 
-## Persistence
+## Job State
 
-Browser imports use IndexedDB by default. Recreating both the store and provider
-after a reload is enough to resume a persisted job:
+The engine's job repository is an in-process boundary (`createMemoryJobRepository`
+by default; inject a custom one via the provider's `jobRepository` option).
+Records are not durable across restarts and the engine performs no dedup —
+every `jobs.start` call creates an independent job. Durability, dedup, and
+recovery belong to the worker (`@sdppp/pptask-worker`), whose task store is the
+single source of truth.
 
-```ts
-import {
-  createIndexedDbJobStore,
-  createRunninghubProvider,
-} from '@sdppp/pptask-aisdk/browser';
-
-const jobStore = createIndexedDbJobStore({ databaseName: 'my-app-jobs' });
-const runninghub = createRunninghubProvider({
-  apiKey: 'RUNNINGHUB_API_KEY',
-  jobStore,
-});
-
-const restored = await runninghub.jobs.resume(savedJobId);
-const result = await restored.wait();
-```
-
-Server runtimes default to an in-memory store. Pass a custom `PptaskJobStore` to
-persist jobs across server process restarts. A `jobSystem` is not injected: each
-provider owns the runtime that resolves its models and remote operations. Only
-the storage boundary is configurable because durability is application-specific.
-
-The store's `create(record)` method is an atomic idempotency claim and returns
-`{ record, created }`. `created: true` means this caller claimed a new job;
-`created: false` means the same provider already has that `idempotencyKey`, so
-the existing record must be returned. A key already used by another
-provider/model must be rejected by the job API. Database-backed stores must
-implement this claim atomically so two browser tabs cannot create duplicate
-remote jobs.
-
-Before persistence, request headers, abort signals, API keys, access tokens,
-secrets, and other credential fields are removed from job input.
+Before records are written, request headers, abort signals, API keys, access
+tokens, secrets, and other credential fields are removed from job input.
 
 ## Provider Factories
 
@@ -108,8 +102,8 @@ createFireworksProvider
 ```
 
 Each primary provider is also available from a tree-shakeable subpath such as
-`@sdppp/pptask-aisdk/providers/replicate`. Modern factories are exported from
-`@sdppp/pptask-aisdk/providers/modern`.
+`@sdppp/pptask/providers/replicate`. Modern factories are exported from
+`@sdppp/pptask/providers/modern`.
 
 RunningHub accepts `api/<model-path>` and `app/<webapp-id>` model IDs. ComfyUI
 receives its server in `baseURL` and uses `modelId` as the workflow identifier.
@@ -124,7 +118,7 @@ models. Asynchronous image and language models can implement `doStart` and
 use the AI SDK's native `doStart` and `doStatus` operation shape.
 
 ```ts
-import { createPptaskProvider } from '@sdppp/pptask-aisdk';
+import { createPptaskProvider } from '@sdppp/pptask';
 
 const provider = createPptaskProvider({
   providerId: 'example',
@@ -143,19 +137,10 @@ const provider = createPptaskProvider({
 Provider implementations are private to each factory; there is no public
 backend-adapter registry or externally supplied job runtime.
 
-## Browser And Server
-
-Use `/browser` for browser applications and `/server` for server applications.
-Both entry points are free of Node-only provider runtime dependencies. Browser
-code should route requests through a server proxy or use short-lived,
-user-scoped credentials when an upstream API key must remain private. Every
-provider accepts a custom `fetch` implementation for that purpose.
-
 ## Tests
 
 ```bash
-pnpm test             # unit, provider protocol, contract, and fake IndexedDB
-pnpm test:browser     # real Chromium reload and IndexedDB recovery
+pnpm test             # unit, provider protocol, and contract tests
 pnpm typecheck
 pnpm build
 ```

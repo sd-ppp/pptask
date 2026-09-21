@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { createMemoryJobStore, type PptaskJobRecord } from '../../src/index.ts';
+import { createMemoryJobRepository, type PptaskJobRecord } from '../../src/index.ts';
 import { createFakeProvider } from '../support/fake-provider.ts';
 
 describe('Pptask jobs', () => {
@@ -20,7 +20,7 @@ describe('Pptask jobs', () => {
   });
 
   it('resumes from the same store without creating the remote operation again', async () => {
-    const store = createMemoryJobStore();
+    const store = createMemoryJobRepository();
     const controller = { starts: 0, statuses: 0, cancels: 0, completeAfter: 2, statusErrors: 0 };
     const first = createFakeProvider({ store, controller }).provider;
     const handle = await first.jobs.start({
@@ -68,7 +68,7 @@ describe('Pptask jobs', () => {
   });
 
   it('does not persist request controls or credentials', async () => {
-    const store = createMemoryJobStore();
+    const store = createMemoryJobRepository();
     const { provider } = createFakeProvider({ store });
     const job = await provider.jobs.start({
       model: provider.imageModel('secure'),
@@ -88,7 +88,7 @@ describe('Pptask jobs', () => {
   });
 
   it('preserves shared non-circular input references', async () => {
-    const store = createMemoryJobStore();
+    const store = createMemoryJobRepository();
     const { provider } = createFakeProvider({ store });
     const shared = { style: 'plain' };
     const job = await provider.jobs.start({
@@ -99,13 +99,12 @@ describe('Pptask jobs', () => {
     expect((await store.get(job.id))?.input).toEqual({ first: shared, second: shared });
   });
 
-  it('retries a creating record with its original idempotency key', async () => {
-    const store = createMemoryJobStore();
+  it('retries a creating record after rehydration', async () => {
+    const store = createMemoryJobRepository();
     const now = new Date().toISOString();
     const record: PptaskJobRecord = {
       schemaVersion: 1,
       id: 'job-retry',
-      idempotencyKey: 'stable-key',
       providerId: 'fake',
       modelType: 'image',
       modelId: 'demo',
@@ -124,12 +123,11 @@ describe('Pptask jobs', () => {
   });
 
   it('deduplicates concurrent recovery of a creating record', async () => {
-    const store = createMemoryJobStore();
+    const store = createMemoryJobRepository();
     const now = new Date().toISOString();
     await store.put({
       schemaVersion: 1,
       id: 'job-concurrent-create',
-      idempotencyKey: 'stable-key',
       providerId: 'fake',
       modelType: 'image',
       modelId: 'demo',
@@ -150,51 +148,16 @@ describe('Pptask jobs', () => {
     expect(second.state).toBe('succeeded');
   });
 
-  it('returns the persisted job for repeated idempotency keys', async () => {
-    const store = createMemoryJobStore();
+  it('creates an independent job for every start call', async () => {
+    const store = createMemoryJobRepository();
     const { provider, controller } = createFakeProvider({ store });
-    const model = provider.imageModel('deduplicated');
-    const first = await provider.jobs.start({
-      model,
-      input: { prompt: 'first' },
-      idempotencyKey: 'same-request',
-    });
-    const second = await provider.jobs.start({
-      model,
-      input: { prompt: 'ignored retry payload' },
-      idempotencyKey: 'same-request',
-    });
+    const model = provider.imageModel('independent');
+    const first = await provider.jobs.start({ model, input: { prompt: 'first' } });
+    const second = await provider.jobs.start({ model, input: { prompt: 'second' } });
 
-    expect(second.id).toBe(first.id);
-    expect(controller.starts).toBe(1);
+    expect(second.id).not.toBe(first.id);
+    expect(controller.starts).toBe(2);
     expect((await store.get(first.id))?.input).toEqual({ prompt: 'first' });
-  });
-
-  it('deduplicates concurrent starts with the same idempotency key', async () => {
-    const store = createMemoryJobStore();
-    const { provider, controller } = createFakeProvider({ store });
-    const model = provider.imageModel('concurrent');
-    const [first, second] = await Promise.all([
-      provider.jobs.start({ model, input: { prompt: 'same' }, idempotencyKey: 'concurrent-key' }),
-      provider.jobs.start({ model, input: { prompt: 'same' }, idempotencyKey: 'concurrent-key' }),
-    ]);
-
-    expect(second.id).toBe(first.id);
-    expect(controller.starts).toBe(1);
-  });
-
-  it('rejects reuse of an idempotency key for a different model', async () => {
-    const { provider } = createFakeProvider();
-    await provider.jobs.start({
-      model: provider.imageModel('first-model'),
-      input: { prompt: 'first' },
-      idempotencyKey: 'conflicting-key',
-    });
-
-    await expect(provider.jobs.start({
-      model: provider.imageModel('second-model'),
-      input: { prompt: 'second' },
-      idempotencyKey: 'conflicting-key',
-    })).rejects.toThrow('Idempotency key conflicting-key is already used');
+    expect((await store.get(second.id))?.input).toEqual({ prompt: 'second' });
   });
 });

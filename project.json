@@ -1,7 +1,7 @@
 {
-  "name": "pptask-aisdk",
+  "name": "pptask",
   "projectType": "library",
-  "sourceRoot": "libs/domain/pptask-aisdk/src",
+  "sourceRoot": "pptask/src",
   "tags": [
     "layer:domain",
     "type:domain-core",

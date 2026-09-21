@@ -1,6 +1,6 @@
 import { generateText, streamText } from 'ai';
 import { describe, expect, it } from 'vitest';
-import { createMemoryJobStore, createPptaskProvider, type PptaskLanguageModelImplementation } from '../../src/index.ts';
+import { createPptaskProvider, type PptaskLanguageModelImplementation } from '../../src/index.ts';
 
 function createLanguageProvider() {
   let starts = 0;
@@ -34,7 +34,6 @@ function createLanguageProvider() {
   const provider = createPptaskProvider({
     providerId: 'fake-language',
     languageModel: () => implementation,
-    jobStore: createMemoryJobStore(),
     pollIntervalMs: 1,
   });
   return { provider, getCounts: () => ({ starts, statuses }) };

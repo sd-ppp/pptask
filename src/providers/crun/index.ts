@@ -1,6 +1,7 @@
 export * from './provider.ts';
 export {
   buildCrunGptImage2RequestBody,
+  buildCrunGenericVideoRequestBody,
   buildCrunRequestBody,
   buildCrunImageExpandRequestBody,
   buildCrunWatermarkRemoveRequestBody,
@@ -38,6 +39,7 @@ export {
   CRUN_GEMINI_OMNI_MODELS,
   CRUN_VEO_31_MODELS,
   CRUN_SUPPORTED_MODELS,
+  CRUN_GENERIC_VIDEO_MODELS,
   getCrunVeo31Profile,
   getCrunHappyHorse11Profile,
   getCrunHailuo23Profile,

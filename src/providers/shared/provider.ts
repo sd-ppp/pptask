@@ -23,9 +23,8 @@ export function createHttpProvider(
   const common = {
     providerId: protocol.providerId,
     files: protocol.files,
-    jobStore: options.jobStore,
+    jobRepository: options.jobRepository,
     pollIntervalMs: options.pollIntervalMs,
-    maxStatusErrors: options.maxStatusErrors,
   };
   return createPptaskProvider({
     ...common,

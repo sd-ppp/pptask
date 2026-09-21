@@ -47,9 +47,7 @@ export function createKieProvider(options: KieProviderOptions): PptaskProvider {
       const raw = await requestJson<any>(config.fetch, 'kie', jsonRequest(
         `${config.baseURL}/api/v1/jobs/createTask`,
         body,
-        mergeHeaders(auth, context.headers, context.operationContext?.idempotencyKey
-          ? { 'idempotency-key': context.operationContext.idempotencyKey }
-          : undefined),
+        mergeHeaders(auth, context.headers),
       ), context.signal);
       if (raw.code !== 200) throw new Error(`kie createTask failed: ${raw.msg ?? raw.code ?? 'unknown error'}`);
       const taskId = raw.data?.taskId;

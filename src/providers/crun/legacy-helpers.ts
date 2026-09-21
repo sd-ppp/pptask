@@ -16,6 +16,8 @@ export const CRUN_GPT_IMAGE_MODELS = [
   'openai/gpt-image-2',
   'openai/gpt-image-2-stable',
   'openai/gpt-image-2-premium',
+  'openai/gpt-image-2-5',
+  'openai/gpt-image-2-5-official',
 ] as const;
 
 export const CRUN_SEEDREAM_MODELS = [
@@ -46,6 +48,7 @@ export const CRUN_KLING_MODELS = [
   'kling/v2-6',
   'kling/v2-6-motion-control',
   'kling/avatar',
+  'kling/v2-5-turbo-pro',
 ] as const;
 
 export const CRUN_MINIMAX_H3_MODELS = [
@@ -69,6 +72,11 @@ export const CRUN_HAPPYHORSE_11_MODELS = [
 
 export const CRUN_HAILUO_23_MODELS = [
   'minimax/hailuo-2-3',
+] as const;
+
+export const CRUN_GENERIC_VIDEO_MODELS = [
+  'wan/3-0-i2v',
+  'minimax/hailuo-02',
 ] as const;
 
 export const CRUN_IMAGE_UPSCALE_MODELS = [
@@ -118,6 +126,7 @@ export const CRUN_SUPPORTED_MODELS = [
   ...CRUN_PIXVERSE_V6_MODELS,
   ...CRUN_HAPPYHORSE_11_MODELS,
   ...CRUN_HAILUO_23_MODELS,
+  ...CRUN_GENERIC_VIDEO_MODELS,
   ...CRUN_IMAGE_UPSCALE_MODELS,
   ...CRUN_WATERMARK_REMOVE_MODELS,
   ...CRUN_IMAGE_EXPAND_MODELS,
@@ -302,6 +311,10 @@ export function isCrunHappyHorse11Model(model: string): boolean {
 
 export function isCrunHailuo23Model(model: string): boolean {
   return (CRUN_HAILUO_23_MODELS as readonly string[]).includes(model);
+}
+
+export function isCrunGenericVideoModel(model: string): boolean {
+  return (CRUN_GENERIC_VIDEO_MODELS as readonly string[]).includes(model);
 }
 
 export function isCrunImageUpscaleModel(model: string): boolean {

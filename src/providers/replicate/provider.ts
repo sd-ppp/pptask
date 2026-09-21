@@ -12,7 +12,7 @@ import { createPptaskProvider } from '../../core/provider.ts';
 import type {
   PptaskDescription,
   PptaskImageModelImplementation,
-  PptaskJobStore,
+  PptaskJobRepository,
   PptaskOperationContext,
   PptaskOperationStatusResult,
   PptaskProvider,
@@ -26,7 +26,7 @@ export type ReplicateProviderOptions = {
   baseURL?: string;
   version?: string;
   fetch?: typeof globalThis.fetch;
-  jobStore?: PptaskJobStore;
+  jobRepository?: PptaskJobRepository;
   pollIntervalMs?: number;
 };
 
@@ -56,7 +56,7 @@ export function createReplicateProvider(options: ReplicateProviderOptions): Ppta
     imageModel: modelId => createReplicateImageModel(modelId, config),
     videoModel: modelId => createReplicateVideoModel(modelId, config),
     files,
-    jobStore: options.jobStore,
+    jobRepository: options.jobRepository,
     pollIntervalMs: options.pollIntervalMs,
   });
 }
@@ -217,7 +217,6 @@ async function startPrediction(
     headers: {
       ...definedHeaders(requestHeaders),
       'content-type': 'application/json',
-      ...(context?.idempotencyKey ? { 'idempotency-key': context.idempotencyKey } : {}),
     },
     body: JSON.stringify({
       input,

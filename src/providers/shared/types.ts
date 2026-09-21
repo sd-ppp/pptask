@@ -5,7 +5,7 @@ import type {
 } from '@ai-sdk/provider';
 import type {
   PptaskDescription,
-  PptaskJobStore,
+  PptaskJobRepository,
   PptaskModelType,
   PptaskOperationContext,
 } from '../../core/types.ts';
@@ -15,9 +15,8 @@ export type CommonProviderOptions = {
   baseURL?: string;
   fetch?: typeof globalThis.fetch;
   headers?: Record<string, string>;
-  jobStore?: PptaskJobStore;
+  jobRepository?: PptaskJobRepository;
   pollIntervalMs?: number;
-  maxStatusErrors?: number;
 };
 
 export type HttpRequest = {

@@ -1,9 +1,10 @@
 import { customProvider } from 'ai';
 import type { FilesV4 } from '@ai-sdk/provider';
 import { createJobs } from './jobs.ts';
+import { registerPptaskJobs } from './registry.ts';
 import { getModelType } from './internal.ts';
 import { createImageModel, createLanguageModel, createVideoModel } from './model.ts';
-import { createDefaultJobStore } from '../stores/index.ts';
+import { createMemoryJobRepository } from '../stores/index.ts';
 import type {
   CreatePptaskProviderOptions,
   PptaskImageModel,
@@ -18,15 +19,15 @@ export function createPptaskProvider(options: CreatePptaskProviderOptions): Ppta
   const pollIntervalMs = options.pollIntervalMs ?? 1000;
   const languageModels = lazyModelRecord<PptaskLanguageModel>(modelId => {
     if (!options.languageModel) return undefined;
-    return createLanguageModel(options.providerId, modelId, options.languageModel(modelId), pollIntervalMs);
+    return createLanguageModel(options.providerId, modelId, options.languageModel(modelId), pollIntervalMs, options.executionReporter);
   });
   const imageModels = lazyModelRecord<PptaskImageModel>(modelId => {
     if (!options.imageModel) return undefined;
-    return createImageModel(options.providerId, modelId, options.imageModel(modelId), pollIntervalMs);
+    return createImageModel(options.providerId, modelId, options.imageModel(modelId), pollIntervalMs, options.executionReporter);
   });
   const videoModels = lazyModelRecord<PptaskVideoModel>(modelId => {
     if (!options.videoModel) return undefined;
-    return createVideoModel(options.providerId, modelId, options.videoModel(modelId));
+    return createVideoModel(options.providerId, modelId, options.videoModel(modelId), options.executionReporter);
   });
 
   const sdkProvider = customProvider({
@@ -43,11 +44,13 @@ export function createPptaskProvider(options: CreatePptaskProviderOptions): Ppta
   };
   const jobs = createJobs({
     providerId: options.providerId,
-    store: options.jobStore ?? createDefaultJobStore(),
+    store: options.jobRepository ?? createMemoryJobRepository(),
     pollIntervalMs,
     maxStatusErrors: options.maxStatusErrors ?? 3,
     resolveModel,
+    reporter: options.executionReporter,
   });
+  registerPptaskJobs(jobs);
 
   return Object.assign(sdkProvider, {
     providerId: options.providerId,

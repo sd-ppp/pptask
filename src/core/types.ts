@@ -18,6 +18,7 @@ import type {
   SharedV4ProviderMetadata,
   SharedV4Warning,
 } from '@ai-sdk/provider';
+import type { PptaskExecutionReporter } from './execution.ts';
 
 export type PptaskModelType = 'language' | 'image' | 'video';
 export type PptaskJobState =
@@ -55,7 +56,6 @@ export type PptaskOperationStatusResult<RESULT extends object> =
 
 export type PptaskOperationContext = {
   jobId: string;
-  idempotencyKey: string;
 };
 
 export type PptaskOperationMethods<CALL_OPTIONS, RESULT extends object> = {
@@ -129,28 +129,44 @@ export type PptaskSerializedError = {
 export type PptaskJobRecord<RESULT = unknown> = {
   schemaVersion: 1;
   id: string;
-  idempotencyKey: string;
   providerId: string;
   modelType: PptaskModelType;
   modelId: string;
   state: PptaskJobState;
   input: unknown;
+  metadata?: Record<string, unknown>;
   operation?: JSONValue;
   progress?: number;
   result?: RESULT;
   error?: PptaskSerializedError;
+  startedAt?: string;
+  finishedAt?: string;
+  transitions?: PptaskJobTransition[];
   createdAt: string;
   updatedAt: string;
+};
+
+export type PptaskJobTransition = {
+  at: string;
+  type: 'created' | 'submitting' | 'accepted' | 'progress' | 'succeeded' | 'failed' | 'cancelled';
+  state: PptaskJobState;
+  progress?: number;
 };
 
 export type PptaskJobFilter = {
   states?: PptaskJobState[];
   providerId?: string;
   modelId?: string;
-  idempotencyKey?: string;
 };
 
-export type PptaskJobStore = {
+/**
+ * In-process storage boundary for the jobs engine. Implementations are
+ * ephemeral by design: durability and recovery belong to the scheduling layer
+ * above (the worker), which snapshots records into its own store and
+ * rehydrates them here. `create` is a plain insert — dedup is a scheduling
+ * policy, not a job-repository concern.
+ */
+export type PptaskJobRepository = {
   get<RESULT = unknown>(id: string): Promise<PptaskJobRecord<RESULT> | undefined>;
   create(record: PptaskJobRecord): Promise<{
     record: PptaskJobRecord;
@@ -163,6 +179,12 @@ export type PptaskJobStore = {
   ): Promise<PptaskJobRecord<RESULT>>;
   list(filter?: PptaskJobFilter): Promise<PptaskJobRecord[]>;
   delete(id: string): Promise<void>;
+  subscribe?(listener: (change: PptaskJobRepositoryChange) => void): () => void;
+};
+
+export type PptaskJobRepositoryChange = {
+  type: 'created' | 'updated' | 'deleted';
+  job: PptaskJobRecord;
 };
 
 export type PptaskJobEvent<RESULT = unknown> = {
@@ -170,8 +192,11 @@ export type PptaskJobEvent<RESULT = unknown> = {
   job: PptaskJobRecord<RESULT>;
 };
 
+export type PptaskJobListener = (event: PptaskJobEvent) => void;
+
 export type PptaskJobHandle<RESULT = unknown> = {
   readonly id: string;
+  readonly record: PptaskJobRecord<RESULT>;
   status(options?: PptaskJobCallOptions): Promise<PptaskJobRecord<RESULT>>;
   watch(options?: PptaskJobCallOptions): AsyncIterable<PptaskJobEvent<RESULT>>;
   wait(options?: PptaskJobCallOptions): Promise<RESULT>;
@@ -187,24 +212,46 @@ export type PptaskJobs = {
   start<RESULT = unknown>(options: {
     model: PptaskModel;
     input: unknown;
-    idempotencyKey?: string;
+    metadata?: Record<string, unknown>;
   }): Promise<PptaskJobHandle<RESULT>>;
   resume<RESULT = unknown>(jobId: string): Promise<PptaskJobHandle<RESULT>>;
-  status<RESULT = unknown>(
-    jobId: string,
-    options?: PptaskJobCallOptions,
-  ): Promise<PptaskJobRecord<RESULT>>;
-  watch<RESULT = unknown>(
-    jobId: string,
-    options?: PptaskJobCallOptions,
-  ): AsyncIterable<PptaskJobEvent<RESULT>>;
+  status<RESULT = unknown>(jobId: string, options?: PptaskJobCallOptions): Promise<PptaskJobRecord<RESULT>>;
+  watch<RESULT = unknown>(jobId: string, options?: PptaskJobCallOptions): AsyncIterable<PptaskJobEvent<RESULT>>;
   wait<RESULT = unknown>(jobId: string, options?: PptaskJobCallOptions): Promise<RESULT>;
+  updateResult<RESULT = unknown>(jobId: string, result: RESULT): Promise<PptaskJobRecord<RESULT>>;
   cancel(jobId: string, options?: PptaskJobCallOptions): Promise<void>;
   list(filter?: PptaskJobFilter): Promise<PptaskJobRecord[]>;
+  subscribe(listener: PptaskJobListener): () => void;
 };
 
 export type PptaskUploadOptions = FilesV4UploadFileCallOptions;
 export type PptaskUploadResult = FilesV4UploadFileResult;
+
+/**
+ * Scheduling-side execution facts, emitted by a worker around its claim,
+ * retry, and settle decisions. Pure type contract shared between the worker
+ * (emitter) and execution-history (projector); core itself has no worker.
+ */
+export type PptaskSchedulingStage =
+  | 'enqueued'
+  | 'claimed'
+  | 'lease-lost'
+  | 'provider-missing'
+  | 'transient-retry'
+  | 'unfail-retry'
+  | 'task-completed'
+  | 'task-failed'
+  | 'task-cancelled';
+
+export type PptaskSchedulingEvent = {
+  stage: PptaskSchedulingStage;
+  jobId: string;
+  providerId: string;
+  attempt?: number;
+  consecutiveFailures?: number;
+  detail?: unknown;
+  at: string;
+};
 
 export type CreatePptaskProviderOptions = {
   providerId: string;
@@ -212,9 +259,12 @@ export type CreatePptaskProviderOptions = {
   imageModel?: (modelId: string) => PptaskImageModelImplementation;
   videoModel?: (modelId: string) => PptaskVideoModelImplementation;
   files?: FilesV4;
-  jobStore?: PptaskJobStore;
+  /** Persistence adapter for durable Pptask jobs. */
+  jobRepository?: PptaskJobRepository;
   pollIntervalMs?: number;
   maxStatusErrors?: number;
+  /** Receives execution facts in addition to the process-wide Pptask feed. */
+  executionReporter?: PptaskExecutionReporter;
 };
 
 export type PptaskProvider = Omit<

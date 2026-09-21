@@ -44,6 +44,7 @@ import {
   isCrunGptImage2,
   isCrunGptImage2Premium,
   isCrunGptImage2Stable,
+  isCrunGenericVideoModel,
   isCrunGpt56Model,
   isCrunHailuo23Model,
   isCrunImageUpscaleModel,
@@ -354,6 +355,35 @@ export function buildCrunGptImage2RequestBody(
     }
   }
 
+  if (model === 'openai/gpt-image-2-5' || model === 'openai/gpt-image-2-5-official') {
+    if (payload.quality !== undefined && payload.quality !== '') {
+      input.quality = String(payload.quality).toLowerCase();
+    }
+    if (payload.resolution !== undefined && payload.resolution !== '') {
+      input.resolution = String(payload.resolution).toUpperCase();
+    }
+  }
+
+  const body: Record<string, any> = { model, input };
+  addCrunCallbackUrl(body, model, payload);
+  return body;
+}
+
+export function buildCrunGenericVideoRequestBody(
+  model: string,
+  payload: Record<string, any>,
+): Record<string, any> {
+  parseCrunModel(new URL(`crun:///${model}`));
+  if (!isCrunGenericVideoModel(model)) throw new Error(`Unsupported CRUN generic video model: ${model}`);
+  const prompt = String(payload.prompt ?? '').trim();
+  if (!prompt) throw new Error(`CRUN ${model} requires a non-empty prompt`);
+  const image = payload.image_url ?? payload.imageUrl ?? payload.image ?? payload.img_urls ?? payload.imgUrls;
+  const input: Record<string, any> = {
+    prompt,
+    duration: Number(payload.duration ?? (model === 'minimax/hailuo-02' ? 6 : 5)),
+    resolution: payload.resolution ?? (model === 'minimax/hailuo-02' ? '512P' : '480P'),
+  };
+  if (image !== undefined && image !== '') input.image_url = Array.isArray(image) ? image[0] : image;
   const body: Record<string, any> = { model, input };
   addCrunCallbackUrl(body, model, payload);
   return body;
@@ -371,6 +401,8 @@ export function buildCrunRequestBody(
     ? buildCrunImageUpscaleRequestBody(model, payload)
     : isCrunHailuo23Model(model)
     ? buildCrunHailuo23RequestBody(model, payload)
+    : isCrunGenericVideoModel(model)
+    ? buildCrunGenericVideoRequestBody(model, payload)
     : isCrunKlingModel(model)
     ? buildCrunKlingRequestBody(model, payload)
     : isCrunVeo31Model(model) ? buildCrunVeo31RequestBody(model, payload)
@@ -1217,6 +1249,16 @@ export function buildCrunKlingRequestBody(
     );
     input.audio = audio;
     addCrunComplianceFields(input, model, payload);
+  } else if (model === 'kling/v2-5-turbo-pro') {
+    if (!prompt) throw new Error(`CRUN ${model} requires a non-empty prompt`);
+    const imageUrls = normalizeCrunHttpUrls(
+      payload.image_url ?? payload.imageUrl ?? payload.image ?? payload.img_urls ?? payload.imgUrls,
+      'frame image'
+    );
+    input.prompt = prompt;
+    if (imageUrls.length) input.image_url = imageUrls[0];
+    input.duration = normalizeCrunInteger(payload.duration ?? 5, 5, 10, model, 'duration');
+    input.mode = normalizeCrunEnum(payload.mode ?? 'pro', ['std', 'pro'], model, 'mode');
   } else if (model === 'kling/v3-turbo') {
     if (!prompt) throw new Error(`CRUN ${model} requires a non-empty prompt`);
     input.prompt = prompt;

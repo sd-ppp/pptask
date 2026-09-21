@@ -111,7 +111,7 @@ export function createNovitaProvider(options: NovitaProviderOptions): PptaskProv
         url = `${bases.seedance}/contents/generations/tasks`;
         body = buildNovitaSeedanceOverseaRequestBody(context.modelId, payload);
       }
-      const raw = await requestJson<any>(config.fetch, 'novita', jsonRequest(url, body, mergeHeaders(auth, context.headers, context.operationContext?.idempotencyKey ? { 'idempotency-key': context.operationContext.idempotencyKey } : undefined)), context.signal);
+      const raw = await requestJson<any>(config.fetch, 'novita', jsonRequest(url, body, mergeHeaders(auth, context.headers)), context.signal);
       const data = raw.data ?? raw;
       const taskId = kind === 'veo' ? data.name : kind === 'kling' ? data.task_id : data.id;
       if (typeof taskId !== 'string' || !taskId) throw new Error(`novita ${context.modelId} did not return a task id`);

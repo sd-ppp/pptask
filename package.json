@@ -1,6 +1,6 @@
 {
-  "name": "@sdppp/pptask-aisdk",
-  "version": "0.0.0",
+  "name": "@sdppp/pptask",
+  "version": "0.2.1",
   "private": true,
   "type": "module",
   "main": "./dist/index.js",
@@ -10,14 +10,6 @@
     ".": {
       "types": "./dist/types/index.d.ts",
       "import": "./dist/index.js"
-    },
-    "./browser": {
-      "types": "./dist/types/browser.d.ts",
-      "import": "./dist/browser.js"
-    },
-    "./server": {
-      "types": "./dist/types/server.d.ts",
-      "import": "./dist/server.js"
     },
     "./providers/replicate": {
       "types": "./dist/types/providers/replicate/index.d.ts",
@@ -81,7 +73,6 @@
   "scripts": {
     "build": "vite build && tsc -p tsconfig.build.json",
     "test": "vitest run",
-    "test:browser": "playwright test",
     "test:integration": "PPTASK_INTEGRATION=1 vitest run tests/integration/providers.integration.test.ts",
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
@@ -92,10 +83,8 @@
     "@ai-sdk/provider": "^4.0.14"
   },
   "devDependencies": {
-    "@playwright/test": "1.55.0",
     "@types/node": "^24.3.0",
     "ai": "^7.0.99",
-    "fake-indexeddb": "^6.2.4",
     "typescript": "5.9.3",
     "vite": "^8.3.0",
     "vitest": "^4.1.11"

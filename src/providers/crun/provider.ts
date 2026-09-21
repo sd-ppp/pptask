@@ -58,8 +58,7 @@ export function createCrunProvider(options: CrunProviderOptions): PptaskProvider
     },
     async start(context) {
       const body = buildCrunRequestBody(context.modelId, normalizeAsyncPayload(context.modelType, context.input));
-      const headers = mergeHeaders(auth, context.headers,
-        context.operationContext?.idempotencyKey ? { 'idempotency-key': context.operationContext.idempotencyKey } : undefined);
+      const headers = mergeHeaders(auth, context.headers);
       const raw = await requestJson<any>(config.fetch, 'crun', jsonRequest(`${config.baseURL}/client/job/CreateTask`, body, headers), context.signal);
       if (raw.code !== undefined && raw.code !== 200) throw new Error(`crun createTask failed: ${raw.message ?? raw.msg ?? raw.code}`);
       const taskId = raw.data?.task_id ?? raw.data?.taskId ?? raw.task_id ?? raw.taskId;
