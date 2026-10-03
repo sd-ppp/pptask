@@ -1810,7 +1810,7 @@ function extensionForMime(mimeType: string): string {
   return 'png';
 }
 
-export function buildNovitaRequestBody(payload: Record<string, any>): Record<string, any> {
+export function buildNovitaRequestBody(payload: Record<string, any>, model?: string): Record<string, any> {
   const prompt = typeof payload.prompt === 'string' ? payload.prompt.trim() : '';
   const imageValues = payload.urls ?? payload.images ?? payload.image;
   const images = imageValues == null || imageValues === ''
@@ -1834,7 +1834,7 @@ export function buildNovitaRequestBody(payload: Record<string, any>): Record<str
   if (aspectRatio || imageSize) {
     generationConfig.imageConfig = {};
     if (aspectRatio) generationConfig.imageConfig.aspectRatio = String(aspectRatio);
-    if (imageSize) generationConfig.imageConfig.imageSize = normalizeImageSize(imageSize);
+    if (imageSize) generationConfig.imageConfig.imageSize = normalizeImageSize(imageSize, model);
   }
 
   return {
@@ -1880,10 +1880,13 @@ function normalizeResponseModalities(payload: Record<string, any>): ('TEXT' | 'I
   });
 }
 
-function normalizeImageSize(value: unknown): string {
+function normalizeImageSize(value: unknown, model?: string): string {
   const imageSize = String(value).toUpperCase();
-  if (!['1K', '2K', '4K'].includes(imageSize)) {
-    throw new Error('novita imageSize must be one of: 1K, 2K, 4K');
+  const supported = model?.includes('gemini-3.1-flash-image')
+    ? ['512', '1K', '2K', '4K']
+    : ['1K', '2K', '4K'];
+  if (!supported.includes(imageSize)) {
+    throw new Error(`novita imageSize must be one of: ${supported.join(', ')}`);
   }
   return imageSize;
 }
