@@ -1,6 +1,8 @@
 import { describe, expect, it, vi } from 'vitest';
 import {
+  buildCrunGenericVideoRequestBody,
   buildCrunGeminiOmniRequestBody,
+  buildCrunGptImage2RequestBody,
   buildCrunGrokImagineVideoRequestBody,
   buildCrunImageExpandRequestBody,
   buildCrunImageUpscaleRequestBody,
@@ -37,6 +39,49 @@ describe('migrated model protocol builders', () => {
       if (model === 'happyhorse-1-1-t2v' || model === 'minimax/hailuo-2-3') continue;
       expect(builder(model, input as any).model).toBe(model);
     }
+  });
+
+  it('maps flat CRUN image handler inputs to upstream request bodies', () => {
+    expect(buildCrunGptImage2RequestBody('openai/gpt-image-2-5-official', {
+      prompt: 'draw', img_urls: ['https://a.test/i.png'], quality: 'xhigh',
+      aspect_ratio: '9:16', model_variant: 'flare', output_format: 'webp', background: 'transparent',
+    })).toEqual({
+      model: 'openai/gpt-image-2-5-official',
+      input: {
+        prompt: 'draw', img_urls: ['https://a.test/i.png'], quality: 'xhigh',
+        aspect_ratio: '9:16', model_variant: 'flare', output_format: 'webp', background: 'transparent',
+      },
+    });
+    expect(buildCrunImageUpscaleRequestBody('image-upscale-pro', {
+      img_urls: ['https://a.test/i.png'], clarity: 'ultra', output_format: 'jpg',
+    })).toEqual({
+      model: 'image-upscale-pro',
+      input: { img_urls: ['https://a.test/i.png'], clarity: 'ultra', output_format: 'jpg' },
+    });
+  });
+
+  it('maps flat CRUN video handler inputs to upstream request bodies', () => {
+    expect(buildCrunGenericVideoRequestBody('wan/3-0-i2v', {
+      prompt: 'move', img_urls: ['https://a.test/i.png'], duration: 12, resolution: '1080P',
+      audio: false, aspect_ratio: '9:16', prompt_extend: true,
+    })).toEqual({
+      model: 'wan/3-0-i2v',
+      input: {
+        prompt: 'move', image_url: 'https://a.test/i.png', duration: 12, resolution: '1080P',
+        audio: false, aspect_ratio: '9:16', prompt_extend: true,
+      },
+    });
+    expect(buildCrunMinimaxH3RequestBody('minimax/h3-i2v', {
+      prompt: 'move', img_urls: ['https://a.test/a.png'], duration: 5,
+      resolution: '768P', aspect_ratio: 'auto', context_ir_enabled: false,
+    }).input).toMatchObject({ context_ir_enabled: false });
+    expect(buildCrunKlingRequestBody('kling/v2-5-turbo-pro', {
+      prompt: 'move', negative_prompt: 'blur', img_urls: ['https://a.test/a.png'], duration: 10,
+    }).input).toMatchObject({ negative_prompt: 'blur' });
+    expect(buildCrunVeo31RequestBody('google/veo3-1-fast-i2v', {
+      prompt: 'move', img_urls: ['https://a.test/a.png'], duration: 8,
+      resolution: '4K', aspect_ratio: '16:9',
+    }).input).toMatchObject({ resolution: '4k' });
   });
 });
 

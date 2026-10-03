@@ -362,6 +362,20 @@ export function buildCrunGptImage2RequestBody(
     if (payload.resolution !== undefined && payload.resolution !== '') {
       input.resolution = String(payload.resolution).toUpperCase();
     }
+    input.model_variant = normalizeCrunEnum(
+      payload.model_variant ?? payload.modelVariant ?? 'sunburst',
+      ['flare', 'sunburst'], model, 'model_variant'
+    );
+  }
+  if (model === 'openai/gpt-image-2-5-official') {
+    input.output_format = normalizeCrunEnum(
+      payload.output_format ?? payload.outputFormat ?? 'png',
+      ['webp', 'png', 'jpg'], model, 'output_format'
+    );
+    input.background = normalizeCrunEnum(
+      payload.background ?? 'auto',
+      ['auto', 'transparent', 'opaque'], model, 'background'
+    );
   }
 
   const body: Record<string, any> = { model, input };
@@ -384,6 +398,17 @@ export function buildCrunGenericVideoRequestBody(
     resolution: payload.resolution ?? (model === 'minimax/hailuo-02' ? '512P' : '480P'),
   };
   if (image !== undefined && image !== '') input.image_url = Array.isArray(image) ? image[0] : image;
+  if (model === 'wan/3-0-i2v') {
+    input.audio = Boolean(payload.audio ?? true);
+    input.aspect_ratio = normalizeCrunEnum(
+      payload.aspect_ratio ?? payload.aspectRatio ?? 'auto',
+      ['auto', '16:9', '9:16', '1:1', '4:3', '3:4'], model, 'aspect_ratio'
+    );
+    input.prompt_extend = Boolean(payload.prompt_extend ?? payload.promptExtend);
+  }
+  if (model === 'minimax/hailuo-02') {
+    input.prompt_optimizer = Boolean(payload.prompt_optimizer ?? payload.promptOptimizer);
+  }
   const body: Record<string, any> = { model, input };
   addCrunCallbackUrl(body, model, payload);
   return body;
@@ -520,15 +545,6 @@ export function buildCrunImageUpscaleRequestBody(
       throw new Error(`CRUN ${model} mode must be one of: ${profile.modes.join(', ')}`);
     }
     input.mode = mode;
-    const outputFormat = String(
-      payload.output_format ?? payload.outputFormat ?? 'png'
-    ).trim().toLowerCase();
-    if (!profile.outputFormats.includes(outputFormat)) {
-      throw new Error(
-        `CRUN ${model} output_format must be one of: ${profile.outputFormats.join(', ')}`
-      );
-    }
-    input.output_format = outputFormat;
   } else {
     const clarity = String(payload.clarity ?? 'high').trim().toLowerCase();
     if (!profile.clarityLevels.includes(clarity)) {
@@ -538,6 +554,15 @@ export function buildCrunImageUpscaleRequestBody(
     }
     input.clarity = clarity;
   }
+  const outputFormat = String(
+    payload.output_format ?? payload.outputFormat ?? 'png'
+  ).trim().toLowerCase();
+  if (!profile.outputFormats.includes(outputFormat)) {
+    throw new Error(
+      `CRUN ${model} output_format must be one of: ${profile.outputFormats.join(', ')}`
+    );
+  }
+  input.output_format = outputFormat;
   const body: Record<string, any> = { model, input };
   addCrunCallbackUrl(body, model, payload);
   return body;
@@ -603,7 +628,7 @@ export function buildCrunVeo31RequestBody(
     );
   }
   const resolution = normalizeCrunEnum(
-    payload.resolution ?? '720p', ['720p', '1080p'], model, 'resolution'
+    String(payload.resolution ?? '720p').toLowerCase(), ['720p', '1080p', '4k'], model, 'resolution'
   );
   const aspectRatio = normalizeCrunEnum(
     payload.aspect_ratio ?? payload.aspectRatio ?? '16:9',
@@ -1008,6 +1033,11 @@ export function buildCrunMinimaxH3RequestBody(
     }
   }
   input.aspect_ratio = aspectRatio;
+  if (payload.context_ir_enabled !== undefined || payload.contextIrEnabled !== undefined) {
+    input.context_ir_enabled = Boolean(
+      payload.context_ir_enabled ?? payload.contextIrEnabled
+    );
+  }
 
   const body: Record<string, any> = { model, input };
   addCrunCallbackUrl(body, model, payload);
@@ -1227,27 +1257,19 @@ export function buildCrunKlingRequestBody(
     if (imageUrls.length > 2) {
       throw new Error(`CRUN ${model} supports at most two frame images`);
     }
-    const mode = normalizeCrunEnum(payload.mode ?? 'std', ['std', 'pro'], model, 'mode');
-    if (imageUrls.length === 2 && mode !== 'std') {
-      throw new Error(`CRUN ${model} first/last frame generation requires std mode`);
-    }
-    const audio = Boolean(payload.audio ?? false);
-    if (mode === 'std' && audio) {
-      throw new Error(`CRUN ${model} audio must be false in std mode`);
-    }
     const duration = normalizeCrunInteger(payload.duration ?? 5, 5, 10, model, 'duration');
     if (![5, 10].includes(duration)) {
       throw new Error(`CRUN ${model} duration must be one of: 5, 10`);
     }
-    input.mode = mode;
     input.prompt = prompt;
     if (imageUrls.length) input.img_urls = imageUrls;
     input.duration = duration;
-    input.aspect_ratio = normalizeCrunEnum(
-      payload.aspect_ratio ?? payload.aspectRatio ?? '16:9',
-      ['16:9', '9:16', '1:1'], model, 'aspect_ratio'
+    input.mode = 'std';
+    input.resolution = normalizeCrunEnum(
+      String(payload.resolution ?? '720P').toUpperCase(),
+      ['720P', '1080P'], model, 'resolution'
     );
-    input.audio = audio;
+    input.audio = false;
     addCrunComplianceFields(input, model, payload);
   } else if (model === 'kling/v2-5-turbo-pro') {
     if (!prompt) throw new Error(`CRUN ${model} requires a non-empty prompt`);
@@ -1256,6 +1278,10 @@ export function buildCrunKlingRequestBody(
       'frame image'
     );
     input.prompt = prompt;
+    const negativePrompt = String(
+      payload.negative_prompt ?? payload.negativePrompt ?? ''
+    ).trim();
+    if (negativePrompt) input.negative_prompt = negativePrompt;
     if (imageUrls.length) input.image_url = imageUrls[0];
     input.duration = normalizeCrunInteger(payload.duration ?? 5, 5, 10, model, 'duration');
     input.mode = normalizeCrunEnum(payload.mode ?? 'pro', ['std', 'pro'], model, 'mode');
@@ -1360,7 +1386,7 @@ export function buildCrunNanoBananaRequestBody(
   const aspectRatio = String(payload.aspect_ratio ?? payload.aspectRatio ?? '').trim();
   if (aspectRatio) input.aspect_ratio = aspectRatio;
 
-  const supportsResolution = isCrunNanoBanana2(model) || isCrunNanoBananaPro(model);
+  const supportsResolution = isCrunNanoBanana2(model) || isCrunNanoBananaPro(model) || isCrunNanoBanana2Lite(model);
   if (supportsResolution) {
     const resolution = String(payload.resolution ?? '2K').trim().toUpperCase();
     if (!['1K', '2K', '4K'].includes(resolution)) {
