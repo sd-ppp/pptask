@@ -30,7 +30,7 @@ describe('createNovitaProvider protocols', () => {
           input: {
             urls: ['data:image/png;base64,AQID'],
             aspectRatio: '16:9',
-            imageSize: '512',
+            imageSize: '2K',
             includeTextResponse: false,
           },
         },
@@ -47,7 +47,7 @@ describe('createNovitaProvider protocols', () => {
       }],
       generationConfig: {
         responseModalities: ['IMAGE'],
-        imageConfig: { aspectRatio: '16:9', imageSize: '512' },
+        imageConfig: { aspectRatio: '16:9', imageSize: '2K' },
       },
     });
   });

@@ -88,7 +88,7 @@ export function createNovitaProvider(options: NovitaProviderOptions): PptaskProv
       const payload = normalizeImagePayload(context.input);
       return requestJsonOrSse(config.fetch, 'novita', jsonRequest(
         `${config.baseURL}/${options.apiVersion ?? 'v1'}/models/${encodeURIComponent(context.modelId)}:generateContent`,
-        buildNovitaRequestBody(payload, context.modelId), mergeHeaders(auth, context.headers),
+        buildNovitaRequestBody(payload), mergeHeaders(auth, context.headers),
       ), context.signal);
     },
     async start(context) {

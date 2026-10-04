@@ -406,7 +406,7 @@ export function getCrunImageUpscaleProfile(model: string): CrunImageUpscaleProfi
   return model === 'image-upscale-pro'
     ? {
       model, channel: 'pro', scaleFactors: [], modes: [],
-      clarityLevels: ['high', 'ultra'], outputFormats: ['png', 'jpg'],
+      clarityLevels: ['high', 'ultra'], outputFormats: [],
     }
     : {
       model, channel: 'basic', scaleFactors: [1, 2, 4], modes: ['clean', 'face'],

@@ -209,6 +209,10 @@ export function isNovitaGptImageModel(model: string): boolean {
   return (NOVITA_GPT_IMAGE_MODELS as readonly string[]).includes(model);
 }
 
+export function isNovitaGptImage25Model(model: string): boolean {
+  return model === 'gpt-image-2.5-flare-oai' || model === 'gpt-image-2.5-sunburst-oai';
+}
+
 export function isNovitaGpt56Model(model: string): boolean {
   return (NOVITA_GPT56_MODELS as readonly string[]).includes(model);
 }

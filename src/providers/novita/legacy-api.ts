@@ -20,6 +20,7 @@ import {
   ensureNovitaConfig,
   isNovitaAsyncModel,
   isNovitaGpt56Model,
+  isNovitaGptImage25Model,
   isNovitaGptImageModel,
   isNovitaKlingV3Model,
   isNovitaSeedanceOverseaModel,
@@ -1640,7 +1641,10 @@ export async function buildNovitaGptImageEditFormData(
     ['png', 'jpeg', 'webp'] as const,
     'output_format'
   );
-  const values = buildGptImageCommonBody(model, payload, prompt, outputFormat);
+  // Novita's 2.5 edit gateway rejects optional OpenAI image fields.
+  const values = isNovitaGptImage25Model(model)
+    ? { model, prompt, size: normalizeGptImageSize(payload.size ?? '1024x1024') }
+    : buildGptImageCommonBody(model, payload, prompt, outputFormat);
 
   const form = new FormData();
   for (const [key, value] of Object.entries(values)) {
@@ -1651,7 +1655,7 @@ export async function buildNovitaGptImageEditFormData(
     form.append('image[]', file.blob, file.name);
   }
   const mask = normalizedMask ?? firstValue(payload.mask);
-  if (mask != null) {
+  if (mask != null && !isNovitaGptImage25Model(model)) {
     const file = await normalizeGptImageFile(mask, 0, 'mask', fetchImpl);
     if (file.blob.type !== 'image/png') {
       throw new Error('novita GPT Image 2 mask must be a PNG image');
@@ -1659,7 +1663,7 @@ export async function buildNovitaGptImageEditFormData(
     form.append('mask', file.blob, file.name);
   }
   const inputFidelity = payload.input_fidelity ?? payload.inputFidelity;
-  if (inputFidelity != null && inputFidelity !== '') {
+  if (!isNovitaGptImage25Model(model) && inputFidelity != null && inputFidelity !== '') {
     form.append('input_fidelity', normalizeGptImageEnum(
       inputFidelity, ['high', 'low'] as const, 'input_fidelity'
     ));
@@ -1810,7 +1814,7 @@ function extensionForMime(mimeType: string): string {
   return 'png';
 }
 
-export function buildNovitaRequestBody(payload: Record<string, any>, model?: string): Record<string, any> {
+export function buildNovitaRequestBody(payload: Record<string, any>): Record<string, any> {
   const prompt = typeof payload.prompt === 'string' ? payload.prompt.trim() : '';
   const imageValues = payload.urls ?? payload.images ?? payload.image;
   const images = imageValues == null || imageValues === ''
@@ -1834,7 +1838,7 @@ export function buildNovitaRequestBody(payload: Record<string, any>, model?: str
   if (aspectRatio || imageSize) {
     generationConfig.imageConfig = {};
     if (aspectRatio) generationConfig.imageConfig.aspectRatio = String(aspectRatio);
-    if (imageSize) generationConfig.imageConfig.imageSize = normalizeImageSize(imageSize, model);
+    if (imageSize) generationConfig.imageConfig.imageSize = normalizeImageSize(imageSize);
   }
 
   return {
@@ -1880,13 +1884,10 @@ function normalizeResponseModalities(payload: Record<string, any>): ('TEXT' | 'I
   });
 }
 
-function normalizeImageSize(value: unknown, model?: string): string {
+function normalizeImageSize(value: unknown): string {
   const imageSize = String(value).toUpperCase();
-  const supported = model?.includes('gemini-3.1-flash-image')
-    ? ['512', '1K', '2K', '4K']
-    : ['1K', '2K', '4K'];
-  if (!supported.includes(imageSize)) {
-    throw new Error(`novita imageSize must be one of: ${supported.join(', ')}`);
+  if (!['1K', '2K', '4K'].includes(imageSize)) {
+    throw new Error('novita imageSize must be one of: 1K, 2K, 4K');
   }
   return imageSize;
 }
