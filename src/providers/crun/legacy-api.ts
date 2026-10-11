@@ -1037,7 +1037,7 @@ export function buildCrunSeedreamRequestBody(
     payload.aspect_ratio ?? payload.aspectRatio ?? '1:1'
   ).trim().toLowerCase();
   const allowedRatios = [
-    'match_input_image', '1:1', '4:3', '3:4', '16:9', '9:16', '3:2', '2:3', '21:9',
+    '1:1', '4:3', '3:4', '16:9', '9:16', '3:2', '2:3', '21:9',
   ];
   if (!allowedRatios.includes(aspectRatio)) {
     throw new Error(`CRUN ${model} aspect_ratio must be one of: ${allowedRatios.join(', ')}`);
