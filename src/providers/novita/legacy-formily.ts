@@ -403,14 +403,6 @@ function buildNovitaGptImageFormSchema(): FormilySchema {
   return {
     type: 'object',
     properties: {
-      prompt: {
-        type: 'string',
-        title: 'Prompt',
-        required: true,
-        'x-decorator': 'FormItem',
-        'x-component': 'Input.TextArea',
-        'x-component-props': { rows: 5, maxLength: 32000 },
-      },
       urls: {
         type: 'array',
         title: 'Reference Images (optional)',
@@ -427,10 +419,13 @@ function buildNovitaGptImageFormSchema(): FormilySchema {
         'x-component-props': { accept: 'image/png', maxCount: 1 },
         default: [],
       },
-      n: {
-        type: 'number', title: 'Number of Images', 'x-decorator': 'FormItem',
-        'x-component': 'NumberPicker', 'x-component-props': { min: 1, max: 10, precision: 0 },
-        default: 1,
+      prompt: {
+        type: 'string',
+        title: 'Prompt',
+        required: true,
+        'x-decorator': 'FormItem',
+        'x-component': 'Input.TextArea',
+        'x-component-props': { rows: 5, maxLength: 32000 },
       },
       size: {
         type: 'string', title: 'Image Size', description: 'Explicit size is recommended for cost control.',
@@ -461,7 +456,7 @@ function buildNovitaGptImageFormSchema(): FormilySchema {
       quality: {
         type: 'string', title: 'Quality', 'x-decorator': 'FormItem', 'x-component': 'Select',
         enum: ['low', 'medium', 'high', 'auto'].map(value => ({ label: value, value })),
-        default: 'high',
+        default: 'auto',
       },
       outputFormat: {
         type: 'string', title: 'Output Format', 'x-decorator': 'FormItem', 'x-component': 'Select',
@@ -482,12 +477,17 @@ function buildNovitaGptImageFormSchema(): FormilySchema {
         type: 'string', title: 'Moderation (generation only)', 'x-decorator': 'FormItem',
         'x-component': 'Select',
         enum: [{ label: 'Low (business recommended)', value: 'low' }, { label: 'Auto', value: 'auto' }],
-        default: 'low',
+        default: 'auto',
       },
       inputFidelity: {
         type: 'string', title: 'Input Fidelity (editing)', 'x-decorator': 'FormItem',
         'x-component': 'Select',
-        enum: ['high', 'low'].map(value => ({ label: value, value })), default: 'high',
+        enum: ['high', 'low'].map(value => ({ label: value, value })), default: 'low',
+      },
+      n: {
+        type: 'number', title: 'Number of Images', 'x-decorator': 'FormItem',
+        'x-component': 'NumberPicker', 'x-component-props': { min: 1, max: 4, precision: 0 },
+        default: 1,
       },
     },
   };

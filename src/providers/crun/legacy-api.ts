@@ -329,7 +329,10 @@ export function buildCrunGptImage2RequestBody(
   }
   if (imgUrls.length) input.img_urls = imgUrls;
 
-  const aspectRatio = String(payload.aspect_ratio ?? payload.aspectRatio ?? '1:1').trim();
+  const aspectRatio = String(
+    payload.aspect_ratio ?? payload.aspectRatio
+      ?? (model === 'openai/gpt-image-2-5-official' ? 'auto' : '1:1')
+  ).trim();
   if (aspectRatio) input.aspect_ratio = aspectRatio;
 
   if (isCrunGptImage2Stable(model)) {
@@ -360,7 +363,26 @@ export function buildCrunGptImage2RequestBody(
       input.quality = String(payload.quality).toLowerCase();
     }
     if (payload.resolution !== undefined && payload.resolution !== '') {
-      input.resolution = String(payload.resolution).toUpperCase();
+      input.resolution = String(payload.resolution).toLowerCase();
+    }
+    if (model === 'openai/gpt-image-2-5') {
+      input.model_variant = String(payload.model_variant ?? payload.modelVariant ?? 'flare').trim().toLowerCase();
+      if (!['flare', 'sunburst'].includes(input.model_variant)) {
+        throw new Error(`CRUN ${model} model_variant must be one of: flare, sunburst`);
+      }
+      input.n = normalizeCrunInteger(payload.n ?? 1, 1, 4, model, 'n');
+    } else {
+      input.model_variant = String(payload.model_variant ?? payload.modelVariant ?? 'flare').trim().toLowerCase();
+      if (!['flare', 'sunburst'].includes(input.model_variant)) {
+        throw new Error(`CRUN ${model} model_variant must be one of: flare, sunburst`);
+      }
+      input.n = normalizeCrunInteger(payload.n ?? 1, 1, 10, model, 'n');
+      input.quality = normalizeCrunEnum(payload.quality ?? 'auto', ['low', 'medium', 'high', 'xhigh', 'max', 'auto'], model, 'quality');
+      input.background = normalizeCrunEnum(payload.background ?? 'auto', ['auto', 'transparent', 'opaque'], model, 'background');
+      input.output_format = normalizeCrunEnum(payload.output_format ?? payload.outputFormat ?? 'png', ['webp', 'jpeg', 'png'], model, 'output_format');
+      if (payload.output_compression !== undefined && payload.output_compression !== null && payload.output_compression !== '') {
+        input.output_compression = normalizeCrunInteger(payload.output_compression, 0, 100, model, 'output_compression');
+      }
     }
   }
 
