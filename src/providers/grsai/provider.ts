@@ -19,8 +19,11 @@ export function createGrsaiProvider(options: GrsaiProviderOptions): PptaskProvid
     providerId: 'grsai', fetch: config.fetch, modelTypes: ['image'], mode: () => 'async',
     files: createFiles(options, config.fetch),
     async start(context) {
+      const endpoint = String(context.modelId).startsWith('gpt-image-')
+        ? `${config.baseURL}/v1/api/generate`
+        : `${config.baseURL}/v1/draw/nano-banana`;
       const response = await request(config.fetch, 'grsai', jsonRequest(
-        `${config.baseURL}/v1/draw/nano-banana`,
+        endpoint,
         { ...context.input, model: context.modelId },
         mergeHeaders(auth, context.headers),
       ), context.signal);

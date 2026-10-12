@@ -403,9 +403,20 @@ export function buildCrunGenericVideoRequestBody(
   const input: Record<string, any> = {
     prompt,
     duration: Number(payload.duration ?? (model === 'minimax/hailuo-02' ? 6 : 5)),
-    resolution: payload.resolution ?? (model === 'minimax/hailuo-02' ? '512P' : '480P'),
+    resolution: model === 'minimax/hailuo-02'
+      ? String(payload.resolution ?? '768P').toUpperCase()
+      : (payload.resolution ?? '480P'),
   };
-  if (image !== undefined && image !== '') input.image_url = Array.isArray(image) ? image[0] : image;
+  if ((model === 'minimax/hailuo-02' || model === 'wan/3-0-i2v') && image !== undefined && image !== '') {
+    input.img_urls = Array.isArray(image) ? image : [image];
+    delete input.image_url;
+  }
+  if (model === 'minimax/hailuo-02' && ![6, 10].includes(input.duration)) {
+    throw new Error(`CRUN ${model} duration must be one of: 6, 10`);
+  }
+  if (model !== 'minimax/hailuo-02' && model !== 'wan/3-0-i2v' && image !== undefined && image !== '') {
+    input.image_url = Array.isArray(image) ? image[0] : image;
+  }
   const body: Record<string, any> = { model, input };
   addCrunCallbackUrl(body, model, payload);
   return body;
