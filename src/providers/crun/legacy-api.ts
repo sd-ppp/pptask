@@ -1384,8 +1384,15 @@ export function buildCrunNanoBananaRequestBody(
   if (!prompt) throw new Error(`CRUN ${model} requires a non-empty prompt`);
 
   const input: Record<string, any> = { prompt };
+  const handlerImages = model === 'google/nano-banana-2-1'
+    && ('3_image' in payload || '1x_image' in payload)
+    ? [
+        ...normalizeCrunImageUrls(payload['3_image']),
+        ...normalizeCrunImageUrls(payload['1x_image']),
+      ]
+    : undefined;
   const imgUrls = normalizeCrunImageUrls(
-    payload.img_urls ?? payload.imgUrls ?? payload.imageUrls ?? payload.urls
+    handlerImages ?? payload.img_urls ?? payload.imgUrls ?? payload.imageUrls ?? payload.urls
   );
   if (imgUrls.length) input.img_urls = imgUrls;
 
