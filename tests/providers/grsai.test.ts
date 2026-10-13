@@ -16,6 +16,22 @@ describe('createGrsaiProvider lifecycle', () => {
     expect(result.images[0]).toEqual(new Uint8Array([6]));
   });
 
+  it('routes GPT Image models to the generate endpoint', async () => {
+    const fetchMock = vi.fn(async (input: string | URL | Request) => {
+      const url = String(input);
+      if (url.endsWith('/api/generate')) {
+        return new Response(JSON.stringify({ id: 'gr-gpt-1', status: 'running' }), { headers: { 'content-type': 'application/json' } });
+      }
+      if (url.endsWith('/result')) return Response.json({ status: 'succeeded', results: [{ url: 'https://files.test/gpt.png' }] });
+      if (url === 'https://files.test/gpt.png') return new Response(new Uint8Array([7]));
+      throw new Error(url);
+    });
+    const provider = createGrsaiProvider({ apiKey: 'key', baseURL: 'https://gr.test', fetch: fetchMock as typeof fetch, pollIntervalMs: 1 });
+    const result = await (await provider.jobs.start<any>({ model: provider.imageModel('gpt-image-2'), input: { prompt: 'hello', images: [], aspectRatio: 'auto', quality: 'auto' } })).wait();
+    expect(result.images[0]).toEqual(new Uint8Array([7]));
+    expect(String(fetchMock.mock.calls[0][0])).toContain('/v1/api/generate');
+  });
+
   it('uploads through token and object-storage requests', async () => {
     const fetchMock = vi.fn()
       .mockResolvedValueOnce(Response.json({ code: 0, data: { url: 'https://upload.test', token: 'token', key: 'folder/a.png', domain: 'https://cdn.test' } }))

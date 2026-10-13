@@ -140,9 +140,9 @@ export async function describeNovita(
       },
       formSchema: buildNovitaFormSchema(model),
       formValues: {
-        prompt: '', urls: [], mask: [], n: 1, size: '1024x1024', quality: 'high',
-        outputFormat: 'png', outputCompression: 100, background: 'auto', moderation: 'low',
-        inputFidelity: 'high',
+        prompt: '', urls: [], mask: [], n: 1, size: '1024x1024', quality: 'auto',
+        outputFormat: 'png', outputCompression: 100, background: 'auto', moderation: 'auto',
+        inputFidelity: 'low',
       },
       cancelable: false,
     };
@@ -1615,7 +1615,7 @@ export function buildNovitaGptImageGenerationBody(
   );
   const body = buildGptImageCommonBody(model, payload, prompt, outputFormat);
   body.moderation = normalizeGptImageEnum(
-    payload.moderation ?? 'low', ['low', 'auto'] as const, 'moderation'
+    payload.moderation ?? 'auto', ['low', 'auto'] as const, 'moderation'
   );
   return body;
 }
@@ -1643,7 +1643,20 @@ export async function buildNovitaGptImageEditFormData(
   );
   // Novita's 2.5 edit gateway rejects optional OpenAI image fields.
   const values = isNovitaGptImage25Model(model)
-    ? { model, prompt, size: normalizeGptImageSize(payload.size ?? '1024x1024') }
+    ? {
+      model,
+      prompt,
+      size: normalizeGptImageSize(payload.size ?? '1024x1024'),
+      quality: normalizeGptImageEnum(
+        payload.quality ?? 'high', ['low', 'medium', 'high', 'xhigh', 'max', 'auto'] as const, 'quality'
+      ),
+      moderation: normalizeGptImageEnum(
+        payload.moderation ?? 'low', ['low', 'auto'] as const, 'moderation'
+      ),
+      output_format: normalizeGptImageEnum(
+        payload.output_format ?? payload.outputFormat ?? 'png', ['png', 'jpeg', 'webp'] as const, 'output_format'
+      ),
+    }
     : buildGptImageCommonBody(model, payload, prompt, outputFormat);
 
   const form = new FormData();
@@ -1679,9 +1692,9 @@ function buildGptImageCommonBody(
 ): Record<string, any> {
   const size = normalizeGptImageSize(payload.size ?? '1024x1024');
   const quality = normalizeGptImageEnum(
-    payload.quality ?? 'high', ['low', 'medium', 'high', 'auto'] as const, 'quality'
+    payload.quality ?? 'auto', ['low', 'medium', 'high', 'auto'] as const, 'quality'
   );
-  const n = normalizeInteger(payload.n ?? 1, 1, 10, 'n');
+  const n = normalizeInteger(payload.n ?? 1, 1, 4, 'n');
   const background = normalizeGptImageEnum(
     payload.background ?? 'auto', ['auto', 'opaque', 'transparent'] as const, 'background'
   );

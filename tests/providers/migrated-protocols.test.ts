@@ -49,7 +49,8 @@ describe('migrated model protocol builders', () => {
       model: 'openai/gpt-image-2-5-official',
       input: {
         prompt: 'draw', img_urls: ['https://a.test/i.png'], quality: 'xhigh',
-        aspect_ratio: '9:16',
+        aspect_ratio: '9:16', model_variant: 'flare', n: 1,
+        background: 'transparent', output_format: 'webp',
       },
     });
     expect(buildCrunImageUpscaleRequestBody('image-upscale-pro', {
@@ -67,7 +68,7 @@ describe('migrated model protocol builders', () => {
     })).toEqual({
       model: 'wan/3-0-i2v',
       input: {
-        prompt: 'move', image_url: 'https://a.test/i.png', duration: 12, resolution: '1080P',
+        prompt: 'move', img_urls: ['https://a.test/i.png'], duration: 12, resolution: '1080P',
       },
     });
     expect(buildCrunMinimaxH3RequestBody('minimax/h3-i2v', {

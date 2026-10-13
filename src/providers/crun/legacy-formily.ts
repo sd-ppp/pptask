@@ -74,7 +74,7 @@ export function buildCrunSeedreamFormSchema(): FormilySchema {
         type: 'string', title: 'Aspect Ratio', 'x-decorator': 'FormItem',
         'x-component': 'Select',
         enum: [
-          'match_input_image', '1:1', '4:3', '3:4', '16:9', '9:16', '3:2', '2:3', '21:9',
+          '1:1', '4:3', '3:4', '16:9', '9:16', '3:2', '2:3', '21:9',
         ].map(value => ({ label: value, value })),
         default: '1:1',
       },
