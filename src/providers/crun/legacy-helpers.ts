@@ -4,6 +4,7 @@ export const CRUN_DEFAULT_BASE_URL = 'https://api.crun.ai/api/v1';
 
 export const CRUN_NANO_BANANA_MODELS = [
   'google/nano-banana-2',
+  'google/nano-banana-2-1',
   'google/nano-banana-2-v2',
   'google/nano-banana-2-lite',
   'google/nano-banana-pro',
@@ -541,7 +542,7 @@ export function isCrunV2Channel(model: string): boolean {
 }
 
 export function isCrunNanoBanana2(model: string): boolean {
-  return model === 'google/nano-banana-2' || model === 'google/nano-banana-2-v2';
+  return model === 'google/nano-banana-2' || model === 'google/nano-banana-2-1' || model === 'google/nano-banana-2-v2';
 }
 
 export function isCrunNanoBananaPro(model: string): boolean {

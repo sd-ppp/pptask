@@ -1,6 +1,7 @@
 import { describe, expect, it, vi } from 'vitest';
 import {
   CRUN_GEMINI_OMNI_MODELS,
+  CRUN_GENERIC_VIDEO_MODELS,
   CRUN_GROK_IMAGINE_VIDEO_MODELS,
   CRUN_GPT56_MODELS,
   CRUN_GPT_IMAGE_MODELS,
@@ -58,6 +59,7 @@ describe('migrated provider model coverage', () => {
     const videos = [
       ...CRUN_SEEDANCE_MODELS, ...CRUN_KLING_MODELS, ...CRUN_MINIMAX_H3_MODELS,
       ...CRUN_PIXVERSE_V6_MODELS, ...CRUN_HAPPYHORSE_11_MODELS, ...CRUN_HAILUO_23_MODELS,
+      ...CRUN_GENERIC_VIDEO_MODELS,
       ...CRUN_GROK_IMAGINE_VIDEO_MODELS, ...CRUN_GEMINI_OMNI_MODELS, ...CRUN_VEO_31_MODELS,
       'video-watermark-remove',
     ];

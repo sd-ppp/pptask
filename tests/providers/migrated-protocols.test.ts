@@ -1,11 +1,14 @@
 import { describe, expect, it, vi } from 'vitest';
 import {
+  buildCrunGenericVideoRequestBody,
   buildCrunGeminiOmniRequestBody,
+  buildCrunGptImage2RequestBody,
   buildCrunGrokImagineVideoRequestBody,
   buildCrunImageExpandRequestBody,
   buildCrunImageUpscaleRequestBody,
   buildCrunKlingRequestBody,
   buildCrunMinimaxH3RequestBody,
+  buildCrunNanoBananaRequestBody,
   buildCrunPixverseV6RequestBody,
   buildCrunSeedanceRequestBody,
   buildCrunSeedreamRequestBody,
@@ -37,6 +40,71 @@ describe('migrated model protocol builders', () => {
       if (model === 'happyhorse-1-1-t2v' || model === 'minimax/hailuo-2-3') continue;
       expect(builder(model, input as any).model).toBe(model);
     }
+  });
+
+  it('maps flat CRUN image handler inputs to upstream request bodies', () => {
+    expect(buildCrunNanoBananaRequestBody('google/nano-banana-2-1', {
+      prompt: 'edit image',
+      '3_image': ['https://a.test/main.png'],
+      '1x_image': ['https://a.test/ref-1.png', 'https://a.test/ref-2.png'],
+      aspectRatio: 'auto',
+      resolution: '2K',
+    })).toEqual({
+      model: 'google/nano-banana-2-1',
+      input: {
+        prompt: 'edit image',
+        img_urls: ['https://a.test/main.png', 'https://a.test/ref-1.png', 'https://a.test/ref-2.png'],
+        aspect_ratio: 'auto',
+        resolution: '2K',
+        output_format: 'png',
+      },
+    });
+
+    expect(buildCrunGptImage2RequestBody('openai/gpt-image-2-5-official', {
+      prompt: 'draw', img_urls: ['https://a.test/i.png'], quality: 'xhigh',
+      aspect_ratio: '9:16', model_variant: 'flare', output_format: 'webp', background: 'transparent',
+    })).toEqual({
+      model: 'openai/gpt-image-2-5-official',
+      input: {
+        prompt: 'draw', img_urls: ['https://a.test/i.png'], quality: 'xhigh',
+        aspect_ratio: '9:16', model_variant: 'flare', n: 1,
+        background: 'transparent', output_format: 'webp',
+      },
+    });
+    expect(buildCrunImageUpscaleRequestBody('image-upscale-pro', {
+      img_urls: ['https://a.test/i.png'], clarity: 'ultra', output_format: 'jpg',
+    })).toEqual({
+      model: 'image-upscale-pro',
+      input: { img_urls: ['https://a.test/i.png'], clarity: 'ultra' },
+    });
+  });
+
+  it('maps flat CRUN video handler inputs to upstream request bodies', () => {
+    expect(buildCrunGenericVideoRequestBody('wan/3-0-i2v', {
+      prompt: 'move', img_urls: ['https://a.test/i.png'], duration: 12, resolution: '1080P',
+      audio: false, aspect_ratio: '9:16', prompt_extend: true,
+    })).toEqual({
+      model: 'wan/3-0-i2v',
+      input: {
+        prompt: 'move', img_urls: ['https://a.test/i.png'], duration: 12, resolution: '1080P',
+      },
+    });
+    expect(buildCrunMinimaxH3RequestBody('minimax/h3-i2v', {
+      prompt: 'move', imgUrls: ['https://a.test/a.png'], duration: 5,
+      resolution: '768P', aspectRatio: 'auto',
+    }).input).toMatchObject({ img_urls: ['https://a.test/a.png'], aspect_ratio: 'auto' });
+    expect(buildCrunKlingRequestBody('kling/v2-6', {
+      prompt: 'move', imgUrls: ['https://a.test/a.png'], duration: 10,
+      mode: 'pro', aspectRatio: '9:16', audio: true,
+      inputCompliance: 'disabled', outputCompliance: 'enabled',
+    }).input).toMatchObject({
+      img_urls: ['https://a.test/a.png'], mode: 'pro', aspect_ratio: '9:16', audio: true,
+      input_compliance: 'disabled', output_compliance: 'enabled',
+    });
+    expect(buildCrunVeo31RequestBody('google/veo3-1-fast-i2v', {
+      prompt: 'move', imgUrls: ['https://a.test/a.png'], duration: 8,
+      resolution: '1080p', aspectRatio: '16:9', translatePrompt: true,
+    }).input).toMatchObject({ resolution: '1080p', aspect_ratio: '16:9', translate_prompt: true });
   });
 });
 
@@ -84,6 +152,7 @@ describe('Novita migrated transport', () => {
         return Response.json({ output: [{ type: 'message', content: [{ type: 'output_text', text: 'ok' }] }] });
       }
       expect(url.endsWith('/images/edits')).toBe(true);
+      expect(init?.method).toBe('POST');
       expect(init?.body).toBeInstanceOf(FormData);
       return Response.json({ data: [{ b64_json: 'AQID', output_format: 'png' }] });
     });
@@ -92,5 +161,23 @@ describe('Novita migrated transport', () => {
     expect(text.content[0]).toMatchObject({ type: 'text', text: 'ok' });
     const image = await provider.imageModel('gpt-image-2').doGenerate!({ prompt: 'edit', n: 1, size: undefined, aspectRatio: undefined, seed: undefined, files: [{ type: 'file', data: 'AQID', mediaType: 'image/png' }], mask: undefined, providerOptions: {} });
     expect(image.images[0]).toEqual(new Uint8Array([1, 2, 3]));
+  });
+
+  it('uses Novita-compatible multipart fields for GPT Image 2.5 edits', async () => {
+    const fetchMock = vi.fn(async (_input: string | URL, init?: RequestInit) => {
+      const form = init?.body as FormData;
+      expect([...form.keys()]).toEqual(['model', 'prompt', 'size', 'quality', 'moderation', 'output_format', 'image[]']);
+      expect(form.get('model')).toBe('gpt-image-2.5-flare-oai');
+      return Response.json({ data: [{ b64_json: 'AQID', output_format: 'png' }] });
+    });
+    const provider = createNovitaProvider({ apiKey: 'key', fetch: fetchMock as typeof fetch });
+    await provider.imageModel('gpt-image-2.5-flare-oai').doGenerate!({
+      prompt: 'edit', n: 1, size: undefined, aspectRatio: undefined, seed: undefined,
+      files: [{ type: 'file', data: 'AQID', mediaType: 'image/png' }], mask: undefined,
+      providerOptions: { novita: { input: {
+        prompt: 'edit', size: '1024x1024', quality: 'high', outputFormat: 'png',
+        background: 'auto', inputFidelity: 'high', n: 1,
+      } } },
+    });
   });
 });

@@ -1,7 +1,7 @@
 import type { FilesV4 } from '@ai-sdk/provider';
 import type { PptaskDescription, PptaskModelType, PptaskProvider } from '../../core/types.ts';
 import { createHttpProvider } from '../shared/provider.ts';
-import { jsonRequest, mergeHeaders, normalizeProviderConfig, request, requestJson, uploadBlob } from '../shared/http.ts';
+import { bytesToBase64, jsonRequest, mergeHeaders, normalizeProviderConfig, request, requestJson, uploadBlob } from '../shared/http.ts';
 import { isRecord, normalizeLanguagePrompt } from '../shared/input.ts';
 import type { CommonProviderOptions, HttpProviderProtocol, HttpStatus } from '../shared/types.ts';
 import {
@@ -75,6 +75,7 @@ export function createNovitaProvider(options: NovitaProviderOptions): PptaskProv
           );
           return requestJsonOrSse(config.fetch, 'novita', {
             url: `${bases.openai}/v1/images/edits`,
+            method: 'POST',
             headers: mergeHeaders(auth, context.headers),
             body: form,
           }, context.signal);
@@ -85,7 +86,11 @@ export function createNovitaProvider(options: NovitaProviderOptions): PptaskProv
           mergeHeaders(auth, context.headers),
         ), context.signal);
       }
-      const payload = normalizeImagePayload(context.input);
+      const payload = await materializeGeminiImages(
+        config.fetch,
+        normalizeImagePayload(context.input),
+        context.signal,
+      );
       return requestJsonOrSse(config.fetch, 'novita', jsonRequest(
         `${config.baseURL}/${options.apiVersion ?? 'v1'}/models/${encodeURIComponent(context.modelId)}:generateContent`,
         buildNovitaRequestBody(payload), mergeHeaders(auth, context.headers),
@@ -140,6 +145,28 @@ function normalizeImagePayload(input: Record<string, unknown>): Record<string, a
   const payload: Record<string, any> = { ...input };
   if (payload.images !== undefined && payload.urls === undefined) payload.urls = payload.images;
   return payload;
+}
+
+async function materializeGeminiImages(
+  fetchImpl: typeof globalThis.fetch,
+  payload: Record<string, any>,
+  signal?: AbortSignal,
+): Promise<Record<string, any>> {
+  const values = asArray(payload.urls ?? payload.images ?? payload.image);
+  if (!values.some(value => typeof value === 'string' && /^https?:\/\//i.test(value.trim()))) {
+    return payload;
+  }
+  const urls = await Promise.all(values.map(async (value, index) => {
+    if (typeof value !== 'string' || !/^https?:\/\//i.test(value.trim())) return value;
+    const response = await request(fetchImpl, 'novita reference image', { url: value.trim() }, signal);
+    const mediaType = response.headers.get('content-type')?.split(';')[0]?.trim() || 'image/png';
+    if (!mediaType.startsWith('image/')) {
+      throw new Error(`novita reference image[${index}] returned unsupported media type: ${mediaType}`);
+    }
+    const data = bytesToBase64(new Uint8Array(await response.arrayBuffer()));
+    return `data:${mediaType};base64,${data}`;
+  }));
+  return { ...payload, urls };
 }
 
 function normalizeVideoPayload(input: Record<string, unknown>): Record<string, any> {

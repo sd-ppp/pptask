@@ -160,3 +160,10 @@ Every provider uses the same variable pattern:
 `PPTASK_<PROVIDER>_API_KEY`, `PPTASK_<PROVIDER>_MODEL_ID`, optional
 `PPTASK_<PROVIDER>_MODEL_TYPE`, `PPTASK_<PROVIDER>_BASE_URL`,
 `PPTASK_<PROVIDER>_OPERATION_PATH`, and JSON `PPTASK_<PROVIDER>_INPUT`.
+
+The process-wide jobs registry holds weak references for discovery. A provider
+created for one request and its default repository can be garbage-collected
+after the application releases the provider and job handles. Live providers
+remain discoverable via `listPptaskJobs`; subscriptions still require their
+returned unsubscribe callback. Application-owned repositories retain records
+until the application deletes them or releases the repository.

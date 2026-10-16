@@ -9,6 +9,7 @@ import type {
 import {
   buildCrunHailuo23FormSchema,
   buildCrunGpt56FormSchema,
+  buildCrunGenericVideoFormSchema,
   buildCrunImageUpscaleFormSchema,
   buildCrunWatermarkRemoveFormSchema,
   buildCrunImageExpandFormSchema,
@@ -79,6 +80,7 @@ export async function describeCrun(
   const isGptImage2Stable = isCrunGptImage2Stable(model);
   const isGptImage2Premium = isCrunGptImage2Premium(model);
   const isGpt56 = isCrunGpt56Model(model);
+  const isGenericVideo = isCrunGenericVideoModel(model);
   const isSeedream = isCrunSeedreamModel(model);
   const isSeedance = isCrunSeedanceModel(model);
   const isKling = isCrunKlingModel(model);
@@ -100,7 +102,12 @@ export async function describeCrun(
   const hailuo23Profile = isHailuo23 ? getCrunHailuo23Profile(model) : undefined;
   const imageUpscaleProfile = isImageUpscale ? getCrunImageUpscaleProfile(model) : undefined;
   const veo31Profile = isVeo31 ? getCrunVeo31Profile(model) : undefined;
-  const formValues = isImageExpand ? {
+  const formValues = isGenericVideo ? {
+    prompt: '', imgUrls: [],
+    duration: model === 'minimax/hailuo-02' ? 6 : 5,
+    resolution: model === 'minimax/hailuo-02' ? '512P' : '480P',
+    callbackUrl: '',
+  } : isImageExpand ? {
     imgUrls: [], expandMode: 'sides', maskUrl: [],
     top: 0.25, bottom: 0.25, left: 0.25, right: 0.25,
     prompt: '', outputFormat: 'png', callbackUrl: '',
@@ -185,6 +192,8 @@ export async function describeCrun(
       quality: 'medium', background: 'auto', outputFormat: 'png', moderation: 'low',
     } : {}),
     ...(isGptImage2Premium ? { quality: 'high', resolution: '2K' } : {}),
+    ...(model === 'openai/gpt-image-2-5' ? { resolution: '1K' } : {}),
+    ...(model === 'openai/gpt-image-2-5-official' ? { quality: 'low' } : {}),
     ...(!isGptImage2 && (isCrunNanoBanana2(model) || isCrunNanoBananaPro(model))
       ? { resolution: '2K' } : {}),
     ...(!isGptImage2 && !isV2 && !isLite ? { outputFormat: 'png' } : {}),
@@ -237,7 +246,9 @@ export async function describeCrun(
       supportsGoogleSearch: !isGptImage2 && model === 'google/nano-banana-2',
       ...(isImageExpand ? { supportedExpandModes: ['sides', 'canvas'] } : {}),
     },
-    formSchema: isImageExpand
+    formSchema: isGenericVideo
+      ? buildCrunGenericVideoFormSchema(model)
+      : isImageExpand
       ? buildCrunImageExpandFormSchema()
       : isWatermarkRemove
       ? buildCrunWatermarkRemoveFormSchema(model)
@@ -272,6 +283,11 @@ export async function describeCrun(
 }
 
 function buildCrunKlingFormValues(model: string): Record<string, any> {
+  if (model === 'kling/v2-5-turbo-pro') {
+    return {
+      prompt: '', imgUrls: [], duration: 5, mode: 'pro', callbackUrl: '',
+    };
+  }
   if (model === 'kling/v3') {
     return {
       prompt: '', mode: 'pro', multiShots: false, shotType: 'intelligence',
@@ -329,7 +345,10 @@ export function buildCrunGptImage2RequestBody(
   }
   if (imgUrls.length) input.img_urls = imgUrls;
 
-  const aspectRatio = String(payload.aspect_ratio ?? payload.aspectRatio ?? '1:1').trim();
+  const aspectRatio = String(
+    payload.aspect_ratio ?? payload.aspectRatio
+      ?? (model === 'openai/gpt-image-2-5-official' ? 'auto' : '1:1')
+  ).trim();
   if (aspectRatio) input.aspect_ratio = aspectRatio;
 
   if (isCrunGptImage2Stable(model)) {
@@ -360,7 +379,26 @@ export function buildCrunGptImage2RequestBody(
       input.quality = String(payload.quality).toLowerCase();
     }
     if (payload.resolution !== undefined && payload.resolution !== '') {
-      input.resolution = String(payload.resolution).toUpperCase();
+      input.resolution = String(payload.resolution).toLowerCase();
+    }
+    if (model === 'openai/gpt-image-2-5') {
+      input.model_variant = String(payload.model_variant ?? payload.modelVariant ?? 'flare').trim().toLowerCase();
+      if (!['flare', 'sunburst'].includes(input.model_variant)) {
+        throw new Error(`CRUN ${model} model_variant must be one of: flare, sunburst`);
+      }
+      input.n = normalizeCrunInteger(payload.n ?? 1, 1, 4, model, 'n');
+    } else {
+      input.model_variant = String(payload.model_variant ?? payload.modelVariant ?? 'flare').trim().toLowerCase();
+      if (!['flare', 'sunburst'].includes(input.model_variant)) {
+        throw new Error(`CRUN ${model} model_variant must be one of: flare, sunburst`);
+      }
+      input.n = normalizeCrunInteger(payload.n ?? 1, 1, 10, model, 'n');
+      input.quality = normalizeCrunEnum(payload.quality ?? 'auto', ['low', 'medium', 'high', 'xhigh', 'max', 'auto'], model, 'quality');
+      input.background = normalizeCrunEnum(payload.background ?? 'auto', ['auto', 'transparent', 'opaque'], model, 'background');
+      input.output_format = normalizeCrunEnum(payload.output_format ?? payload.outputFormat ?? 'png', ['webp', 'jpeg', 'png'], model, 'output_format');
+      if (payload.output_compression !== undefined && payload.output_compression !== null && payload.output_compression !== '') {
+        input.output_compression = normalizeCrunInteger(payload.output_compression, 0, 100, model, 'output_compression');
+      }
     }
   }
 
@@ -381,9 +419,20 @@ export function buildCrunGenericVideoRequestBody(
   const input: Record<string, any> = {
     prompt,
     duration: Number(payload.duration ?? (model === 'minimax/hailuo-02' ? 6 : 5)),
-    resolution: payload.resolution ?? (model === 'minimax/hailuo-02' ? '512P' : '480P'),
+    resolution: model === 'minimax/hailuo-02'
+      ? String(payload.resolution ?? '768P').toUpperCase()
+      : (payload.resolution ?? '480P'),
   };
-  if (image !== undefined && image !== '') input.image_url = Array.isArray(image) ? image[0] : image;
+  if ((model === 'minimax/hailuo-02' || model === 'wan/3-0-i2v') && image !== undefined && image !== '') {
+    input.img_urls = Array.isArray(image) ? image : [image];
+    delete input.image_url;
+  }
+  if (model === 'minimax/hailuo-02' && ![6, 10].includes(input.duration)) {
+    throw new Error(`CRUN ${model} duration must be one of: 6, 10`);
+  }
+  if (model !== 'minimax/hailuo-02' && model !== 'wan/3-0-i2v' && image !== undefined && image !== '') {
+    input.image_url = Array.isArray(image) ? image[0] : image;
+  }
   const body: Record<string, any> = { model, input };
   addCrunCallbackUrl(body, model, payload);
   return body;
@@ -1008,7 +1057,6 @@ export function buildCrunMinimaxH3RequestBody(
     }
   }
   input.aspect_ratio = aspectRatio;
-
   const body: Record<string, any> = { model, input };
   addCrunCallbackUrl(body, model, payload);
   return body;
@@ -1038,7 +1086,7 @@ export function buildCrunSeedreamRequestBody(
     payload.aspect_ratio ?? payload.aspectRatio ?? '1:1'
   ).trim().toLowerCase();
   const allowedRatios = [
-    'match_input_image', '1:1', '4:3', '3:4', '16:9', '9:16', '3:2', '2:3', '21:9',
+    '1:1', '4:3', '3:4', '16:9', '9:16', '3:2', '2:3', '21:9',
   ];
   if (!allowedRatios.includes(aspectRatio)) {
     throw new Error(`CRUN ${model} aspect_ratio must be one of: ${allowedRatios.join(', ')}`);
@@ -1239,10 +1287,10 @@ export function buildCrunKlingRequestBody(
     if (![5, 10].includes(duration)) {
       throw new Error(`CRUN ${model} duration must be one of: 5, 10`);
     }
-    input.mode = mode;
     input.prompt = prompt;
     if (imageUrls.length) input.img_urls = imageUrls;
     input.duration = duration;
+    input.mode = mode;
     input.aspect_ratio = normalizeCrunEnum(
       payload.aspect_ratio ?? payload.aspectRatio ?? '16:9',
       ['16:9', '9:16', '1:1'], model, 'aspect_ratio'
@@ -1352,8 +1400,15 @@ export function buildCrunNanoBananaRequestBody(
   if (!prompt) throw new Error(`CRUN ${model} requires a non-empty prompt`);
 
   const input: Record<string, any> = { prompt };
+  const handlerImages = model === 'google/nano-banana-2-1'
+    && ('3_image' in payload || '1x_image' in payload)
+    ? [
+        ...normalizeCrunImageUrls(payload['3_image']),
+        ...normalizeCrunImageUrls(payload['1x_image']),
+      ]
+    : undefined;
   const imgUrls = normalizeCrunImageUrls(
-    payload.img_urls ?? payload.imgUrls ?? payload.imageUrls ?? payload.urls
+    handlerImages ?? payload.img_urls ?? payload.imgUrls ?? payload.imageUrls ?? payload.urls
   );
   if (imgUrls.length) input.img_urls = imgUrls;
 

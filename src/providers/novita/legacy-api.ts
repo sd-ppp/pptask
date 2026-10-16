@@ -20,6 +20,7 @@ import {
   ensureNovitaConfig,
   isNovitaAsyncModel,
   isNovitaGpt56Model,
+  isNovitaGptImage25Model,
   isNovitaGptImageModel,
   isNovitaKlingV3Model,
   isNovitaSeedanceOverseaModel,
@@ -138,11 +139,13 @@ export async function describeNovita(
         requestModes: { generation: 'application/json', editing: 'multipart/form-data' },
       },
       formSchema: buildNovitaFormSchema(model),
-      formValues: {
-        prompt: '', urls: [], mask: [], n: 1, size: '1024x1024', quality: 'high',
-        outputFormat: 'png', outputCompression: 100, background: 'auto', moderation: 'low',
-        inputFidelity: 'high',
-      },
+      formValues: isNovitaGptImage25Model(model)
+        ? { urls: [], prompt: '', size: '1024x1024', quality: 'low', moderation: 'low', output_format: 'png' }
+        : {
+          prompt: '', urls: [], mask: [], n: 1, size: '1024x1024', quality: 'auto',
+          outputFormat: 'png', outputCompression: 100, background: 'auto', moderation: 'auto',
+          inputFidelity: 'low',
+        },
       cancelable: false,
     };
   }
@@ -1614,7 +1617,7 @@ export function buildNovitaGptImageGenerationBody(
   );
   const body = buildGptImageCommonBody(model, payload, prompt, outputFormat);
   body.moderation = normalizeGptImageEnum(
-    payload.moderation ?? 'low', ['low', 'auto'] as const, 'moderation'
+    payload.moderation ?? 'auto', ['low', 'auto'] as const, 'moderation'
   );
   return body;
 }
@@ -1640,7 +1643,23 @@ export async function buildNovitaGptImageEditFormData(
     ['png', 'jpeg', 'webp'] as const,
     'output_format'
   );
-  const values = buildGptImageCommonBody(model, payload, prompt, outputFormat);
+  // Novita's 2.5 edit gateway rejects optional OpenAI image fields.
+  const values = isNovitaGptImage25Model(model)
+    ? {
+      model,
+      prompt,
+      size: normalizeGptImageSize(payload.size ?? '1024x1024'),
+      quality: normalizeGptImageEnum(
+        payload.quality ?? 'high', ['low', 'medium', 'high', 'xhigh', 'max', 'auto'] as const, 'quality'
+      ),
+      moderation: normalizeGptImageEnum(
+        payload.moderation ?? 'low', ['low', 'auto'] as const, 'moderation'
+      ),
+      output_format: normalizeGptImageEnum(
+        payload.output_format ?? payload.outputFormat ?? 'png', ['png', 'jpeg', 'webp'] as const, 'output_format'
+      ),
+    }
+    : buildGptImageCommonBody(model, payload, prompt, outputFormat);
 
   const form = new FormData();
   for (const [key, value] of Object.entries(values)) {
@@ -1651,7 +1670,7 @@ export async function buildNovitaGptImageEditFormData(
     form.append('image[]', file.blob, file.name);
   }
   const mask = normalizedMask ?? firstValue(payload.mask);
-  if (mask != null) {
+  if (mask != null && !isNovitaGptImage25Model(model)) {
     const file = await normalizeGptImageFile(mask, 0, 'mask', fetchImpl);
     if (file.blob.type !== 'image/png') {
       throw new Error('novita GPT Image 2 mask must be a PNG image');
@@ -1659,7 +1678,7 @@ export async function buildNovitaGptImageEditFormData(
     form.append('mask', file.blob, file.name);
   }
   const inputFidelity = payload.input_fidelity ?? payload.inputFidelity;
-  if (inputFidelity != null && inputFidelity !== '') {
+  if (!isNovitaGptImage25Model(model) && inputFidelity != null && inputFidelity !== '') {
     form.append('input_fidelity', normalizeGptImageEnum(
       inputFidelity, ['high', 'low'] as const, 'input_fidelity'
     ));
@@ -1675,9 +1694,9 @@ function buildGptImageCommonBody(
 ): Record<string, any> {
   const size = normalizeGptImageSize(payload.size ?? '1024x1024');
   const quality = normalizeGptImageEnum(
-    payload.quality ?? 'high', ['low', 'medium', 'high', 'auto'] as const, 'quality'
+    payload.quality ?? 'auto', ['low', 'medium', 'high', 'auto'] as const, 'quality'
   );
-  const n = normalizeInteger(payload.n ?? 1, 1, 10, 'n');
+  const n = normalizeInteger(payload.n ?? 1, 1, 4, 'n');
   const background = normalizeGptImageEnum(
     payload.background ?? 'auto', ['auto', 'opaque', 'transparent'] as const, 'background'
   );

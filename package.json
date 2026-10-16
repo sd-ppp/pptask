@@ -1,6 +1,6 @@
 {
   "name": "@sdppp/pptask",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "private": true,
   "type": "module",
   "main": "./dist/index.js",
@@ -10,6 +10,10 @@
     ".": {
       "types": "./dist/types/index.d.ts",
       "import": "./dist/index.js"
+    },
+    "./executors/inline": {
+      "types": "./dist/types/compat/inline.d.ts",
+      "import": "./dist/executors/inline.js"
     },
     "./providers/replicate": {
       "types": "./dist/types/providers/replicate/index.d.ts",
@@ -76,11 +80,9 @@
     "test:integration": "PPTASK_INTEGRATION=1 vitest run tests/integration/providers.integration.test.ts",
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
-  "peerDependencies": {
-    "ai": "^7.0.0"
-  },
   "dependencies": {
-    "@ai-sdk/provider": "^4.0.14"
+    "@ai-sdk/provider": "^4.0.14",
+    "ai": "^7.0.99"
   },
   "devDependencies": {
     "@types/node": "^24.3.0",

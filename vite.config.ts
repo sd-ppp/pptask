@@ -6,6 +6,7 @@ export default defineConfig({
     lib: {
       entry: {
         index: resolve(import.meta.dirname, 'src/index.ts'),
+        'executors/inline': resolve(import.meta.dirname, 'src/compat/inline.ts'),
         'providers/replicate': resolve(
           import.meta.dirname,
           'src/providers/replicate/index.ts',

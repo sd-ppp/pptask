@@ -74,7 +74,7 @@ export function buildCrunSeedreamFormSchema(): FormilySchema {
         type: 'string', title: 'Aspect Ratio', 'x-decorator': 'FormItem',
         'x-component': 'Select',
         enum: [
-          'match_input_image', '1:1', '4:3', '3:4', '16:9', '9:16', '3:2', '2:3', '21:9',
+          '1:1', '4:3', '3:4', '16:9', '9:16', '3:2', '2:3', '21:9',
         ].map(value => ({ label: value, value })),
         default: '1:1',
       },
@@ -93,6 +93,41 @@ export function buildCrunSeedreamFormSchema(): FormilySchema {
         type: 'string', title: 'Callback URL (optional)', 'x-decorator': 'FormItem',
         'x-component': 'Input',
         'x-component-props': { placeholder: 'https://your-domain.com/callback' },
+      },
+    },
+  };
+}
+
+export function buildCrunGenericVideoFormSchema(model: string): FormilySchema {
+  const hailuo = model === 'minimax/hailuo-02';
+  const resolutions = hailuo ? ['512P', '768P'] : ['480P', '720P', '1080P'];
+  return {
+    type: 'object',
+    properties: {
+      prompt: {
+        type: 'string', title: 'Prompt', required: true,
+        'x-decorator': 'FormItem', 'x-component': 'Input.TextArea',
+        'x-component-props': { rows: 6, placeholder: 'Describe the scene, motion, and camera...' },
+      },
+      imgUrls: {
+        ...imageUploadField('Start Image', 'Upload one starting image for image-to-video.'),
+        'x-component-props': {
+          accept: 'image/*', multiple: false, maxCount: 1, listType: 'picture-card',
+        },
+      },
+      duration: {
+        type: 'number', title: 'Duration (seconds)', 'x-decorator': 'FormItem',
+        'x-component': 'NumberPicker',
+        'x-component-props': { min: 1, max: 15, step: 1 }, default: hailuo ? 6 : 5,
+      },
+      resolution: {
+        type: 'string', title: 'Resolution', 'x-decorator': 'FormItem',
+        'x-component': 'Select',
+        enum: resolutions.map(value => ({ label: value, value })), default: resolutions[0],
+      },
+      callbackUrl: {
+        type: 'string', title: 'Callback URL (optional)', 'x-decorator': 'FormItem',
+        'x-component': 'Input', 'x-component-props': { placeholder: 'https://your-domain.com/callback' },
       },
     },
   };
@@ -831,6 +866,26 @@ export function buildCrunKlingFormSchema(model: string): FormilySchema {
     default: 'enabled',
   });
 
+  if (model === 'kling/v2-5-turbo-pro') {
+    return {
+      type: 'object',
+      properties: {
+        prompt: { ...prompt, required: true },
+        imgUrls: mediaUploadField(
+          'Start Image (optional)', 'image/*',
+          'Leave empty for text-to-video, or upload one start image for image-to-video.', false
+        ),
+        duration: {
+          type: 'number', title: 'Duration', 'x-decorator': 'FormItem',
+          'x-component': 'Select',
+          enum: [5, 10].map(value => ({ label: `${value}s`, value })), default: 5,
+        },
+        mode: { ...mode, default: 'pro' },
+        callbackUrl,
+      },
+    };
+  }
+
   if (model === 'kling/v2-6-motion-control') {
     return {
       type: 'object',
@@ -1120,6 +1175,19 @@ export function buildCrunGptImage2FormSchema(
     properties.resolution = {
       type: 'string', title: 'Resolution', 'x-decorator': 'FormItem', 'x-component': 'Select',
       enum: ['1K', '2K', '4K'].map(value => ({ label: value, value })), default: '2K',
+    };
+  }
+  if (model === 'openai/gpt-image-2-5') {
+    properties.resolution = {
+      type: 'string', title: 'Resolution', 'x-decorator': 'FormItem', 'x-component': 'Select',
+      enum: ['1K', '2K', '4K'].map(value => ({ label: value, value })), default: '1K',
+    };
+  }
+  if (model === 'openai/gpt-image-2-5-official') {
+    properties.quality = {
+      type: 'string', title: 'Quality', 'x-decorator': 'FormItem', 'x-component': 'Select',
+      enum: ['low', 'medium', 'high', 'xhigh', 'max'].map(value => ({ label: value, value })),
+      default: 'low',
     };
   }
   properties.callbackUrl = {
