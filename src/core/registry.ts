@@ -1,18 +1,44 @@
 import type { PptaskJobListener, PptaskJobs } from './types.ts';
 
-const sources = new Set<PptaskJobs>();
+// Discovery must not own a provider's lifetime: handlers may create a provider
+// per request, whose jobs API closes over credentials and the job repository.
+const sources = new Set<WeakRef<PptaskJobs>>();
+const references = new WeakMap<PptaskJobs, WeakRef<PptaskJobs>>();
+const collected = new FinalizationRegistry<WeakRef<PptaskJobs>>(reference => {
+  sources.delete(reference);
+});
 const listeners = new Set<(jobs: PptaskJobs) => void>();
 
 /** Register a jobs API so integrations can discover providers in this process. */
 export function registerPptaskJobs(jobs: PptaskJobs): () => void {
-  sources.add(jobs);
+  let reference = references.get(jobs);
+  if (!reference) {
+    reference = new WeakRef(jobs);
+    references.set(jobs, reference);
+  }
+  if (!sources.has(reference)) {
+    sources.add(reference);
+    collected.register(jobs, reference, reference);
+  }
   for (const listener of listeners) listener(jobs);
-  return () => sources.delete(jobs);
+  return () => {
+    sources.delete(reference);
+    collected.unregister(reference);
+  };
 }
 
-/** Enumerate the jobs APIs created in this process. */
+/** Enumerate live jobs APIs without retaining providers after their owners release them. */
 export function listPptaskJobs(): PptaskJobs[] {
-  return [...sources];
+  const jobs: PptaskJobs[] = [];
+  for (const reference of sources) {
+    const source = reference.deref();
+    if (source) jobs.push(source);
+    else {
+      sources.delete(reference);
+      collected.unregister(reference);
+    }
+  }
+  return jobs;
 }
 
 /** Observe jobs APIs created after the subscriber is attached. */

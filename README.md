@@ -183,3 +183,9 @@ SIXI_MEDIA_COS_PUBLIC_BASE_URL. Credentials must never be passed to a client.
 The bucket must support the existing public-read object policy and upstream
 services must be able to fetch the returned HTTPS URL. This provider implements
 file upload only; it does not generate images or language responses.
+The process-wide jobs registry holds weak references for discovery. A provider
+created for one request and its default repository can be garbage-collected
+after the application releases the provider and job handles. Live providers
+remain discoverable via `listPptaskJobs`; subscriptions still require their
+returned unsubscribe callback. Application-owned repositories retain records
+until the application deletes them or releases the repository.

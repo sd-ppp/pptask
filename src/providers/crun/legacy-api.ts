@@ -10,6 +10,7 @@ import type {
 import {
   buildCrunHailuo23FormSchema,
   buildCrunGpt56FormSchema,
+  buildCrunGenericVideoFormSchema,
   buildCrunImageUpscaleFormSchema,
   buildCrunWatermarkRemoveFormSchema,
   buildCrunImageExpandFormSchema,
@@ -80,6 +81,7 @@ export async function describeCrun(
   const isGptImage2Stable = isCrunGptImage2Stable(model);
   const isGptImage2Premium = isCrunGptImage2Premium(model);
   const isGpt56 = isCrunGpt56Model(model);
+  const isGenericVideo = isCrunGenericVideoModel(model);
   const isSeedream = isCrunSeedreamModel(model);
   const isSeedance = isCrunSeedanceModel(model);
   const isKling = isCrunKlingModel(model);
@@ -101,7 +103,12 @@ export async function describeCrun(
   const hailuo23Profile = isHailuo23 ? getCrunHailuo23Profile(model) : undefined;
   const imageUpscaleProfile = isImageUpscale ? getCrunImageUpscaleProfile(model) : undefined;
   const veo31Profile = isVeo31 ? getCrunVeo31Profile(model) : undefined;
-  const formValues = isImageExpand ? {
+  const formValues = isGenericVideo ? {
+    prompt: '', imgUrls: [],
+    duration: model === 'minimax/hailuo-02' ? 6 : 5,
+    resolution: model === 'minimax/hailuo-02' ? '512P' : '480P',
+    callbackUrl: '',
+  } : isImageExpand ? {
     imgUrls: [], expandMode: 'sides', maskUrl: [],
     top: 0.25, bottom: 0.25, left: 0.25, right: 0.25,
     prompt: '', outputFormat: 'png', callbackUrl: '',
@@ -186,6 +193,8 @@ export async function describeCrun(
       quality: 'medium', background: 'auto', outputFormat: 'png', moderation: 'low',
     } : {}),
     ...(isGptImage2Premium ? { quality: 'high', resolution: '2K' } : {}),
+    ...(model === 'openai/gpt-image-2-5' ? { resolution: '1K' } : {}),
+    ...(model === 'openai/gpt-image-2-5-official' ? { quality: 'low' } : {}),
     ...(!isGptImage2 && (isCrunNanoBanana2(model) || isCrunNanoBananaPro(model))
       ? { resolution: '2K' } : {}),
     ...(!isGptImage2 && !isV2 && !isLite ? { outputFormat: 'png' } : {}),
@@ -238,7 +247,9 @@ export async function describeCrun(
       supportsGoogleSearch: !isGptImage2 && model === 'google/nano-banana-2',
       ...(isImageExpand ? { supportedExpandModes: ['sides', 'canvas'] } : {}),
     },
-    formSchema: isImageExpand
+    formSchema: isGenericVideo
+      ? buildCrunGenericVideoFormSchema(model)
+      : isImageExpand
       ? buildCrunImageExpandFormSchema()
       : isWatermarkRemove
       ? buildCrunWatermarkRemoveFormSchema(model)
@@ -273,6 +284,11 @@ export async function describeCrun(
 }
 
 function buildCrunKlingFormValues(model: string): Record<string, any> {
+  if (model === 'kling/v2-5-turbo-pro') {
+    return {
+      prompt: '', imgUrls: [], duration: 5, mode: 'pro', callbackUrl: '',
+    };
+  }
   if (model === 'kling/v3') {
     return {
       prompt: '', mode: 'pro', multiShots: false, shotType: 'intelligence',

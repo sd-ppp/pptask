@@ -25,6 +25,7 @@ export {
   NOVITA_VEO31_MODELS,
   NOVITA_SUPPORTED_MODELS,
   isNovitaGptImageModel,
+  isNovitaGptImage25Model,
   isNovitaGpt56Model,
   isNovitaSeedanceOverseaModel,
   isNovitaKlingV3Model,

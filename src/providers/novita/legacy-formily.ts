@@ -1,5 +1,6 @@
 import type { FormilySchema } from './legacy-types.ts';
 import {
+  isNovitaGptImage25Model,
   isNovitaKlingV3Model,
   isNovitaSeedanceOverseaModel,
   isNovitaVeo31Model,
@@ -17,6 +18,24 @@ export function buildNovitaFormSchema(model?: string): FormilySchema {
   }
   if (model && ['pa/gpt-5.6-terra', 'pa/gpt-5.6-luna', 'pa/gpt-5.6-sol'].includes(model)) {
     return buildNovitaGpt56FormSchema();
+  }
+  if (model && isNovitaGptImage25Model(model)) {
+    const fields = buildNovitaGptImageFormSchema().properties;
+    return {
+      type: 'object',
+      properties: {
+        urls: fields.urls,
+        prompt: fields.prompt,
+        size: fields.size,
+        quality: {
+          ...fields.quality,
+          enum: ['low', 'medium', 'high', 'xhigh', 'max', 'auto'].map(value => ({ label: value, value })),
+          default: 'low',
+        },
+        moderation: { ...fields.moderation, default: 'low' },
+        output_format: fields.outputFormat,
+      },
+    };
   }
   if (model === 'gpt-image-2' || model === 'gpt-image-2-oai') {
     return buildNovitaGptImageFormSchema();

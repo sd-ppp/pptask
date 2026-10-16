@@ -16,3 +16,7 @@ vitest.config.*.timestamp-*.mjs
 .env
 .env.*
 !.env.example
+
+# Local provider credentials and generated integration-test output
+test.env
+core/tests/output/
