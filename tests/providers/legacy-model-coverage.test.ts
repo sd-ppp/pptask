@@ -76,7 +76,7 @@ describe('migrated provider model coverage', () => {
       ...NOVITA_SEEDANCE_OVERSEA_MODELS.map(model => assertDescribed(provider, model, 'video')),
       ...NOVITA_KLING_V3_MODELS.map(model => assertDescribed(provider, model, 'video')),
       ...NOVITA_VEO31_MODELS.map(model => assertDescribed(provider, model, 'video')),
-      ...['gemini-3.1-flash-lite-image', 'gemini-3.1-flash-image', 'gemini-3-pro-image', 'gemini-2.5-flash-image',
+      ...['gemini-3.1-flash-lite-image', 'gemini-3.1-flash-image', 'gemini-nano-banana-2.1', 'gemini-3-pro-image', 'gemini-2.5-flash-image',
         'gemini-3.1-flash-lite-image-as', 'gemini-3.1-flash-image-as', 'gemini-3-pro-image-as', 'gemini-2.5-flash-image-as']
         .map(model => assertDescribed(provider, model, 'image')),
     ]);

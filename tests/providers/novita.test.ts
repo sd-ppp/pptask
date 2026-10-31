@@ -52,6 +52,22 @@ describe('createNovitaProvider protocols', () => {
     });
   });
 
+  it('supports Nano Banana 2.1 with the Gemini generateContent endpoint', async () => {
+    let requestUrl = '';
+    const fetchMock = vi.fn(async (input: string | URL | Request) => {
+      requestUrl = String(input);
+      return Response.json({ candidates: [{ content: { parts: [{ inline_data: { mime_type: 'image/png', data: 'BA==' } }] } }] });
+    });
+    const provider = createNovitaProvider({ apiKey: 'key', fetch: fetchMock as typeof fetch });
+    const result = await provider.imageModel('gemini-nano-banana-2.1').doGenerate!({
+      prompt: 'test image', n: 1, size: undefined, aspectRatio: undefined, seed: undefined,
+      files: undefined, mask: undefined, providerOptions: {},
+    });
+
+    expect(requestUrl).toBe('https://api.novita.ai/gemini/v1/models/gemini-nano-banana-2.1:generateContent');
+    expect(result.images[0]).toEqual(new Uint8Array([4]));
+  });
+
   it('cancels a Seedance task through its persisted URL', async () => {
     const fetchMock = vi.fn(async (_input: string | URL | Request, init?: RequestInit) => init?.method === 'DELETE' ? Response.json({}) : Response.json({ data: { id: 'novita-1' } }));
     const provider = createNovitaProvider({ apiKey: 'key', fetch: fetchMock as typeof fetch });
