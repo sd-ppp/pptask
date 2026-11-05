@@ -118,6 +118,7 @@ export const CRUN_VEO_31_MODELS = [
 ] as const;
 
 export const CRUN_SUPPORTED_MODELS = [
+  'tripo-3d-3.1',
   ...CRUN_NANO_BANANA_MODELS,
   ...CRUN_GPT_IMAGE_MODELS,
   ...CRUN_SEEDREAM_MODELS,

@@ -160,3 +160,26 @@ Every provider uses the same variable pattern:
 `PPTASK_<PROVIDER>_API_KEY`, `PPTASK_<PROVIDER>_MODEL_ID`, optional
 `PPTASK_<PROVIDER>_MODEL_TYPE`, `PPTASK_<PROVIDER>_BASE_URL`,
 `PPTASK_<PROVIDER>_OPERATION_PATH`, and JSON `PPTASK_<PROVIDER>_INPUT`.
+
+## COS upload provider (server only)
+
+```ts
+import { createCosProvider, cosMediaStorageConfigFromEnv } from '@sdppp/pptask/providers/cos';
+
+// Resolve uploadProvider === 'cos' to this instance in your host upload router.
+const cos = createCosProvider(cosMediaStorageConfigFromEnv());
+const result = await cos.upload({
+  data: { type: 'data', data: new Uint8Array([1, 2, 3]) },
+  mediaType: 'image/png',
+  filename: 'reference.png',
+});
+const url = result.providerReference?.cos;
+```
+
+Configure SIXI_MEDIA_COS_SECRET_ID, SIXI_MEDIA_COS_SECRET_KEY,
+SIXI_MEDIA_COS_BUCKET and SIXI_MEDIA_COS_REGION on the server. Optional variables:
+SIXI_MEDIA_COS_SESSION_TOKEN, SIXI_MEDIA_COS_KEY_PREFIX,
+SIXI_MEDIA_COS_PUBLIC_BASE_URL. Credentials must never be passed to a client.
+The bucket must support the existing public-read object policy and upstream
+services must be able to fetch the returned HTTPS URL. This provider implements
+file upload only; it does not generate images or language responses.

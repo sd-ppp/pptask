@@ -67,6 +67,7 @@ export type HttpProviderProtocol = {
   status(context: HttpExecutionContext & { operation: JSONValue }): Promise<HttpStatus>;
   cancel?(context: HttpExecutionContext & { operation: JSONValue }): Promise<void>;
   describe?(modelId: string, modelType: PptaskModelType): Promise<PptaskDescription>;
+  imageResult?: (modelId: string, output: unknown, metadata?: Record<string, JSONValue>) => import('@ai-sdk/provider').ImageModelV4Result | undefined;
   files?: FilesV4;
 };
 

@@ -1,3 +1,4 @@
+import { TRIPO_MODEL, tripoResult } from './tripo.ts';
 import type { FilesV4 } from '@ai-sdk/provider';
 import type { PptaskDescription, PptaskModelType, PptaskProvider } from '../../core/types.ts';
 import { createHttpProvider } from '../shared/provider.ts';
@@ -37,6 +38,7 @@ export function createCrunProvider(options: CrunProviderOptions): PptaskProvider
   const protocol: HttpProviderProtocol = {
     providerId: 'crun', fetch: config.fetch,
     modelTypes: undefined,
+    imageResult: (modelId, output, metadata) => modelId === TRIPO_MODEL ? tripoResult(output, modelId, metadata) : undefined,
     validateModel(modelId, modelType) {
       if (!(CRUN_SUPPORTED_MODELS as readonly string[]).includes(modelId)) {
         throw new Error(`Unsupported CRUN model: ${modelId}. Supported models: ${CRUN_SUPPORTED_MODELS.join(', ')}`);
@@ -80,7 +82,7 @@ export function createCrunProvider(options: CrunProviderOptions): PptaskProvider
 }
 
 function isImageModel(model: string): boolean {
-  return isCrunGptImage2(model) || isCrunSeedreamModel(model) || isCrunImageUpscaleModel(model) ||
+  return model === TRIPO_MODEL || isCrunGptImage2(model) || isCrunSeedreamModel(model) || isCrunImageUpscaleModel(model) ||
     isCrunWatermarkRemoveModel(model) && model === 'image-watermark-remove' || isCrunImageExpandModel(model) ||
     model.startsWith('google/nano-banana');
 }
@@ -129,6 +131,7 @@ function mapStatus(data: Record<string, any>, taskId: string): HttpStatus {
 }
 
 async function describeModel(modelId: string, modelType: PptaskModelType): Promise<PptaskDescription> {
+  if (modelId === TRIPO_MODEL) return { providerId: 'crun', modelId, modelType, title: 'Tripo 3D 3.1', inputSchema: { type: 'object', properties: { prompt: { type: 'string', maxLength: 1024 }, image_urls: { type: 'array', maxItems: 1, items: { type: 'string' } }, multiview_image_urls: { type: 'object', minProperties: 2, maxProperties: 4 } } }, defaultInput: {}, capabilities: { outputType: '3d', upload: true, cancel: false } };
   const legacy = await describeCrun(new URL(`crun:///${encodeURIComponent(modelId)}`));
   return {
     providerId: 'crun', modelId, modelType,

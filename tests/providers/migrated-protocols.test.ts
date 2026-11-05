@@ -8,6 +8,7 @@ import {
   buildCrunImageUpscaleRequestBody,
   buildCrunKlingRequestBody,
   buildCrunMinimaxH3RequestBody,
+  buildCrunNanoBananaRequestBody,
   buildCrunPixverseV6RequestBody,
   buildCrunSeedanceRequestBody,
   buildCrunSeedreamRequestBody,
@@ -42,6 +43,23 @@ describe('migrated model protocol builders', () => {
   });
 
   it('maps flat CRUN image handler inputs to upstream request bodies', () => {
+    expect(buildCrunNanoBananaRequestBody('google/nano-banana-2-1', {
+      prompt: 'edit image',
+      '3_image': ['https://a.test/main.png'],
+      '1x_image': ['https://a.test/ref-1.png', 'https://a.test/ref-2.png'],
+      aspectRatio: 'auto',
+      resolution: '2K',
+    })).toEqual({
+      model: 'google/nano-banana-2-1',
+      input: {
+        prompt: 'edit image',
+        img_urls: ['https://a.test/main.png', 'https://a.test/ref-1.png', 'https://a.test/ref-2.png'],
+        aspect_ratio: 'auto',
+        resolution: '2K',
+        output_format: 'png',
+      },
+    });
+
     expect(buildCrunGptImage2RequestBody('openai/gpt-image-2-5-official', {
       prompt: 'draw', img_urls: ['https://a.test/i.png'], quality: 'xhigh',
       aspect_ratio: '9:16', model_variant: 'flare', output_format: 'webp', background: 'transparent',
