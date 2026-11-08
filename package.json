@@ -25,6 +25,13 @@
     "test": "vitest run",
     "prepublishOnly": "pnpm run build"
   },
+  "nx": {
+    "tags": [
+      "scope:capability",
+      "platform:agnostic",
+      "type:lib"
+    ]
+  },
   "dependencies": {
     "@google/genai": "^1.35.0",
     "dotenv": "^16.4.5",
