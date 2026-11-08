@@ -139,11 +139,13 @@ export async function describeNovita(
         requestModes: { generation: 'application/json', editing: 'multipart/form-data' },
       },
       formSchema: buildNovitaFormSchema(model),
-      formValues: {
-        prompt: '', urls: [], mask: [], n: 1, size: '1024x1024', quality: 'auto',
-        outputFormat: 'png', outputCompression: 100, background: 'auto', moderation: 'auto',
-        inputFidelity: 'low',
-      },
+      formValues: isNovitaGptImage25Model(model)
+        ? { urls: [], prompt: '', size: '1024x1024', quality: 'low', moderation: 'low', output_format: 'png' }
+        : {
+          prompt: '', urls: [], mask: [], n: 1, size: '1024x1024', quality: 'auto',
+          outputFormat: 'png', outputCompression: 100, background: 'auto', moderation: 'auto',
+          inputFidelity: 'low',
+        },
       cancelable: false,
     };
   }

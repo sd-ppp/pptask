@@ -152,6 +152,7 @@ describe('Novita migrated transport', () => {
         return Response.json({ output: [{ type: 'message', content: [{ type: 'output_text', text: 'ok' }] }] });
       }
       expect(url.endsWith('/images/edits')).toBe(true);
+      expect(init?.method).toBe('POST');
       expect(init?.body).toBeInstanceOf(FormData);
       return Response.json({ data: [{ b64_json: 'AQID', output_format: 'png' }] });
     });
@@ -160,5 +161,23 @@ describe('Novita migrated transport', () => {
     expect(text.content[0]).toMatchObject({ type: 'text', text: 'ok' });
     const image = await provider.imageModel('gpt-image-2').doGenerate!({ prompt: 'edit', n: 1, size: undefined, aspectRatio: undefined, seed: undefined, files: [{ type: 'file', data: 'AQID', mediaType: 'image/png' }], mask: undefined, providerOptions: {} });
     expect(image.images[0]).toEqual(new Uint8Array([1, 2, 3]));
+  });
+
+  it('uses Novita-compatible multipart fields for GPT Image 2.5 edits', async () => {
+    const fetchMock = vi.fn(async (_input: string | URL, init?: RequestInit) => {
+      const form = init?.body as FormData;
+      expect([...form.keys()]).toEqual(['model', 'prompt', 'size', 'quality', 'moderation', 'output_format', 'image[]']);
+      expect(form.get('model')).toBe('gpt-image-2.5-flare-oai');
+      return Response.json({ data: [{ b64_json: 'AQID', output_format: 'png' }] });
+    });
+    const provider = createNovitaProvider({ apiKey: 'key', fetch: fetchMock as typeof fetch });
+    await provider.imageModel('gpt-image-2.5-flare-oai').doGenerate!({
+      prompt: 'edit', n: 1, size: undefined, aspectRatio: undefined, seed: undefined,
+      files: [{ type: 'file', data: 'AQID', mediaType: 'image/png' }], mask: undefined,
+      providerOptions: { novita: { input: {
+        prompt: 'edit', size: '1024x1024', quality: 'high', outputFormat: 'png',
+        background: 'auto', inputFidelity: 'high', n: 1,
+      } } },
+    });
   });
 });

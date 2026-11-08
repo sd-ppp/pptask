@@ -3,6 +3,34 @@ import { uploadFile } from 'ai';
 import { createCrunProvider } from '../../src/index.ts';
 
 describe('createCrunProvider lifecycle', () => {
+  it('describes generic video and GPT Image 2.5 model-specific inputs', async () => {
+    const provider = createCrunProvider({ apiKey: 'key' });
+    const wan = await provider.describe(provider.videoModel('wan/3-0-i2v'));
+    expect(wan.inputSchema?.properties).toMatchObject({
+      prompt: { type: 'string', 'x-component': 'Input.TextArea' },
+      imgUrls: { type: 'array', 'x-component': 'Upload' },
+      duration: { type: 'number', 'x-component': 'NumberPicker' },
+      resolution: { type: 'string', 'x-component': 'Select' },
+    });
+    expect(wan.defaultInput).toMatchObject({ duration: 5, resolution: '480P' });
+
+    const standard = await provider.describe(provider.imageModel('openai/gpt-image-2-5'));
+    expect((standard.inputSchema?.properties as any).resolution.enum.map((item: any) => item.value))
+      .toEqual(['1K', '2K', '4K']);
+    const official = await provider.describe(provider.imageModel('openai/gpt-image-2-5-official'));
+    expect((official.inputSchema?.properties as any).quality.enum.map((item: any) => item.value))
+      .toEqual(['low', 'medium', 'high', 'xhigh', 'max']);
+
+    const kling = await provider.describe(provider.videoModel('kling/v2-5-turbo-pro'));
+    expect(kling.inputSchema?.properties).toMatchObject({
+      prompt: { type: 'string', required: true },
+      imgUrls: { type: 'array', 'x-component': 'Upload' },
+      duration: { type: 'number', 'x-component': 'Select' },
+      mode: { type: 'string', 'x-component': 'Select' },
+    });
+    expect(kling.inputSchema?.properties).not.toHaveProperty('multiShots');
+  });
+
   it('normalizes aliases and restores an asynchronous task', async () => {
     const fetchMock = vi.fn(async (input: string | URL | Request, init?: RequestInit) => {
       const url = String(input);
