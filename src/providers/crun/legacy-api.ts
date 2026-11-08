@@ -1,4 +1,6 @@
 import { buildTripoRequestBody, TRIPO_MODEL } from './tripo.ts';
+import { buildCrunGptImage26Body, describeCrunGptImage26 } from './gpt-image-2-6.ts';
+import { buildCrunFlux3KleinBody, describeCrunFlux3Klein } from './flux-3-klein.ts';
 import type {
   DescribeResult,
   PlatformConfig,
@@ -74,6 +76,8 @@ export async function describeCrun(
   _options?: TaskRequestOptions
 ): Promise<DescribeResult> {
   const model = parseCrunModel(url);
+  if (model === 'flux-3-klein') return describeCrunFlux3Klein();
+  if (model === 'openai/gpt-image-2-6') return describeCrunGptImage26();
   const isV2 = isCrunV2Channel(model);
   const isLite = isCrunNanoBanana2Lite(model);
   const isGptImage2 = isCrunGptImage2(model);
@@ -314,6 +318,7 @@ export function buildCrunGptImage2RequestBody(
   model: string,
   payload: Record<string, any>
 ): Record<string, any> {
+  if (model === 'openai/gpt-image-2-6') return buildCrunGptImage26Body(payload);
   parseCrunModel(new URL(`crun:///${model}`));
   if (!isCrunGptImage2(model)) {
     throw new Error(`CRUN GPT Image 2 builder received unsupported model: ${model}`);
@@ -427,7 +432,8 @@ export function buildCrunRequestBody(
   model: string,
   payload: Record<string, any>
 ): Record<string, any> {
-  return model === TRIPO_MODEL ? buildTripoRequestBody(payload) : isCrunImageExpandModel(model)
+  return model === 'flux-3-klein' ? buildCrunFlux3KleinBody(payload)
+    : model === TRIPO_MODEL ? buildTripoRequestBody(payload) : isCrunImageExpandModel(model)
     ? buildCrunImageExpandRequestBody(model, payload)
     : isCrunWatermarkRemoveModel(model)
     ? buildCrunWatermarkRemoveRequestBody(model, payload)

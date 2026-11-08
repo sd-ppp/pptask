@@ -4,6 +4,7 @@ import {
   CRUN_GROK_IMAGINE_VIDEO_MODELS,
   CRUN_GPT56_MODELS,
   CRUN_GPT_IMAGE_MODELS,
+  CRUN_FLUX_MODELS,
   CRUN_HAILUO_23_MODELS,
   CRUN_HAPPYHORSE_11_MODELS,
   CRUN_IMAGE_EXPAND_MODELS,
@@ -51,7 +52,7 @@ describe('migrated provider model coverage', () => {
   it('describes every CRUN model through the new modelId factory', async () => {
     const provider = createCrunProvider({ apiKey: 'key', fetch: fetchMock as typeof fetch });
     const images = [
-      ...CRUN_NANO_BANANA_MODELS, ...CRUN_GPT_IMAGE_MODELS, ...CRUN_SEEDREAM_MODELS,
+      ...CRUN_NANO_BANANA_MODELS, ...CRUN_GPT_IMAGE_MODELS, ...CRUN_FLUX_MODELS, ...CRUN_SEEDREAM_MODELS,
       ...CRUN_IMAGE_UPSCALE_MODELS, ...CRUN_WATERMARK_REMOVE_MODELS.filter(model => model.startsWith('image-')),
       ...CRUN_IMAGE_EXPAND_MODELS,
     ];
