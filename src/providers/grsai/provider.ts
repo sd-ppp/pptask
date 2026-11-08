@@ -19,12 +19,18 @@ export function createGrsaiProvider(options: GrsaiProviderOptions): PptaskProvid
     providerId: 'grsai', fetch: config.fetch, modelTypes: ['image'], mode: () => 'async',
     files: createFiles(options, config.fetch),
     async start(context) {
-      const endpoint = String(context.modelId).startsWith('gpt-image-')
+      const isGptImage = String(context.modelId).startsWith('gpt-image-');
+      const endpoint = isGptImage
         ? `${config.baseURL}/v1/api/generate`
         : `${config.baseURL}/v1/draw/nano-banana`;
+      const input = { ...context.input };
+      if (isGptImage && input.aspect_ratio !== undefined) {
+        input.aspectRatio ??= input.aspect_ratio;
+        delete input.aspect_ratio;
+      }
       const response = await request(config.fetch, 'grsai', jsonRequest(
         endpoint,
-        { ...context.input, model: context.modelId },
+        { ...input, model: context.modelId },
         mergeHeaders(auth, context.headers),
       ), context.signal);
       const raw = await parseResponse(response, true);

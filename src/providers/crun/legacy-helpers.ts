@@ -19,7 +19,10 @@ export const CRUN_GPT_IMAGE_MODELS = [
   'openai/gpt-image-2-premium',
   'openai/gpt-image-2-5',
   'openai/gpt-image-2-5-official',
+  'openai/gpt-image-2-6',
 ] as const;
+
+export const CRUN_FLUX_MODELS = ['flux-3-klein'] as const;
 
 export const CRUN_SEEDREAM_MODELS = [
   'bytedance/seedream-5-pro',
@@ -118,8 +121,10 @@ export const CRUN_VEO_31_MODELS = [
 ] as const;
 
 export const CRUN_SUPPORTED_MODELS = [
+  'tripo-3d-3.1',
   ...CRUN_NANO_BANANA_MODELS,
   ...CRUN_GPT_IMAGE_MODELS,
+  ...CRUN_FLUX_MODELS,
   ...CRUN_SEEDREAM_MODELS,
   ...CRUN_SEEDANCE_MODELS,
   ...CRUN_KLING_MODELS,

@@ -138,7 +138,7 @@ function operationMethods<OPTIONS extends { abortSignal?: AbortSignal; headers?:
         };
       }
       const result = modelType === 'image'
-        ? await imageResult(protocol.providerId, modelId, status.output, protocol.fetch, options.abortSignal, status.metadata)
+        ? protocol.imageResult?.(modelId, status.output, status.metadata) ?? await imageResult(protocol.providerId, modelId, status.output, protocol.fetch, options.abortSignal, status.metadata)
         : languageResult(protocol.providerId, modelId, status.output, status.metadata);
       return { status: 'completed' as const, ...result };
     },

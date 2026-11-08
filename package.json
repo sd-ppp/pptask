@@ -66,6 +66,10 @@
     "./providers/modern": {
       "types": "./dist/types/providers/modern/index.d.ts",
       "import": "./dist/providers/modern.js"
+    },
+    "./providers/cos": {
+      "types": "./dist/types/providers/cos/index.d.ts",
+      "import": "./dist/providers/cos.js"
     }
   },
   "sideEffects": false,
@@ -82,7 +86,8 @@
   },
   "dependencies": {
     "@ai-sdk/provider": "^4.0.14",
-    "ai": "^7.0.99"
+    "ai": "^7.0.99",
+    "cos-nodejs-sdk-v5": "^2.14.3"
   },
   "devDependencies": {
     "@types/node": "^24.3.0",

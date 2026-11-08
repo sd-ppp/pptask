@@ -6,6 +6,7 @@ export default defineConfig({
     lib: {
       entry: {
         index: resolve(import.meta.dirname, 'src/index.ts'),
+        'providers/cos': resolve(import.meta.dirname, 'src/providers/cos/index.ts'),
         'executors/inline': resolve(import.meta.dirname, 'src/compat/inline.ts'),
         'providers/replicate': resolve(
           import.meta.dirname,
@@ -31,7 +32,7 @@ export default defineConfig({
       fileName: (_format, entryName) => `${entryName}.js`,
     },
     rollupOptions: {
-      external: ['ai', '@ai-sdk/provider'],
+      external: ['ai', '@ai-sdk/provider', 'cos-nodejs-sdk-v5', 'node:crypto'],
     },
   },
 });

@@ -16,4 +16,5 @@ export * from './providers/comfy/index.ts';
 export * from './providers/openai/index.ts';
 export * from './providers/gemini/index.ts';
 export * from './providers/modern/index.ts';
+export * from './providers/cos/index.ts';
 export * from './compat/legacy.ts';
