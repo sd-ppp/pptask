@@ -1,5 +1,6 @@
 import { TRIPO_MODEL, tripoResult } from './tripo.ts';
-import type { FilesV4 } from '@ai-sdk/provider';
+import { gptImage26Result } from './gpt-image-2-6.ts';
+import type { FilesV4, ImageModelV4Result } from '@ai-sdk/provider';
 import type { PptaskDescription, PptaskModelType, PptaskProvider } from '../../core/types.ts';
 import { createHttpProvider } from '../shared/provider.ts';
 import { jsonRequest, mergeHeaders, normalizeProviderConfig, request, requestJson, uploadBlob } from '../shared/http.ts';
@@ -13,6 +14,7 @@ import {
 } from './legacy-api.ts';
 import {
   CRUN_SUPPORTED_MODELS,
+  CRUN_FLUX_MODELS,
   isCrunGpt56Model,
   isCrunGptImage2,
   isCrunGeminiOmniModel,
@@ -38,7 +40,8 @@ export function createCrunProvider(options: CrunProviderOptions): PptaskProvider
   const protocol: HttpProviderProtocol = {
     providerId: 'crun', fetch: config.fetch,
     modelTypes: undefined,
-    imageResult: (modelId, output, metadata) => modelId === TRIPO_MODEL ? tripoResult(output, modelId, metadata) : undefined,
+    imageResult: (modelId, output, metadata) => modelId === TRIPO_MODEL ? tripoResult(output, modelId, metadata)
+      : modelId === 'openai/gpt-image-2-6' ? output as ImageModelV4Result : undefined,
     validateModel(modelId, modelType) {
       if (!(CRUN_SUPPORTED_MODELS as readonly string[]).includes(modelId)) {
         throw new Error(`Unsupported CRUN model: ${modelId}. Supported models: ${CRUN_SUPPORTED_MODELS.join(', ')}`);
@@ -74,7 +77,11 @@ export function createCrunProvider(options: CrunProviderOptions): PptaskProvider
         headers: mergeHeaders(auth, context.headers),
       }, context.signal);
       if (raw.code !== undefined && raw.code !== 200) throw new Error(`crun TaskInfo failed: ${raw.message ?? raw.msg ?? raw.code}`);
-      return mapStatus(raw.data ?? raw, taskId);
+      const status = mapStatus(raw.data ?? raw, taskId);
+      if (context.modelId === 'openai/gpt-image-2-6' && status.state === 'completed') {
+        return { ...status, output: await gptImage26Result(status.output, config.fetch, context.signal, status.metadata) };
+      }
+      return status;
     },
     describe: async (modelId, modelType) => describeModel(modelId, modelType),
   };
@@ -82,7 +89,7 @@ export function createCrunProvider(options: CrunProviderOptions): PptaskProvider
 }
 
 function isImageModel(model: string): boolean {
-  return model === TRIPO_MODEL || isCrunGptImage2(model) || isCrunSeedreamModel(model) || isCrunImageUpscaleModel(model) ||
+  return model === TRIPO_MODEL || (CRUN_FLUX_MODELS as readonly string[]).includes(model) || isCrunGptImage2(model) || isCrunSeedreamModel(model) || isCrunImageUpscaleModel(model) ||
     isCrunWatermarkRemoveModel(model) && model === 'image-watermark-remove' || isCrunImageExpandModel(model) ||
     model.startsWith('google/nano-banana');
 }

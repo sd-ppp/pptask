@@ -86,8 +86,8 @@
   },
   "dependencies": {
     "@ai-sdk/provider": "^4.0.14",
-    "cos-nodejs-sdk-v5": "^2.14.3",
-    "ai": "^7.0.99"
+    "ai": "^7.0.99",
+    "cos-nodejs-sdk-v5": "^2.14.3"
   },
   "devDependencies": {
     "@types/node": "^24.3.0",

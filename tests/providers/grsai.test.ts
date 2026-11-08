@@ -64,6 +64,37 @@ describe('createGrsaiProvider lifecycle', () => {
     await expect(job.wait()).rejects.toThrow('blocked');
   });
 
+  it.each(['gpt-image-2.6', 'gpt-image-2.6-flare', 'gpt-image-2.6-sunburst'])(
+    'submits %s with its exact model ID and GRSai image options', async modelId => {
+      const requests: Array<{ url: string; body: Record<string, any> }> = [];
+      const fetchMock = vi.fn(async (input: string | URL | Request, init?: RequestInit) => {
+        const url = String(input);
+        if (url.endsWith('/api/generate')) {
+          requests.push({ url, body: JSON.parse(String(init?.body)) });
+          return Response.json({ id: `gr-${modelId}`, status: 'running' });
+        }
+        throw new Error(String(input));
+      });
+      const provider = createGrsaiProvider({ apiKey: 'key', baseURL: 'https://gr.test', fetch: fetchMock as typeof fetch });
+      await provider.jobs.start({
+        model: provider.imageModel(modelId),
+        input: {
+          prompt: 'a studio portrait', images: ['https://input.test/ref.png'],
+          aspect_ratio: '1024x1024', quality: 'high', replyType: 'async',
+          outputFormat: 'png', background: 'transparent',
+        },
+      });
+      expect(requests).toEqual([{
+        url: 'https://gr.test/v1/api/generate',
+        body: {
+          prompt: 'a studio portrait', images: ['https://input.test/ref.png'],
+          aspectRatio: '1024x1024', quality: 'high', replyType: 'async',
+          outputFormat: 'png', background: 'transparent', model: modelId,
+        },
+      }]);
+    },
+  );
+
   it('uploads through token and object-storage requests', async () => {
     const fetchMock = vi.fn()
       .mockResolvedValueOnce(Response.json({ code: 0, data: { url: 'https://upload.test', token: 'token', key: 'folder/a.png', domain: 'https://cdn.test' } }))

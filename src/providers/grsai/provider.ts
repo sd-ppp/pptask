@@ -28,6 +28,10 @@ export function createGrsaiProvider(options: GrsaiProviderOptions): PptaskProvid
       const endpoint = grsaiApiVersion === 'generate'
         ? `${config.baseURL}/v1/api/generate` : `${config.baseURL}/v1/draw/nano-banana`;
       const input: Record<string, unknown> = { ...context.input, model: context.modelId };
+      if (context.modelId.startsWith('gpt-image-') && input.aspect_ratio !== undefined) {
+        input.aspectRatio ??= input.aspect_ratio;
+        delete input.aspect_ratio;
+      }
       if (grsaiApiVersion === 'generate') {
         input.images ??= input.urls ?? [];
         delete input.urls;
