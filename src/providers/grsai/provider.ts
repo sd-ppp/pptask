@@ -10,6 +10,8 @@ export type GrsaiProviderOptions = CommonProviderOptions & {
   baseURL: string;
   uploadApiKey?: string;
   uploadBaseURL?: string;
+  /** Pin the submission API. The selected API is persisted with each operation. */
+  grsaiApiVersion?: 'legacy' | 'generate';
 };
 
 export function createGrsaiProvider(options: GrsaiProviderOptions): PptaskProvider {
@@ -19,25 +21,43 @@ export function createGrsaiProvider(options: GrsaiProviderOptions): PptaskProvid
     providerId: 'grsai', fetch: config.fetch, modelTypes: ['image'], mode: () => 'async',
     files: createFiles(options, config.fetch),
     async start(context) {
-      const endpoint = String(context.modelId).startsWith('gpt-image-')
-        ? `${config.baseURL}/v1/api/generate`
-        : `${config.baseURL}/v1/draw/nano-banana`;
+      const grsaiApiVersion = options.grsaiApiVersion ?? (
+        context.modelId.startsWith('gpt-image-') || context.modelId === 'nano-banana-2.1'
+          ? 'generate' : 'legacy'
+      );
+      const endpoint = grsaiApiVersion === 'generate'
+        ? `${config.baseURL}/v1/api/generate` : `${config.baseURL}/v1/draw/nano-banana`;
+      const input: Record<string, unknown> = { ...context.input, model: context.modelId };
+      if (grsaiApiVersion === 'generate') {
+        input.images ??= input.urls ?? [];
+        delete input.urls;
+        // Submission must return an operation immediately, rather than waiting for an image.
+        input.replyType = 'async';
+      }
       const response = await request(config.fetch, 'grsai', jsonRequest(
         endpoint,
-        { ...context.input, model: context.modelId },
+        input,
         mergeHeaders(auth, context.headers),
       ), context.signal);
       const raw = await parseResponse(response, true);
       if (raw?.code !== undefined && raw.code !== 0) throw new Error(String(raw.msg ?? 'Grsai API error'));
       const data = raw.data ?? raw;
+      if (['failed', 'violation', 'cancelled'].includes(data?.status)) {
+        throw new Error(String(data.error ?? `Grsai task ${data.status}`));
+      }
       if (typeof data?.id !== 'string') throw new Error('grsai createTask did not return id');
-      return { operation: { taskId: data.id }, metadata: { taskId: data.id } };
+      return { operation: { taskId: data.id, grsaiApiVersion }, metadata: { taskId: data.id } };
     },
     async status(context) {
       const taskId = operationId(context.operation);
-      const response = await request(config.fetch, 'grsai', jsonRequest(
-        `${config.baseURL}/v1/draw/result`, { id: taskId }, mergeHeaders(auth, context.headers),
-      ), context.signal);
+      const operation: unknown = context.operation;
+      // Operations created before grsaiApiVersion was recorded retain their legacy polling API.
+      const response = await request(config.fetch, 'grsai',
+        isRecord(operation) && operation.grsaiApiVersion === 'generate'
+          ? { url: `${config.baseURL}/v1/api/result?id=${encodeURIComponent(taskId)}`,
+              method: 'GET', headers: mergeHeaders(auth, context.headers) }
+          : jsonRequest(`${config.baseURL}/v1/draw/result`, { id: taskId }, mergeHeaders(auth, context.headers)),
+        context.signal);
       const raw = await parseResponse(response);
       if (raw?.code !== undefined && raw.code !== 0) throw new Error(String(raw.msg ?? 'Grsai API error'));
       return mapStatus(raw.data ?? raw, taskId);
@@ -78,6 +98,7 @@ function mapStatus(data: Record<string, any>, taskId: string): HttpStatus {
     case 'running': return { state: 'pending', phase: 'running', progress: number(data.progress), metadata };
     case 'succeeded': return { state: 'completed', output: data.results ?? data, metadata };
     case 'failed':
+    case 'violation':
     case 'cancelled': return { state: 'failed', error: String(data.error ?? data.failure_reason ?? `Grsai task ${data.status}`), metadata };
     default: return { state: 'pending', phase: 'running', progress: number(data.progress), metadata };
   }

@@ -39,6 +39,37 @@ export function cosMediaStorageConfigFromEnv(
   };
 }
 
+/** Sign this store's content-addressed media for an upstream provider to read. */
+export function createCosMediaUrlSigner(config: CosMediaStorageConfig): (url: string) => string {
+  for (const key of ['secretId', 'secretKey', 'bucket', 'region'] as const) {
+    if (!config[key]?.trim()) throw new Error(`Sixi COS media storage requires ${key}`);
+  }
+  const base = new URL(config.publicBaseUrl ?? `https://${config.bucket}.cos.${config.region}.myqcloud.com`);
+  const basePath = `${base.pathname.replace(/\/+$/, '')}/`;
+  const prefix = (config.keyPrefix ?? 'sixi/generated').replace(/^\/+|\/+$/g, '');
+  const cos = new COS({
+    SecretId: config.secretId,
+    SecretKey: config.secretKey,
+    ...(config.sessionToken ? { SecurityToken: config.sessionToken } : {}),
+  });
+  return value => {
+    const url = new URL(value);
+    if (url.origin !== base.origin || !url.pathname.startsWith(basePath)) return value;
+    const key = decodeURIComponent(url.pathname.slice(basePath.length));
+    const name = prefix ? key.startsWith(`${prefix}/`) ? key.slice(prefix.length + 1) : '' : key;
+    // Never grant read access to arbitrary objects supplied in a client payload.
+    if (!/^[a-f0-9]{64}\.[a-z0-9]+$/.test(name)) return value;
+    return cos.getObjectUrl({
+      Bucket: config.bucket,
+      Region: config.region,
+      Key: key,
+      Protocol: 'https:',
+      Sign: true,
+      Expires: 3600,
+    });
+  };
+}
+
 export function createCosMediaUploader(config: CosMediaStorageConfig): MediaUploader {
   for (const key of ['secretId', 'secretKey', 'bucket', 'region'] as const) {
     if (!config[key]?.trim()) throw new Error(`Sixi COS media storage requires ${key}`);
@@ -70,6 +101,14 @@ export function createCosMediaUploader(config: CosMediaStorageConfig): MediaUplo
       Body: Buffer.from(bytes),
       ContentType: mediaType,
       ContentLength: bytes.byteLength,
+      ACL: 'public-read',
+    });
+    // An existing content-addressed object may still have a private ACL.
+    // Finish setting read access before giving an unsigned URL to a provider.
+    await cos.putObjectAcl({
+      Bucket: config.bucket,
+      Region: config.region,
+      Key: key,
       ACL: 'public-read',
     });
     signal?.throwIfAborted();
