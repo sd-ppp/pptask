@@ -19,16 +19,20 @@ describe('CRUN GPT Image 2.6', () => {
   it('preserves Sunburst editing parameters and callback in the official envelope', () => {
     expect(buildCrunGptImage26Body({
       prompt: 'edit product', imgUrls: images, model_variant: 'sunburst',
-      aspectRatio: '4:5', resolution: '1k', quality: 'xhigh', complexity: 'medium',
+      aspectRatio: '4:5', resolution: '4k', quality: 'xhigh', complexity: 'medium',
       output_format: 'webp', n: 1, callbackUrl: 'https://callback.test/result',
     })).toEqual({
       model, callback_url: 'https://callback.test/result',
       input: {
         prompt: 'edit product', img_urls: images, model_variant: 'sunburst',
-        aspect_ratio: '4:5', resolution: '1k', quality: 'xhigh', complexity: 'medium',
+        aspect_ratio: '4:5', resolution: '4k', quality: 'xhigh', complexity: 'medium',
         output_format: 'webp', n: 1,
       },
     });
+  });
+
+  it.each(['1k', '2k', '4k'])('accepts and forwards %s resolution', resolution => {
+    expect(buildCrunGptImage26Body({ prompt: 'a cat', resolution }).input.resolution).toBe(resolution);
   });
 
   it.each(['png', 'jpeg', 'webp', 'svg', 'gif'])('supports %s text-to-image output', output_format => {
@@ -47,7 +51,7 @@ describe('CRUN GPT Image 2.6', () => {
     [{ prompt: '' }, /prompt/],
     [{ prompt: 'x'.repeat(20001) }, /20000/],
     [{ prompt: 123 }, /prompt/],
-    [{ resolution: '2k' }, /resolution/],
+    [{ resolution: '8k' }, /resolution/],
     [{ n: 2 }, /n/],
     [{ n: 1.5 }, /n/],
     [{ model_variant: 'unknown' }, /model_variant/],
@@ -74,6 +78,7 @@ describe('CRUN GPT Image 2.6', () => {
     const fields = (description.inputSchema as any).properties;
     expect(fields.imgUrls.maxItems).toBe(15);
     expect(fields.prompt.maxLength).toBe(20000);
+    expect(fields.resolution.enum.map((option: { value: string }) => option.value)).toEqual(['1k', '2k', '4k']);
     expect(fields.n.maximum).toBe(1);
     expect(description.capabilities).toMatchObject({ supportsOutputFormat: true, supportsResolution: true });
   });

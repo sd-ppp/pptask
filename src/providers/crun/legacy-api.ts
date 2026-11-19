@@ -1,4 +1,5 @@
 import { buildTripoRequestBody, TRIPO_MODEL } from './tripo.ts';
+import { buildHunyuan31RequestBody } from './hunyuan.ts';
 import { buildCrunGptImage26Body, describeCrunGptImage26 } from './gpt-image-2-6.ts';
 import { buildCrunFlux3KleinBody, describeCrunFlux3Klein } from './flux-3-klein.ts';
 import type {
@@ -186,7 +187,11 @@ export async function describeCrun(
     ...(seedanceProfile.supportsByteplusFallback ? { byteplusFallback: false } : {}),
     ...(seedanceProfile.supportsReturnLastFrame ? { returnLastFrame: false } : {}),
     callbackUrl: '',
-  } : isSeedream ? {
+  } : isSeedream ? model === 'bytedance/seedream-5-5' ? {
+    prompt: '', imgUrls: [], aspectRatio: '1:1', resolution: '1K', outputFormat: 'jpeg',
+    background: 'opaque', layerDecomposition: false, maxImages: 16,
+    textRecognition: false, contentModeration: true, callbackUrl: '',
+  } : {
     prompt: '', imgUrls: [], aspectRatio: '1:1', resolution: '2K',
     outputFormat: 'png', callbackUrl: '',
   } : {
@@ -237,7 +242,7 @@ export async function describeCrun(
         isHappyHorse11 ? 'happyhorse-1.1' : isPixverseV6 ? 'pixverse-v6' :
         isMinimaxH3 ? 'minimax-h3' :
         klingProfile?.channel ?? seedanceProfile?.series ??
-        (isSeedream ? 'seedream-5-pro'
+        (isSeedream ? model === 'bytedance/seedream-5-5' ? 'seedream-5.5' : 'seedream-5-pro'
         : isGptImage2Premium ? 'premium'
         : isGptImage2Stable ? 'stable'
           : isV2 ? 'cost-optimized-v2' : isLite ? 'lite' : 'standard'),
@@ -278,7 +283,7 @@ export async function describeCrun(
       : isKling
       ? buildCrunKlingFormSchema(model)
       : isSeedance ? buildCrunSeedanceFormSchema(model)
-      : isSeedream ? buildCrunSeedreamFormSchema()
+      : isSeedream ? buildCrunSeedreamFormSchema(model)
       : isGptImage2 ? buildCrunGptImage2FormSchema(model)
         : buildCrunNanoBananaFormSchema(model),
     formValues,
@@ -449,7 +454,9 @@ export function buildCrunRequestBody(
   payload: Record<string, any>
 ): Record<string, any> {
   return model === 'flux-3-klein' ? buildCrunFlux3KleinBody(payload)
-    : model === TRIPO_MODEL ? buildTripoRequestBody(payload) : isCrunImageExpandModel(model)
+    : model === TRIPO_MODEL ? buildTripoRequestBody(payload)
+    : model === 'hy-3d-3.1' ? buildHunyuan31RequestBody(payload)
+    : isCrunImageExpandModel(model)
     ? buildCrunImageExpandRequestBody(model, payload)
     : isCrunWatermarkRemoveModel(model)
     ? buildCrunWatermarkRemoveRequestBody(model, payload)
@@ -1077,6 +1084,9 @@ export function buildCrunSeedreamRequestBody(
   if (!isCrunSeedreamModel(model)) {
     throw new Error(`CRUN Seedream builder received unsupported model: ${model}`);
   }
+  if (model === 'bytedance/seedream-5-5') {
+    return buildCrunSeedream55RequestBody(model, payload);
+  }
   const prompt = String(payload.prompt ?? '').trim();
   if (!prompt) throw new Error(`CRUN ${model} requires a non-empty prompt`);
 
@@ -1117,6 +1127,100 @@ export function buildCrunSeedreamRequestBody(
     throw new Error(`CRUN ${model} output_format must be one of: png, jpeg`);
   }
   input.output_format = outputFormat;
+
+  const body: Record<string, any> = { model, input };
+  addCrunCallbackUrl(body, model, payload);
+  return body;
+}
+
+function buildCrunSeedream55RequestBody(
+  model: string,
+  payload: Record<string, any>
+): Record<string, any> {
+  const prompt = String(payload.prompt ?? '').trim();
+  if (!prompt || prompt.length > 5000) {
+    throw new Error(`CRUN ${model} prompt must contain 1 to 5000 characters`);
+  }
+
+  const input: Record<string, any> = { prompt };
+  const imgUrls = normalizeCrunImageUrls(
+    payload.img_urls ?? payload.imgUrls ?? payload.imageUrls ?? payload.urls
+  );
+  if (imgUrls.length > 10) {
+    throw new Error(`CRUN ${model} supports at most 10 reference images`);
+  }
+  if (imgUrls.length) input.img_urls = imgUrls;
+
+  const layerDecomposition = payload.layer_decomposition ?? payload.layerDecomposition ?? false;
+  if (typeof layerDecomposition !== 'boolean') {
+    throw new Error(`CRUN ${model} layer_decomposition must be a boolean`);
+  }
+  if (layerDecomposition && imgUrls.length !== 1) {
+    throw new Error(`CRUN ${model} layer_decomposition requires exactly one reference image`);
+  }
+  input.layer_decomposition = layerDecomposition;
+
+  const resolution = String(payload.resolution ?? '1K').trim().toUpperCase();
+  if (!['1K', '1.5K', '2K'].includes(resolution)) {
+    throw new Error(`CRUN ${model} resolution must be one of: 1K, 1.5K, 2K`);
+  }
+  input.resolution = resolution;
+
+  const aspectRatioValue = payload.aspect_ratio ?? payload.aspectRatio;
+  if (layerDecomposition) {
+    if (aspectRatioValue !== undefined && !['1:1', 'auto'].includes(String(aspectRatioValue).trim().toLowerCase())) {
+      throw new Error(`CRUN ${model} aspect_ratio is not supported with layer_decomposition`);
+    }
+  } else {
+    const aspectRatio = String(aspectRatioValue ?? '1:1').trim().toLowerCase();
+    const allowedRatios = ['1:1', '2:3', '3:2', '3:4', '4:3', '9:16', '16:9', '21:9', 'auto'];
+    if (!allowedRatios.includes(aspectRatio)) {
+      throw new Error(`CRUN ${model} aspect_ratio must be one of: ${allowedRatios.join(', ')}`);
+    }
+    input.aspect_ratio = aspectRatio;
+  }
+
+  const maxImagesValue = payload.max_images ?? payload.maxImages;
+  if (layerDecomposition) {
+    const maxImages = Number(maxImagesValue);
+    if (!Number.isInteger(maxImages) || maxImages < 2 || maxImages > 100) {
+      throw new Error(`CRUN ${model} max_images must be an integer from 2 to 100 when layer_decomposition is enabled`);
+    }
+    input.max_images = maxImages;
+    const textRecognition = payload.text_recognition ?? payload.textRecognition ?? false;
+    if (typeof textRecognition !== 'boolean') {
+      throw new Error(`CRUN ${model} text_recognition must be a boolean`);
+    }
+    input.text_recognition = textRecognition;
+  }
+
+  const backgroundValue = payload.background;
+  if (!layerDecomposition && backgroundValue !== undefined) {
+    const background = String(backgroundValue).trim().toLowerCase();
+    if (!['transparent', 'opaque'].includes(background)) {
+      throw new Error(`CRUN ${model} background must be one of: transparent, opaque`);
+    }
+    input.background = background;
+  }
+
+  const outputFormatValue = payload.output_format ?? payload.outputFormat;
+  let outputFormat = String(
+    outputFormatValue ?? (!layerDecomposition && backgroundValue === 'transparent' ? 'png' : 'jpeg')
+  ).trim().toLowerCase();
+  if (outputFormat === 'jpg') outputFormat = 'jpeg';
+  if (!['png', 'jpeg'].includes(outputFormat)) {
+    throw new Error(`CRUN ${model} output_format must be one of: png, jpeg`);
+  }
+  if (!layerDecomposition && backgroundValue === 'transparent' && outputFormatValue !== undefined && outputFormat === 'jpeg') {
+    throw new Error(`CRUN ${model} transparent background does not support jpeg output`);
+  }
+  input.output_format = outputFormat;
+
+  const contentModeration = payload.content_moderation ?? payload.contentModeration ?? true;
+  if (typeof contentModeration !== 'boolean') {
+    throw new Error(`CRUN ${model} content_moderation must be a boolean`);
+  }
+  input.content_moderation = contentModeration;
 
   const body: Record<string, any> = { model, input };
   addCrunCallbackUrl(body, model, payload);
@@ -1186,7 +1290,10 @@ export function buildCrunSeedanceRequestBody(
   if (profile.supportsCameraFixed) {
     input.camera_fixed = Boolean(payload.camera_fixed ?? payload.cameraFixed);
   }
-  if (profile.supportsByteplusFallback) {
+  if (model === 'bytedance/seedance2-5-flash-i2v') {
+    input.byteplus_fallback = false;
+    input.direct_byteplus = false;
+  } else if (profile.supportsByteplusFallback) {
     input.byteplus_fallback = Boolean(
       payload.byteplus_fallback ?? payload.byteplusFallback
     );

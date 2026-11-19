@@ -1,6 +1,7 @@
 import type { ImageModelV4Result } from '@ai-sdk/provider';
 
 export const TRIPO_MODEL = 'tripo-3d-3.1';
+export const HUNYUAN_31_MODEL = 'hy-3d-3.1';
 const flags = ['texture', 'pbr', 'quad', 'smart_low_poly', 'auto_size'];
 
 export function buildTripoRequestBody(payload: Record<string, any>) {
@@ -45,7 +46,7 @@ export function buildTripoRequestBody(payload: Record<string, any>) {
 }
 
 // The SDK has no 3D model interface; keep file URLs in metadata on the image job transport.
-export function tripoResult(output: any, modelId: string, metadata: any = {}): ImageModelV4Result {
+export function crun3dResult(output: any, modelId: string, metadata: any = {}): ImageModelV4Result {
   const urls = new Set<string>();
   function visit(value: any): void {
     if (typeof value === 'string' && /^https?:\/\//i.test(value)) { urls.add(value); return; }
@@ -54,10 +55,12 @@ export function tripoResult(output: any, modelId: string, metadata: any = {}): I
   }
   visit(output?.media_urls);
   visit(output?.media_info);
-  if (!urls.size) throw new Error('CRUN Tripo returned no model files');
+  if (!urls.size) throw new Error(`CRUN ${modelId} returned no model files`);
   return {
     images: [], warnings: [],
     providerMetadata: { crun: { ...metadata, files: [...urls].map(url => ({ url, mediaType: 'application/octet-stream' })) } },
     response: { timestamp: new Date(), modelId, headers: undefined },
   };
 }
+
+export const tripoResult = crun3dResult;

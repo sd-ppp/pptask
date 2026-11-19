@@ -54,7 +54,58 @@ function mediaUploadField(
   };
 }
 
-export function buildCrunSeedreamFormSchema(): FormilySchema {
+export function buildCrunSeedreamFormSchema(model?: string): FormilySchema {
+  if (model === 'bytedance/seedream-5-5') {
+    return {
+      type: 'object',
+      properties: {
+        prompt: {
+          type: 'string', title: 'Prompt', required: true,
+          maxLength: 5000, 'x-decorator': 'FormItem', 'x-component': 'Input.TextArea',
+          'x-component-props': { rows: 6 },
+        },
+        imgUrls: imageUploadField('Reference Images (optional, up to 10)'),
+        resolution: {
+          type: 'string', title: 'Resolution', 'x-decorator': 'FormItem', 'x-component': 'Select',
+          enum: ['1K', '1.5K', '2K'].map(value => ({ label: value, value })), default: '1K',
+        },
+        aspectRatio: {
+          type: 'string', title: 'Aspect Ratio', 'x-decorator': 'FormItem', 'x-component': 'Select',
+          enum: ['1:1', '2:3', '3:2', '3:4', '4:3', '9:16', '16:9', '21:9', 'auto']
+            .map(value => ({ label: value, value })), default: '1:1',
+        },
+        outputFormat: {
+          type: 'string', title: 'Output Format', 'x-decorator': 'FormItem', 'x-component': 'Select',
+          enum: ['png', 'jpeg'].map(value => ({ label: value.toUpperCase(), value })),
+        },
+        background: {
+          type: 'string', title: 'Background', 'x-decorator': 'FormItem', 'x-component': 'Select',
+          enum: ['opaque', 'transparent'].map(value => ({ label: value, value })),
+        },
+        layerDecomposition: {
+          type: 'boolean', title: 'Layer Decomposition', 'x-decorator': 'FormItem',
+          'x-component': 'Switch', default: false,
+        },
+        maxImages: {
+          type: 'number', title: 'Maximum Layer Images', minimum: 2, maximum: 100,
+          'x-decorator': 'FormItem', 'x-component': 'InputNumber', default: 16,
+        },
+        textRecognition: {
+          type: 'boolean', title: 'Text Recognition (OCR)', 'x-decorator': 'FormItem',
+          'x-component': 'Switch', default: false,
+        },
+        contentModeration: {
+          type: 'boolean', title: 'Content Moderation', 'x-decorator': 'FormItem',
+          'x-component': 'Switch', default: true,
+        },
+        callbackUrl: {
+          type: 'string', title: 'Callback URL (optional)', 'x-decorator': 'FormItem',
+          'x-component': 'Input',
+          'x-component-props': { placeholder: 'https://your-domain.com/callback' },
+        },
+      },
+    };
+  }
   return {
     type: 'object',
     properties: {

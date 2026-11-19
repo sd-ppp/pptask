@@ -26,11 +26,13 @@ export const CRUN_FLUX_MODELS = ['flux-3-klein'] as const;
 
 export const CRUN_SEEDREAM_MODELS = [
   'bytedance/seedream-5-pro',
+  'bytedance/seedream-5-5',
 ] as const;
 
 export const CRUN_SEEDANCE_MODELS = [
   'bytedance/seedance2-5-t2v',
   'bytedance/seedance2-5-i2v',
+  'bytedance/seedance2-5-flash-i2v',
   'bytedance/seedance2-5-r2v',
   'bytedance/seedance2-0-t2v',
   'bytedance/seedance2-0-i2v',
@@ -122,6 +124,7 @@ export const CRUN_VEO_31_MODELS = [
 
 export const CRUN_SUPPORTED_MODELS = [
   'tripo-3d-3.1',
+  'hy-3d-3.1',
   ...CRUN_NANO_BANANA_MODELS,
   ...CRUN_GPT_IMAGE_MODELS,
   ...CRUN_FLUX_MODELS,
@@ -536,7 +539,8 @@ export function getCrunSeedanceProfile(model: string): CrunSeedanceProfile {
     resolutions,
     maxDuration: series === '2.5' ? 30 : series === '1.5-pro' ? 12 : 15,
     supportsAudio: series !== '1.5-pro',
-    supportsByteplusFallback: series === '2.5' || series === '2.0-mini',
+    supportsByteplusFallback: model !== 'bytedance/seedance2-5-flash-i2v' &&
+      (series === '2.5' || series === '2.0-mini'),
     supportsReturnLastFrame: series !== '1.5-pro' || operation === 'text-to-video',
     supportsCameraFixed: series === '1.5-pro',
   };
