@@ -1,4 +1,4 @@
-import { TRIPO_MODEL, tripoResult } from './tripo.ts';
+import { HUNYUAN_31_MODEL, TRIPO_MODEL, crun3dResult } from './tripo.ts';
 import { gptImage26Result } from './gpt-image-2-6.ts';
 import type { FilesV4, ImageModelV4Result } from '@ai-sdk/provider';
 import type { PptaskDescription, PptaskModelType, PptaskProvider } from '../../core/types.ts';
@@ -40,7 +40,7 @@ export function createCrunProvider(options: CrunProviderOptions): PptaskProvider
   const protocol: HttpProviderProtocol = {
     providerId: 'crun', fetch: config.fetch,
     modelTypes: undefined,
-    imageResult: (modelId, output, metadata) => modelId === TRIPO_MODEL ? tripoResult(output, modelId, metadata)
+    imageResult: (modelId, output, metadata) => modelId === TRIPO_MODEL || modelId === HUNYUAN_31_MODEL ? crun3dResult(output, modelId, metadata)
       : modelId === 'openai/gpt-image-2-6' ? output as ImageModelV4Result : undefined,
     validateModel(modelId, modelType) {
       if (!(CRUN_SUPPORTED_MODELS as readonly string[]).includes(modelId)) {
@@ -89,7 +89,7 @@ export function createCrunProvider(options: CrunProviderOptions): PptaskProvider
 }
 
 function isImageModel(model: string): boolean {
-  return model === TRIPO_MODEL || (CRUN_FLUX_MODELS as readonly string[]).includes(model) || isCrunGptImage2(model) || isCrunSeedreamModel(model) || isCrunImageUpscaleModel(model) ||
+  return model === TRIPO_MODEL || model === HUNYUAN_31_MODEL || (CRUN_FLUX_MODELS as readonly string[]).includes(model) || isCrunGptImage2(model) || isCrunSeedreamModel(model) || isCrunImageUpscaleModel(model) ||
     isCrunWatermarkRemoveModel(model) && model === 'image-watermark-remove' || isCrunImageExpandModel(model) ||
     model.startsWith('google/nano-banana');
 }
@@ -139,6 +139,32 @@ function mapStatus(data: Record<string, any>, taskId: string): HttpStatus {
 
 async function describeModel(modelId: string, modelType: PptaskModelType): Promise<PptaskDescription> {
   if (modelId === TRIPO_MODEL) return { providerId: 'crun', modelId, modelType, title: 'Tripo 3D 3.1', inputSchema: { type: 'object', properties: { prompt: { type: 'string', maxLength: 1024 }, image_urls: { type: 'array', maxItems: 1, items: { type: 'string' } }, multiview_image_urls: { type: 'object', minProperties: 2, maxProperties: 4 } } }, defaultInput: {}, capabilities: { outputType: '3d', upload: true, cancel: false } };
+  if (modelId === HUNYUAN_31_MODEL) return {
+    providerId: 'crun', modelId, modelType, title: '混元 3D 3.1',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        prompt: { type: 'string', maxLength: 1024 },
+        img_urls: { type: 'array', maxItems: 1, items: { type: 'string', format: 'uri' } },
+        generate_type: { type: 'string', enum: ['normal', 'geometry'], default: 'normal' },
+        enable_pbr: { type: 'boolean', default: false },
+        face_count: { type: 'integer', minimum: 3000, maximum: 1500000, default: 500000 },
+        result_format: { type: 'string', enum: ['obj', 'glb', 'stl', 'usdz', 'fbx'], default: 'obj' },
+        multi_view_images: {
+          type: 'array', maxItems: 7, items: {
+            type: 'object', required: ['view_type', 'image_url'],
+            properties: {
+              view_type: { type: 'string', enum: ['left', 'right', 'back', 'top', 'bottom', 'left_front', 'right_front'] },
+              image_url: { type: 'string', format: 'uri' },
+            },
+          },
+        },
+      },
+      oneOf: [{ required: ['prompt'] }, { required: ['img_urls'] }],
+    },
+    defaultInput: { generate_type: 'normal', enable_pbr: false, face_count: 500000, result_format: 'obj' },
+    capabilities: { outputType: '3d', upload: true, cancel: false },
+  };
   const legacy = await describeCrun(new URL(`crun:///${encodeURIComponent(modelId)}`));
   return {
     providerId: 'crun', modelId, modelType,

@@ -2,6 +2,7 @@ import { imageResult } from '../shared/output.ts';
 
 const MODEL = 'openai/gpt-image-2-6';
 const ASPECT_RATIOS = ['1:1', '2:3', '3:2', '3:4', '4:3', '4:5', '5:4', '9:16', '16:9', '21:9', 'auto'];
+const RESOLUTIONS = ['1k', '2k', '4k'];
 const QUALITIES = ['low', 'medium', 'high', 'xhigh', 'max', 'auto'];
 const FORMATS = ['png', 'jpeg', 'webp', 'svg', 'gif'];
 
@@ -12,7 +13,7 @@ export function buildCrunGptImage26Body(payload: Record<string, any>): Record<st
     prompt,
     model_variant: enumValue(payload.model_variant ?? payload.modelVariant ?? 'flare', ['flare', 'sunburst'], 'model_variant'),
     aspect_ratio: enumValue(payload.aspect_ratio ?? payload.aspectRatio ?? 'auto', ASPECT_RATIOS, 'aspect_ratio'),
-    resolution: enumValue(payload.resolution ?? '1k', ['1k'], 'resolution'),
+    resolution: enumValue(payload.resolution ?? '1k', RESOLUTIONS, 'resolution'),
     quality: enumValue(payload.quality ?? 'auto', QUALITIES, 'quality'),
     output_format: enumValue(payload.output_format ?? payload.outputFormat ?? 'png', FORMATS, 'output_format'),
     n: payload.n ?? 1,
@@ -104,7 +105,7 @@ export function describeCrunGptImage26() {
         },
         model_variant: { ...select(['flare', 'sunburst'], 'flare'), title: 'Model Variant' },
         aspectRatio: { ...select(ASPECT_RATIOS, 'auto'), title: 'Aspect Ratio' },
-        resolution: { ...select(['1k'], '1k'), title: 'Resolution' },
+        resolution: { ...select(RESOLUTIONS, '1k'), title: 'Resolution' },
         quality: { ...select(QUALITIES, 'auto'), title: 'Quality' },
         complexity: { ...select(['low', 'medium', 'high']), title: 'Complexity (optional)' },
         output_format: { ...select(FORMATS, 'png'), title: 'Output Format' },

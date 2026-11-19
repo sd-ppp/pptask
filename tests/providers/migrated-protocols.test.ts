@@ -79,6 +79,58 @@ describe('migrated model protocol builders', () => {
     });
   });
 
+  it('builds Seedream 5.5 generation, transparency, and layer requests', () => {
+    expect(buildCrunSeedreamRequestBody('bytedance/seedream-5-5', {
+      prompt: 'A glass perfume bottle',
+      resolution: '1.5K',
+      aspectRatio: '16:9',
+      outputFormat: 'jpeg',
+      contentModeration: false,
+    })).toEqual({
+      model: 'bytedance/seedream-5-5',
+      input: {
+        prompt: 'A glass perfume bottle',
+        resolution: '1.5K',
+        aspect_ratio: '16:9',
+        layer_decomposition: false,
+        output_format: 'jpeg',
+        content_moderation: false,
+      },
+    });
+
+    expect(buildCrunSeedreamRequestBody('bytedance/seedream-5-5', {
+      prompt: 'A transparent product image',
+      background: 'transparent',
+    }).input).toMatchObject({
+      output_format: 'png',
+      background: 'transparent',
+    });
+
+    expect(buildCrunSeedreamRequestBody('bytedance/seedream-5-5', {
+      prompt: 'Separate poster layers',
+      imgUrls: ['https://a.test/poster.png'],
+      layerDecomposition: true,
+      maxImages: 12,
+      textRecognition: true,
+      aspectRatio: '1:1',
+      background: 'transparent',
+    }).input).toEqual({
+      prompt: 'Separate poster layers',
+      img_urls: ['https://a.test/poster.png'],
+      resolution: '1K',
+      layer_decomposition: true,
+      max_images: 12,
+      text_recognition: true,
+      output_format: 'jpeg',
+      content_moderation: true,
+    });
+
+    expect(() => buildCrunSeedreamRequestBody('bytedance/seedream-5-5', {
+      prompt: 'Invalid layer request',
+      layerDecomposition: true,
+    })).toThrow('requires exactly one reference image');
+  });
+
   it('maps flat CRUN video handler inputs to upstream request bodies', () => {
     expect(buildCrunGenericVideoRequestBody('wan/3-0-i2v', {
       prompt: 'move', img_urls: ['https://a.test/i.png'], duration: 12, resolution: '1080P',
@@ -105,6 +157,31 @@ describe('migrated model protocol builders', () => {
       prompt: 'move', imgUrls: ['https://a.test/a.png'], duration: 8,
       resolution: '1080p', aspectRatio: '16:9', translatePrompt: true,
     }).input).toMatchObject({ resolution: '1080p', aspect_ratio: '16:9', translate_prompt: true });
+  });
+
+  it('builds the documented Seedance 2.5 Flash image-to-video request', () => {
+    expect(buildCrunSeedanceRequestBody('bytedance/seedance2-5-flash-i2v', {
+      prompt: 'A person waves at the camera',
+      imgUrls: ['https://a.test/start.png', 'https://a.test/end.png'],
+      resolution: '480p',
+      aspectRatio: 'auto',
+      duration: 4,
+      audio: false,
+      returnLastFrame: false,
+    })).toEqual({
+      model: 'bytedance/seedance2-5-flash-i2v',
+      input: {
+        prompt: 'A person waves at the camera',
+        img_urls: ['https://a.test/start.png', 'https://a.test/end.png'],
+        resolution: '480p',
+        aspect_ratio: 'auto',
+        duration: 4,
+        audio: false,
+        byteplus_fallback: false,
+        direct_byteplus: false,
+        return_last_frame: false,
+      },
+    });
   });
 });
 
