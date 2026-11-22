@@ -99,7 +99,7 @@ describe('createRunninghubProvider', () => {
     const fetchMock = vi.fn(async (input: string | URL | Request, init?: RequestInit) => {
       const url = String(input);
       if (url.includes('/api/webapp/apiCallDemo')) {
-        return Response.json({ code: 0, data: { nodeInfoList: [{ nodeId: 1, fieldName: 'prompt', fieldType: 'text' }] } });
+        return Response.json({ code: 0, data: { webappName: 'My Test App', nodeInfoList: [{ nodeId: 1, fieldName: 'prompt', fieldType: 'text' }] } });
       }
       if (url.endsWith('/task/openapi/upload')) return Response.json({ code: 0, data: { fileName: 'uploaded-file' } });
       if (url.endsWith('/task/openapi/ai-app/run')) return Response.json({ code: 0, data: { taskId: 'cancel-task' } });
@@ -121,6 +121,8 @@ describe('createRunninghubProvider', () => {
     });
     await job.cancel();
 
+    expect(description.title).toBe('My Test App');
+    expect(description.providerMetadata?.runninghub?.webappName).toBe('My Test App');
     expect(description.inputSchema?.properties).toHaveProperty('1_prompt');
     expect(uploaded.providerReference).toEqual({ runninghub: 'uploaded-file' });
     expect((await job.status()).state).toBe('cancelled');

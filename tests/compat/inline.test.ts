@@ -121,4 +121,103 @@ describe('legacy inline compatibility', () => {
     await expect(handle.promise).rejects.toMatchObject({ name: 'AbortError' });
     expect(calls).toContain('https://app.test/task/openapi/cancel');
   });
+
+  it('extracts RunningHub chargedPoint and settleMode into legacy TaskResult', async () => {
+    const fetchMock = vi.fn(async (input: string | URL | Request) => {
+      const url = String(input);
+      if (url === 'https://rh.test/rhart-image-v1/edit') {
+        return Response.json({ taskId: 'remote-point-1', status: 'PENDING' });
+      }
+      if (url === 'https://rh.test/query') {
+        return Response.json({
+          taskId: 'remote-point-1',
+          status: 'SUCCESS',
+          settleMode: 'POINT',
+          chargedPoint: '1.28',
+          results: [{ url: 'https://files.test/result-point.png' }],
+          usage: {
+            consumeCoins: null,
+            consumeMoney: null,
+            taskCostTime: '12',
+          },
+        });
+      }
+      if (url === 'https://files.test/result-point.png') {
+        return new Response(new Uint8Array([1, 2, 3]), {
+          headers: { 'content-type': 'image/png' },
+        });
+      }
+      throw new Error(`Unexpected request: ${url}`);
+    });
+    const executor = createInlineExecutor({
+      platformConfig: {
+        apiKey: 'test-key',
+        apiBaseURL: 'https://rh.test',
+        fetch: fetchMock as typeof fetch,
+        pollIntervalMs: 1,
+      },
+    });
+
+    const handle = await executor.run({
+      locator: 'runninghub://api/rhart-image-v1/edit',
+      payload: { prompt: 'test' },
+    });
+    const result = await handle.promise;
+
+    expect(result.costPoints).toBe(1.28);
+    expect(result.settleMode).toBe('POINT');
+    expect(result.costCoins).toBeUndefined();
+    expect(result.costMoney).toBeUndefined();
+  });
+
+  it('extracts RunningHub App consumeCoins and leaves null costs undefined', async () => {
+    const fetchMock = vi.fn(async (input: string | URL | Request) => {
+      const url = String(input);
+      if (url.startsWith('https://app.test/api/webapp/apiCallDemo')) {
+        return Response.json({ success: true, data: { nodeInfoList: [] } });
+      }
+      if (url === 'https://app.test/task/openapi/ai-app/run') {
+        return Response.json({ success: true, data: { taskId: 'remote-app-cost' } });
+      }
+      if (url === 'https://app.test/task/openapi/status') {
+        return Response.json({ success: true, data: { status: 'SUCCESS' } });
+      }
+      if (url === 'https://app.test/task/openapi/outputs') {
+        return Response.json({
+          success: true,
+          data: [
+            {
+              fileUrl: 'https://files.test/app-out.png',
+              consumeCoins: '42',
+              consumeMoney: null,
+            },
+          ],
+        });
+      }
+      if (url === 'https://files.test/app-out.png') {
+        return new Response(new Uint8Array([4, 5, 6]), {
+          headers: { 'content-type': 'image/png' },
+        });
+      }
+      throw new Error(`Unexpected request: ${url}`);
+    });
+    const executor = createInlineExecutor({
+      platformConfig: {
+        apiKey: 'test-key',
+        appBaseURL: 'https://app.test',
+        fetch: fetchMock as typeof fetch,
+        pollIntervalMs: 1,
+      },
+    });
+
+    const handle = await executor.run({
+      locator: 'runninghub://app/webapp-1',
+      payload: { prompt: 'test' },
+    });
+    const result = await handle.promise;
+
+    expect(result.costCoins).toBe(42);
+    expect(result.costPoints).toBeUndefined();
+    expect(result.costMoney).toBeUndefined();
+  });
 });

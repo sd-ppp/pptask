@@ -342,6 +342,101 @@ async function watchBuiltin(
   }
 }
 
+function toFiniteNumber(value: unknown): number | undefined {
+  if (typeof value === 'number') {
+    return Number.isFinite(value) ? value : undefined;
+  }
+  if (typeof value === 'string' && value.trim()) {
+    const parsed = Number(value.trim());
+    return Number.isFinite(parsed) ? parsed : undefined;
+  }
+  return undefined;
+}
+
+function firstNonEmptyString(...values: unknown[]): string | undefined {
+  for (const value of values) {
+    if (typeof value === 'string' && value.trim()) {
+      return value.trim();
+    }
+  }
+  return undefined;
+}
+
+function firstDefined(...values: unknown[]): unknown {
+  for (const value of values) {
+    if (value !== undefined && value !== null && value !== '') {
+      return value;
+    }
+  }
+  return undefined;
+}
+
+function extractLegacyCost(
+  scheme: string,
+  result: Record<string, any>,
+): Pick<TaskResult, 'costCoins' | 'costPoints' | 'settleMode' | 'costMoney' | 'costMoneyCurrency'> {
+  const metadata = result.providerMetadata?.[scheme];
+  if (!metadata || typeof metadata !== 'object') return {};
+
+  const usage = metadata.usage && typeof metadata.usage === 'object' && !Array.isArray(metadata.usage)
+    ? metadata.usage as Record<string, any>
+    : undefined;
+  const rawResult = metadata.result;
+  const item = Array.isArray(rawResult)
+    ? (rawResult.find((entry: any) =>
+        entry && typeof entry === 'object' && (
+          entry.chargedPoint != null ||
+          entry.consumePoint != null ||
+          entry.deductPoints != null ||
+          entry.consumeCoins != null ||
+          entry.consumeMoney != null ||
+          entry.thirdPartyConsumeMoney != null
+        ),
+      ) ?? rawResult[0])
+    : (rawResult && typeof rawResult === 'object' ? rawResult : undefined);
+
+  const costCoins = toFiniteNumber(
+    firstDefined(usage?.consumeCoins, item?.consumeCoins, metadata.consumeCoins),
+  );
+  const costPoints = toFiniteNumber(
+    firstDefined(
+      metadata.chargedPoint,
+      usage?.chargedPoint,
+      usage?.consumePoint,
+      usage?.deductPoints,
+      item?.chargedPoint,
+      item?.consumePoint,
+      item?.deductPoints,
+    ),
+  );
+  const settleMode = firstNonEmptyString(
+    metadata.settleMode,
+    usage?.settleMode,
+    item?.settleMode,
+  );
+  const costMoney = toFiniteNumber(
+    firstDefined(
+      usage?.consumeMoney,
+      usage?.thirdPartyConsumeMoney,
+      item?.consumeMoney,
+      item?.thirdPartyConsumeMoney,
+      metadata.consumeMoney,
+      metadata.thirdPartyConsumeMoney,
+    ),
+  );
+  const costMoneyCurrency = costMoney !== undefined
+    ? (firstNonEmptyString(usage?.currency, item?.currency, metadata.currency) ?? 'CNY')
+    : undefined;
+
+  return {
+    ...(costCoins !== undefined ? { costCoins } : {}),
+    ...(costPoints !== undefined ? { costPoints } : {}),
+    ...(settleMode !== undefined ? { settleMode } : {}),
+    ...(costMoney !== undefined ? { costMoney } : {}),
+    ...(costMoneyCurrency !== undefined ? { costMoneyCurrency } : {}),
+  };
+}
+
 function toLegacyResult(
   scheme: string,
   taskId: string,
@@ -356,6 +451,7 @@ function toLegacyResult(
     status: 'succeeded',
     outputs,
     usage: normalizeUsage(result.usage ?? result.providerMetadata?.[scheme]?.usage),
+    ...extractLegacyCost(scheme, result),
   };
 }
 

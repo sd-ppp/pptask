@@ -65,6 +65,9 @@ type RunninghubResponse = {
   task_id?: unknown;
   id?: unknown;
   results?: unknown;
+  usage?: unknown;
+  settleMode?: unknown;
+  chargedPoint?: unknown;
 };
 
 type RunninghubNode = {
@@ -342,6 +345,9 @@ async function getStatus(
       kind: model.kind,
       status: rawStatus ?? null,
       result: (result.data ?? result.results ?? null) as JSONValue,
+      usage: (result.usage ?? null) as JSONValue,
+      settleMode: (firstString(result, 'settleMode') ?? firstString(result.usage, 'settleMode') ?? null) as JSONValue,
+      chargedPoint: (firstValue(result, 'chargedPoint') ?? firstValue(result.usage, 'chargedPoint') ?? null) as JSONValue,
       images: extractUrls(result),
     }),
   };
@@ -393,11 +399,15 @@ async function describeModel(
     providerId: 'runninghub',
     modelId,
     modelType,
-    title: model.value,
+    title: template.webappName || model.value,
     inputSchema: nodeSchema(template.nodes),
     defaultInput: template.defaults,
     capabilities: { operation: 'task', cancel: true },
-    providerMetadata: runninghubMetadata({ kind: 'app', webappId: model.value }),
+    providerMetadata: runninghubMetadata({
+      kind: 'app',
+      webappId: model.value,
+      ...(template.webappName ? { webappName: template.webappName } : {}),
+    }),
   };
 }
 
@@ -433,6 +443,7 @@ function createFiles(config: RunninghubConfig): FilesV4 {
 async function getAppTemplate(webappId: string, config: RunninghubConfig): Promise<{
   nodes: RunninghubNode[];
   defaults: Record<string, unknown>;
+  webappName?: string;
 }> {
   const url = new URL('/api/webapp/apiCallDemo', config.appBaseURL);
   url.searchParams.set('apiKey', config.apiKey);
@@ -444,7 +455,11 @@ async function getAppTemplate(webappId: string, config: RunninghubConfig): Promi
   const defaults = Object.fromEntries(nodes
     .filter(node => node.nodeId !== undefined && node.fieldName)
     .map(node => [`${node.nodeId}_${node.fieldName}`, node.fieldValue]));
-  return { nodes, defaults };
+  const webappName =
+    firstString(data, 'webappName') ??
+    firstString(data, 'webAppName') ??
+    firstString(data, 'name');
+  return { nodes, defaults, webappName };
 }
 
 function buildNodeInfoList(

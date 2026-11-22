@@ -103,6 +103,8 @@ export type TaskResult = {
     [key: string]: number | undefined;
   };
   costCoins?: number;
+  costPoints?: number;
+  settleMode?: string;
   costMoney?: number;
   costMoneyCurrency?: string;
   raw?: unknown;
