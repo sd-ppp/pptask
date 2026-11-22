@@ -24,14 +24,16 @@ export async function uploadRunninghubFile(
   }
 
   let language: string | undefined;
+  let site: string | undefined;
   try {
     const config = platformConfig as RunningHubConfig | undefined;
     language = config?.language;
+    site = config?.site;
   } catch {
     // ignore config extraction errors
   }
 
-  const baseHost = getBaseHost(language);
+  const baseHost = getBaseHost(language, site);
   const uploadUrl = `https://${baseHost}/task/openapi/upload`;
   const response = await fetch(uploadUrl, {
     method: 'POST',

@@ -1,4 +1,5 @@
 import type { PlatformConfig, TaskStatus } from '../../../types.ts';
+import { getBaseHost } from '../app/helpers.ts';
 
 export type RunninghubApiConfig = {
   apiKey: string;
@@ -42,6 +43,14 @@ export function ensureRunninghubApiConfig(platformConfig: PlatformConfig | undef
   }
   
   return { apiKey };
+}
+
+/**
+ * 新 API 的 base URL，按站点选择国内站/海外站。
+ */
+export function getRunninghubApiBaseUrl(platformConfig: PlatformConfig | undefined): string {
+  const config = (platformConfig ?? {}) as { language?: string; site?: string };
+  return `https://${getBaseHost(config.language, config.site)}/openapi/v2`;
 }
 
 /**

@@ -30,16 +30,18 @@ export async function uploadRunninghubFile(
     formData.set('fileType', 'image');
   }
   
-  // 从配置中获取 language 设置（如果有的话），用于确定上传的 host
+  // 从配置中获取 site/language，用于确定上传的 host
   let language: string | undefined;
+  let site: string | undefined;
   try {
     const config = platformConfig as RunningHubConfig | undefined;
     language = config?.language;
+    site = config?.site;
   } catch {
     // 如果无法获取配置，使用默认值（undefined 会使用默认的 host）
   }
-  
-  const baseHost = getBaseHost(language);
+
+  const baseHost = getBaseHost(language, site);
   const uploadUrl = `https://${baseHost}/task/openapi/upload`;
   const response = await fetch(uploadUrl, {
     method: 'POST',

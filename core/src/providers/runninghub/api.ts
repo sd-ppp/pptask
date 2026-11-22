@@ -62,7 +62,7 @@ export async function createRunninghubTask(
   if (isRequestAborted(signal)) throw createAbortError('Task creation aborted');
   const template = await fetchRunninghubTemplate(webappId, config);
   const { nodeInfoList } = buildRunninghubPayload(template, payload);
-  const baseHost = getBaseHost(config.language);
+  const baseHost = getBaseHost(config.language, config.site);
   const runUrl = `https://${baseHost}/task/openapi/ai-app/run`;
   const requestPayload = {
     apiKey: config.apiKey,
@@ -133,7 +133,7 @@ export async function checkRunninghubStatus(
   const config = ensureRunninghubConfig(platformConfig);
   const signal = options?.signal;
   if (isRequestAborted(signal)) throw createAbortError('Status check aborted');
-  const baseHost = getBaseHost(config.language);
+  const baseHost = getBaseHost(config.language, config.site);
   const statusUrl = `https://${baseHost}/task/openapi/status`;
   const statusPayload = { apiKey: config.apiKey, taskId };
   console.debug(
@@ -210,7 +210,7 @@ export async function getRunninghubResult(
     throw new Error(`runninghub task ${taskId} is not completed (status=${status.status})`);
   }
 
-  const baseHost = getBaseHost(config.language);
+  const baseHost = getBaseHost(config.language, config.site);
   const outputsUrl = `https://${baseHost}/task/openapi/outputs`;
   const response = await fetch(outputsUrl, {
     method: 'POST',
@@ -245,7 +245,7 @@ export async function cancelRunninghubTask(
   const config = ensureRunninghubConfig(platformConfig);
   const signal = options?.signal;
   if (isRequestAborted(signal)) throw createAbortError('Cancellation aborted');
-  const baseHost = getBaseHost(config.language);
+  const baseHost = getBaseHost(config.language, config.site);
   const cancelUrl = `https://${baseHost}/task/openapi/cancel`;
   const response = await fetch(cancelUrl, {
     method: 'POST',

@@ -2,6 +2,7 @@ import {
   createRunninghubApiError,
   ensureRunninghubApiConfig,
   getModelSchema,
+  getRunninghubApiBaseUrl,
   mapRunninghubApiStatus,
   parseRunninghubApiPath,
 } from './helpers.ts';
@@ -13,8 +14,6 @@ import type {
   TaskResult,
   TaskStatusResult,
 } from '../../../types.ts';
-
-const BASE_URL = 'https://www.runninghub.cn/openapi/v2';
 
 // ========== describe: 返回模型 schema ==========
 export async function describeRunninghubApi(
@@ -50,7 +49,7 @@ export async function createRunninghubApiTask(
   const modelPath = parseRunninghubApiPath(url);
   
   // 调用新 API
-  const apiUrl = `${BASE_URL}/${modelPath}`;
+  const apiUrl = `${getRunninghubApiBaseUrl(platformConfig)}/${modelPath}`;
   
   console.debug(
     '[pptask][runninghub-api] create request',
@@ -122,7 +121,7 @@ export async function checkRunninghubApiStatus(
 ): Promise<TaskStatusResult> {
   const config = ensureRunninghubApiConfig(platformConfig);
   
-  const queryUrl = `${BASE_URL}/query`;
+  const queryUrl = `${getRunninghubApiBaseUrl(platformConfig)}/query`;
   
   console.debug(
     '[pptask][runninghub-api] status request',

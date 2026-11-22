@@ -6,9 +6,17 @@ import type {
   TaskStatus,
 } from '../../types.ts';
 
+export type RunningHubSite = 'cn' | 'ai';
+
 export type RunningHubConfig = {
   apiKey: string;
   language?: string;
+  /**
+   * Explicit RunningHub site selection.
+   * 'cn' -> www.runninghub.cn, 'ai' -> www.runninghub.ai.
+   * When omitted, the site falls back to the UI language for backward compatibility.
+   */
+  site?: RunningHubSite | string;
 };
 
 export type RunninghubNodeTemplate = {
@@ -42,7 +50,7 @@ export async function fetchRunninghubTemplate(
   webappId: string,
   config: RunningHubConfig
 ): Promise<RunninghubNodeTemplate> {
-  const baseHost = getBaseHost(config.language);
+  const baseHost = getBaseHost(config.language, config.site);
   const apiUrl = `https://${baseHost}/api/webapp/apiCallDemo?apiKey=${config.apiKey}&webappId=${encodeURIComponent(
     webappId
   )}`;
@@ -83,7 +91,19 @@ export function buildRunninghubNodeInfoList(
   );
 }
 
-export function getBaseHost(language?: string): string {
+export function normalizeRunningHubSite(site?: string | null): RunningHubSite | undefined {
+  if (!site || typeof site !== 'string') return undefined;
+  const normalized = site.trim().toLowerCase();
+  if (normalized === 'ai' || normalized === 'overseas' || normalized === 'global') return 'ai';
+  if (normalized === 'cn' || normalized === 'domestic' || normalized === 'china') return 'cn';
+  return undefined;
+}
+
+export function getBaseHost(language?: string, site?: string): string {
+  // Explicit site selection always wins over the UI language.
+  const normalizedSite = normalizeRunningHubSite(site);
+  if (normalizedSite === 'ai') return 'www.runninghub.ai';
+  if (normalizedSite === 'cn') return 'www.runninghub.cn';
   return language && language !== 'en-US' ? 'www.runninghub.cn' : 'www.runninghub.ai';
 }
 
@@ -97,7 +117,11 @@ export function ensureRunninghubConfig(platformConfig: PlatformConfig | undefine
     config.language && typeof config.language === 'string'
       ? config.language
       : undefined;
-  return { apiKey, language };
+  const site =
+    config.site && typeof config.site === 'string'
+      ? config.site
+      : undefined;
+  return { apiKey, language, site };
 }
 
 export function extractRunninghubStatus(payload: any): string | undefined {
@@ -117,20 +141,31 @@ export function extractRunninghubProgress(payload: any): number | undefined {
 }
 
 export function extractRunninghubCost(payload: any):
-  | { coins?: number; money?: number; moneyCurrency?: string }
+  | { coins?: number; points?: number; settleMode?: string; money?: number; moneyCurrency?: string }
   | undefined {
   const data = payload?.data;
   const items = Array.isArray(data) ? data : undefined;
   if (items && items.length > 0) {
     let coinsTotal = 0;
+    let pointsTotal = 0;
     let moneyTotal = 0;
     let hasCoins = false;
+    let hasPoints = false;
     let hasMoney = false;
+    let settleMode: string | undefined;
     for (const entry of items) {
       const coins = parseNumber(entry?.consumeCoins ?? entry?.deductCredits ?? entry?.consumedCredits);
       if (coins !== undefined) {
         coinsTotal += coins;
         hasCoins = true;
+      }
+      const points = parseNumber(entry?.chargedPoint ?? entry?.consumePoint ?? entry?.deductPoints);
+      if (points !== undefined) {
+        pointsTotal += points;
+        hasPoints = true;
+      }
+      if (!settleMode && typeof entry?.settleMode === 'string' && entry.settleMode.trim()) {
+        settleMode = entry.settleMode.trim();
       }
       const money = parseNumber(
         entry?.thirdPartyConsumeMoney ?? entry?.consumeMoney ?? entry?.deductMoney ?? entry?.consumedMoney
@@ -140,9 +175,11 @@ export function extractRunninghubCost(payload: any):
         hasMoney = true;
       }
     }
-    if (!hasCoins && !hasMoney) return undefined;
+    if (!hasCoins && !hasPoints && !hasMoney && !settleMode) return undefined;
     return {
       coins: hasCoins ? coinsTotal : undefined,
+      points: hasPoints ? pointsTotal : undefined,
+      settleMode,
       money: hasMoney ? moneyTotal : undefined,
       moneyCurrency: hasMoney ? 'CNY' : undefined,
     };
@@ -151,6 +188,12 @@ export function extractRunninghubCost(payload: any):
   const coins = parseNumber(
     aggregate.deductCredits ?? aggregate.consumedCredits ?? aggregate.consumeCoins ?? aggregate.consumeCredit
   );
+  const points = parseNumber(
+    aggregate.chargedPoint ?? aggregate.consumePoint ?? aggregate.deductPoints
+  );
+  const settleMode = typeof aggregate.settleMode === 'string' && aggregate.settleMode.trim()
+    ? aggregate.settleMode.trim()
+    : undefined;
   const money = parseNumber(
     aggregate.thirdPartyConsumeMoney ?? aggregate.consumeMoney ?? aggregate.deductMoney ?? aggregate.consumedMoney
   );
@@ -162,9 +205,11 @@ export function extractRunninghubCost(payload: any):
         : money !== undefined
           ? 'CNY'
           : undefined;
-  if (coins === undefined && money === undefined && currency === undefined) return undefined;
+  if (coins === undefined && points === undefined && settleMode === undefined && money === undefined && currency === undefined) return undefined;
   return {
     coins,
+    points,
+    settleMode,
     money,
     moneyCurrency: currency,
   };
